@@ -37,7 +37,7 @@
 .yr .r{font-family:var(--display);font-weight:700;font-size:.75rem;background:var(--good);color:#fff;padding:0 6px;border-radius:3px}
 .note{font-size:.78rem;color:var(--muted)}
 @media (max-width:520px){.bar img{height:44px}.bar h1{font-size:1.3rem}}
-.ft.tbd{display:none}.when{white-space:nowrap}.show.up .score{min-height:0}.shows>.more{grid-column:1/-1;margin:2px 0 6px}.show:not(.up){background:#8bb8e8;border-color:#6d9ed6;color:#0b1220}.show:not(.up) .dt{color:#0d2240}.show:not(.up) .vn{color:#1d3150}.show:not(.up) .ft{color:#0b1220}.show.up{background:var(--panel);border-style:solid}.yrow{display:flex;align-items:center;gap:16px;margin-top:14px}.yrow .year{margin:0}.yrow .more{margin:0;flex:1;min-width:0;font-size:1.15rem;padding:12px 16px;align-self:stretch}@media (max-width:520px){.yrow .more{font-size:.92rem;padding:9px 12px;gap:6px;letter-spacing:.04em}}.more{display:flex;align-items:center;justify-content:center;gap:8px;background:#8bb8e8;color:#0b1220;text-decoration:none;text-align:center;font-family:var(--display);font-weight:700;font-size:1.3rem;line-height:1.15;letter-spacing:.06em;text-transform:uppercase;padding:16px 18px;border-radius:10px;border:2px solid #0b1220;box-shadow:0 4px 0 #0b1220;margin:8px 0 4px}.more svg{flex:none}.more:hover{background:#a3c8ef}.more:active{transform:translateY(2px);box-shadow:0 2px 0 #0b1220}.more:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+#splash .bgimg{transition:opacity 1.2s ease}#splash .bgimg.in{animation:spz 6s ease-out forwards}.ft.tbd{display:none}.when{white-space:nowrap}.show.up .score{min-height:0}.shows>.more{grid-column:1/-1;margin:2px 0 6px}.show:not(.up){background:#8bb8e8;border-color:#6d9ed6;color:#0b1220}.show:not(.up) .dt{color:#0d2240}.show:not(.up) .vn{color:#1d3150}.show:not(.up) .ft{color:#0b1220}.show.up{background:var(--panel);border-style:solid}.yrow{display:flex;align-items:center;gap:16px;margin-top:14px}.yrow .year{margin:0}.yrow .more{margin:0;flex:1;min-width:0;font-size:1.15rem;padding:12px 16px;align-self:stretch}@media (max-width:520px){.yrow .more{font-size:.92rem;padding:9px 12px;gap:6px;letter-spacing:.04em}}.more{display:flex;align-items:center;justify-content:center;gap:8px;background:#8bb8e8;color:#0b1220;text-decoration:none;text-align:center;font-family:var(--display);font-weight:700;font-size:1.3rem;line-height:1.15;letter-spacing:.06em;text-transform:uppercase;padding:16px 18px;border-radius:10px;border:2px solid #0b1220;box-shadow:0 4px 0 #0b1220;margin:8px 0 4px}.more svg{flex:none}.more:hover{background:#a3c8ef}.more:active{transform:translateY(2px);box-shadow:0 2px 0 #0b1220}.more:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
 #splash{position:fixed;inset:0;z-index:100;background:#07111f;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 24px max(64px,9vh);text-align:center;color:#fff;cursor:pointer;transition:opacity .6s ease,visibility .6s}
 #splash::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,17,31,.55) 0%,rgba(7,17,31,0) 30%,rgba(7,17,31,.15) 55%,rgba(7,17,31,.92) 82%)}
 #splash>*{position:relative;z-index:2}
@@ -86,16 +86,23 @@ document.addEventListener('click',e=>{const el=e.target.closest('a.more,.watch,a
 </script>
 
 <script>
-// splash: once per visit, auto-closes after 3s, tap/click/key to skip
-(function(){const sp=document.getElementById('splash');let seen=false;try{seen=sessionStorage.getItem('darby-splash')==='1'}catch(e){}
- const go=()=>{sp.classList.add('out');try{sessionStorage.setItem('darby-splash','1')}catch(e){}};
- if(seen){sp.remove();return}
- // splash photo library: add files to photos/ and list them here
+// splash: shows on every visit; random looping slideshow until tapped
+(function(){const sp=document.getElementById('splash');if(!sp)return;let T=null,done=false;
+ const go=()=>{if(done)return;done=true;clearTimeout(T);sp.classList.add('out');setTimeout(()=>sp.remove(),800)};
+ sp.addEventListener('click',go);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+ const A=sp.querySelector('.bgimg'),B=A.cloneNode();A.after(B);let cur=null;
  const FALL=[{"f": "2026-athens-drum-major.jpg", "pos": "center 22%"}, {"f": "2026-athens-mona-lisa.jpg", "pos": "57% 30%"}, {"f": "2026-zanesville-trophies.jpg", "pos": "43% 55%"}, {"f": "2026-athens-trophies.jpg", "pos": "50% 45%"}, {"f": "2026-zanesville-clarinets.jpg", "pos": "50% 35%"}];
- fetch('photos/list.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():FALL).catch(()=>FALL).then(PHOTOS=>{if(!Array.isArray(PHOTOS)||!PHOTOS.length)PHOTOS=FALL;
- const pick=PHOTOS[Math.floor(Math.random()*PHOTOS.length)];const bg=sp.querySelector('.bgimg');const im=new Image();
- im.onload=()=>{bg.style.backgroundImage='url("photos/'+pick.f+'")';bg.style.backgroundPosition=pick.pos;bg.classList.add('in')};im.src='photos/'+pick.f;
- sp.addEventListener('click',go);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});const t0=Date.now();const arm=()=>setTimeout(go,Math.max(0,Math.min(3000,5000-(Date.now()-t0))));im.complete?arm():(im.addEventListener('load',arm),im.addEventListener('error',()=>setTimeout(go,1500)));});})();
+ const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+ fetch('photos/list.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():FALL).catch(()=>FALL).then(P=>{
+  if(!Array.isArray(P)||!P.length)P=FALL;let order=shuf(P),i=0,last=null;
+  function next(){if(i>=order.length){order=shuf(P);if(order.length>1&&order[0]===last)order.push(order.shift());i=0}return order[i++]}
+  function show(){if(done)return;const p=next();last=p;const im=new Image();
+   im.onload=()=>{if(done)return;const nx=cur===A?B:A;nx.style.backgroundImage='url("photos/'+p.f+'")';nx.style.backgroundPosition=p.pos||'50% 35%';
+    nx.classList.remove('in');void nx.offsetWidth;nx.classList.add('in');if(cur)cur.classList.remove('in');cur=nx;
+    if(P.length>1){T=setTimeout(show,4500);const pre=order[i]||order[0];if(pre)(new Image()).src='photos/'+pre.f}};
+   im.onerror=()=>{T=setTimeout(show,200)};im.src='photos/'+p.f}
+  show()});
+})();
 
 </script>
 
