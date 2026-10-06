@@ -91,10 +91,11 @@ document.addEventListener('click',e=>{const el=e.target.closest('a.more,.watch,a
  const go=()=>{sp.classList.add('out');try{sessionStorage.setItem('darby-splash','1')}catch(e){}};
  if(seen){sp.remove();return}
  // splash photo library: add files to photos/ and list them here
- const PHOTOS=[{"f": "2026-athens-drum-major.jpg", "pos": "center 22%"}, {"f": "2026-athens-mona-lisa.jpg", "pos": "57% 30%"}, {"f": "2026-zanesville-trophies.jpg", "pos": "43% 55%"}, {"f": "2026-athens-trophies.jpg", "pos": "50% 45%"}, {"f": "2026-zanesville-clarinets.jpg", "pos": "50% 35%"}];
+ const FALL=[{"f": "2026-athens-drum-major.jpg", "pos": "center 22%"}, {"f": "2026-athens-mona-lisa.jpg", "pos": "57% 30%"}, {"f": "2026-zanesville-trophies.jpg", "pos": "43% 55%"}, {"f": "2026-athens-trophies.jpg", "pos": "50% 45%"}, {"f": "2026-zanesville-clarinets.jpg", "pos": "50% 35%"}];
+ fetch('photos/list.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():FALL).catch(()=>FALL).then(PHOTOS=>{if(!Array.isArray(PHOTOS)||!PHOTOS.length)PHOTOS=FALL;
  const pick=PHOTOS[Math.floor(Math.random()*PHOTOS.length)];const bg=sp.querySelector('.bgimg');const im=new Image();
  im.onload=()=>{bg.style.backgroundImage='url("photos/'+pick.f+'")';bg.style.backgroundPosition=pick.pos;bg.classList.add('in')};im.src='photos/'+pick.f;
- sp.addEventListener('click',go);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});const t0=Date.now();const arm=()=>setTimeout(go,Math.max(0,Math.min(3000,5000-(Date.now()-t0))));im.complete?arm():(im.addEventListener('load',arm),im.addEventListener('error',()=>setTimeout(go,1500)));})();
+ sp.addEventListener('click',go);sp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go()});const t0=Date.now();const arm=()=>setTimeout(go,Math.max(0,Math.min(3000,5000-(Date.now()-t0))));im.complete?arm():(im.addEventListener('load',arm),im.addEventListener('error',()=>setTimeout(go,1500)));});})();
 
 </script>
 
