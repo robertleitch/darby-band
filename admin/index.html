@@ -23,6 +23,7 @@ button[disabled]{opacity:.55;cursor:wait}
 .tag{font-size:.75rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--lb);color:#0d2240;margin-left:6px}
 .help{font-size:.88rem;color:var(--muted)}.help a{color:#2f6fae}
 .hide{display:none}
+textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);resize:vertical}button.alt{background:transparent;color:var(--ink);border:1px solid var(--line);border-bottom-width:3px}.ib{padding:10px 0;border-bottom:1px solid var(--line);font-size:.92rem}.ib:last-child{border-bottom:0}.ib .t{color:var(--muted);font-size:.8rem}.ib a{color:#2f6fae;word-break:break-all}.ib pre{white-space:pre-wrap;margin:4px 0;font:inherit}.ib button{margin:4px 0 0;padding:4px 10px;font-size:.85rem;background:transparent;color:var(--bad);border:1px solid var(--line)}.ib .r{color:var(--good)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:12px}
 .ph{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
@@ -43,6 +44,16 @@ button[disabled]{opacity:.55;cursor:wait}
   <label for="tok">GitHub key</label><input id="tok" type="password" autocomplete="off" placeholder="github_pat_… (only needed once)">
   <div class="help">Enter it once, on your computer. It's saved scrambled with the admin password, so after that your phone and other devices only need the admin password. Leave blank otherwise. <a href="#keyhelp">How to get one</a></div>
   <button id="b1" type="submit">Unlock</button><div class="msg" id="m1" role="status"></div></form>
+ </section>
+
+ <section class="card hide" id="s5">
+  <h2>Send to Claude</h2>
+  <p>Paste a link (a competition page, parking info, a map) and/or type anything: a director email, new times, a schedule change. Tap Save, then open Claude on your phone or computer and say <b>process the inbox</b>. Claude reads it, works up the site update, and shows you the changes before anything goes live.</p>
+  <label for="iu">Link (optional)</label><input type="url" id="iu" inputmode="url" placeholder="https://…">
+  <label for="in">Notes / pasted text</label><textarea id="in" rows="5" placeholder="Paste an email, times, parking details, whatever you have…"></textarea>
+  <button id="b5" type="button">Save to inbox</button> <button id="b5c" type="button" class="alt">Copy “process the inbox”</button>
+  <div class="msg" id="m5" role="status"></div>
+  <div id="ibl"></div>
  </section>
 
  <section class="card hide" id="s2">
@@ -145,7 +156,7 @@ $('f1').addEventListener('submit',async e=>{e.preventDefault();const b=$('b1'),m
   if(typed){try{const iv2=crypto.getRandomValues(new Uint8Array(12));const c2=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:iv2},ak,new TextEncoder().encode(TOK)));const a2=new Uint8Array(12+c2.length);a2.set(iv2);a2.set(c2,12);
    const ex=await ghGet('admin/key.enc');await ghPut('admin/key.enc',btoa(tob64(a2)),ex&&ex.sha,'Save admin key (scrambled)')}catch(x){console.warn(x)}}
   $('rows').innerHTML=SHOWS.map((s,i)=>`<div class="row"><span class="d">${md(s.d)}</span><span class="n">${s.n}${s.up?'<span class="tag">upcoming</span>':''}</span><input type="url" id="v${i}" inputmode="url" placeholder="https://vimeo.com/…" aria-label="Video link for ${s.n} ${md(s.d)}" value="${(cur[s.k]||'').replace(/"/g,'&quot;')}"></div>`).join('');
-  $('s1').classList.add('hide');$('s2').classList.remove('hide');$('s3').classList.remove('hide');$('s4').classList.remove('hide');loadPhotos().catch(x=>pmsg(x.message,'err'));
+  $('s1').classList.add('hide');$('s2').classList.remove('hide');$('s3').classList.remove('hide');$('s4').classList.remove('hide');$('s5').classList.remove('hide');ibLoad().catch(x=>imsg(x.message,'err'));loadPhotos().catch(x=>pmsg(x.message,'err'));
  }catch(x){m.className='msg err';m.textContent=x.message||'Something went wrong.'}
  b.disabled=false});
 $('b2').addEventListener('click',async()=>{const b=$('b2'),m=$('m2');b.disabled=true;m.className='msg';m.textContent='Saving…';
@@ -157,4 +168,24 @@ $('b2').addEventListener('click',async()=>{const b=$('b2'),m=$('m2');b.disabled=
   SHA=(await r.json()).content.sha;m.className='msg ok';m.textContent='Saved. The site updates in about 1–2 minutes. In GitHub Desktop, click Fetch origin then Pull before your next push.';
  }catch(x){m.className='msg err';m.textContent=x.message||'Save failed.'}
  b.disabled=false});
+
+// ---- inbox for Claude ----
+let IB=[];
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function imsg(t,c){const m=$('m5');m.className='msg'+(c?' '+c:'');m.textContent=t}
+async function ibDecrypt(j){if(!j)return [];const u=b64(dec(j.content).trim());return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:u.slice(0,12)},KEY,u.slice(12))))}
+async function ibEnc(list){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},KEY,new TextEncoder().encode(JSON.stringify(list))));const all=new Uint8Array(12+ct.length);all.set(iv);all.set(ct,12);return enc(tob64(all))}
+async function ibMutate(fn,msg){const j=await ghGet('inbox.enc');const list=fn(await ibDecrypt(j))||[];await ghPut('inbox.enc',await ibEnc(list),j&&j.sha,msg);IB=list;renderIB()}
+async function ibLoad(){IB=await ibDecrypt(await ghGet('inbox.enc'));renderIB()}
+function renderIB(){const L=IB.slice().reverse();$('ibl').innerHTML=L.length?'<label>Inbox</label>'+L.map(x=>'<div class="ib"><div class="t">'+esc(new Date(x.ts).toLocaleString())+' · <b>'+(x.status==='done'?'done':'waiting for Claude')+'</b></div>'+(x.url?'<div><a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.url)+'</a></div>':'')+(x.note?'<pre>'+esc(x.note)+'</pre>':'')+(x.r?'<div class="r">'+esc(x.r)+'</div>':'')+'<button type="button" data-ibrm="'+esc(x.id)+'">Remove</button></div>').join(''):''}
+$('b5').addEventListener('click',async()=>{const b=$('b5'),url=$('iu').value.trim(),note=$('in').value.trim();
+ if(!url&&!note){imsg('Add a link or some notes first.','err');return}
+ if(url&&url.indexOf('http')!==0){imsg('The link should start with https://','err');return}
+ b.disabled=true;imsg('Saving…');
+ try{await ibMutate(l=>{l.push({id:Date.now().toString(36),ts:new Date().toISOString(),url,note,status:'new'});return l},'Add to inbox (admin)');$('iu').value='';$('in').value='';imsg('Saved. Now open Claude and say: process the inbox','ok')}
+ catch(x){imsg(x.message||'Save failed.','err')}
+ b.disabled=false});
+$('b5c').addEventListener('click',async()=>{try{await navigator.clipboard.writeText('process the inbox');imsg('Copied. Paste it into Claude.','ok')}catch(x){imsg('Just type: process the inbox','')}});
+$('ibl').addEventListener('click',async e=>{const r=e.target.closest('[data-ibrm]');if(!r)return;if(!confirm('Remove this inbox item?'))return;
+ try{await ibMutate(l=>l.filter(x=>x.id!==r.dataset.ibrm),'Remove inbox item (admin)')}catch(x){imsg(x.message,'err')}});
 </script></body></html>
