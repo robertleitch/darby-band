@@ -76,7 +76,7 @@ input[type=datetime-local]{width:100%;font:inherit;padding:9px 11px;border:1px s
   <div class="when"><label class="opt"><input type="radio" name="aw" value="now" checked> Send now</label><label class="opt"><input type="radio" name="aw" value="later"> Schedule</label></div>
   <input type="datetime-local" id="ad" class="hide">
   <div class="pv" aria-hidden="true"><img src="../icon-192.png" alt=""><div><b id="pvt">Darby Band</b><span id="pvb">Your message shows here.</span></div></div>
-  <button id="b6" type="button">Send alert</button> <button id="b6t" type="button" class="alt">Send a test to this phone only</button>
+  <button id="b6" type="button">Send alert</button> <button id="b6t" type="button" class="alt">Send a test to my phone</button><div class="help">For a test: first open Darby from your home screen icon (with alerts on), then come back here and tap <b>Send a test to my phone</b>. It goes only to the phone that opened the app most recently.</div>
   <div class="msg" id="m6" role="status"></div>
   <div id="all"></div>
  </section>
@@ -237,11 +237,11 @@ async function queue(test){const body=$('ab').value.trim();if(!body){amsg('Type 
  let at=new Date().toISOString(),when='now';
  if(!test&&document.querySelector('input[name=aw]:checked').value==='later'){if(!$('ad').value){amsg('Pick a date and time.','err');return}const d=new Date($('ad').value);if(isNaN(d)||d<Date.now()-60e3){amsg('That time has already passed.','err');return}at=d.toISOString();when=fmt(at)}
  const a={id:Date.now().toString(36),title:$('at').value.trim()||'Darby Band',body,url,topic:'news',at,status:'scheduled',created:new Date().toISOString()};
- if(test){const id=await myId().catch(()=>null);if(!id){amsg('This phone isn’t signed up for alerts. Open the site from your home screen, turn on alerts, then try again.','err');return}a.only=[id]}
+ if(test){const id=await myId().catch(()=>null);a.only=id?[id]:'newest'}
  else if(!window.confirm(when==='now'?'Send this alert to everyone now?':'Schedule this alert for '+when+'?'))return;
  const b=$('b6'),bt=$('b6t');b.disabled=bt.disabled=true;amsg('Saving…');
  try{await alMutate(l=>{l.push(a);return l.slice(-60)},test?'Test alert (admin)':(when==='now'?'Send alert (admin)':'Schedule alert (admin)'));
-  amsg(test?'Test queued. It should pop up on this phone in about a minute.':(when==='now'?'Sending. Phones get it in about a minute. Check back here for the count.':'Scheduled for '+when+'. It goes out within about 5 minutes of that time.'),'ok');if(!test){$('ab').value='';pv()}
+  amsg(test?(a.only==='newest'?'Test queued. It goes to the phone that most recently opened the Darby app with alerts on, usually within a minute.':'Test queued. It should pop up on this phone in about a minute.'):(when==='now'?'Sending. Phones get it in about a minute. Check back here for the count.':'Scheduled for '+when+'. It goes out within about 5 minutes of that time.'),'ok');if(!test){$('ab').value='';pv()}
   setTimeout(()=>alLoad().catch(()=>{}),75e3)}
  catch(x){amsg(x.message,'err')}finally{b.disabled=bt.disabled=false}}
 $('b6').addEventListener('click',()=>queue(false));$('b6t').addEventListener('click',()=>queue(true));

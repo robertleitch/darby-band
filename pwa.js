@@ -98,13 +98,13 @@ function ensureSub(show){
     return reg.pushManager.getSubscription().then(function(s){return s||reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID)})});
   }).then(function(sub){
     var j=sub.toJSON();var saved=ls('darby-push-ep');
-    if(saved===j.endpoint&&!show)return;
+    if(saved===j.endpoint&&!show&&Date.now()-(+ls('darby-push-seen')||0)<6e5)return;
     return crypto.subtle.digest('SHA-256',new TextEncoder().encode(j.endpoint)).then(function(h){
       var id=hex(h).slice(0,32);
       return fetch(DB+'/push/'+id+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({ep:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,os:isIOS?'ios':(isAndroid?'android':'other'),
           topics:{report:true,scores:true,news:true},t:{'.sv':'timestamp'}})});
-    }).then(function(r){if(r&&r.ok){ls('darby-push-ep',j.endpoint);if(show)done()}else if(show)fail()});
+    }).then(function(r){if(r&&r.ok){ls('darby-push-ep',j.endpoint);ls('darby-push-seen',String(Date.now()));if(show)done()}else if(show)fail()});
   }).catch(function(){if(show)fail()});
 }
 function done(){card('ok','Alerts are on','You&#39;ll get report-time reminders and score alerts.','',[['Great','go',close]]);setTimeout(close,6000);track('alerts-on')}

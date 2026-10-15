@@ -29,8 +29,15 @@ const subs = (await r.json()) || {};
 const gone = new Set();
 for (const a of due) {
   if (now - Date.parse(a.at) > 3 * 3600e3) { a.status = 'skipped'; a.result = { error: 'More than 3 hours late, so it was not sent.' }; continue; }
-  const targets = Object.entries(subs).filter(([id, s]) =>
-    s && s.ep && (a.only ? a.only.includes(id) : !(s.topics && s.topics[a.topic || 'news'] === false)));
+  let targets;
+  if (a.only === 'newest') {
+    const fresh = Object.entries(subs).filter(([id, s]) => s && s.ep && now - (s.t || 0) < 20 * 60e3).sort((x, y) => (y[1].t || 0) - (x[1].t || 0));
+    targets = fresh.slice(0, 1);
+    if (!targets.length) { a.status = 'error'; a.result = { error: 'No phone opened the Darby app with alerts on in the last 20 minutes. Open it from the home screen, then try again.' }; continue; }
+  } else {
+    targets = Object.entries(subs).filter(([id, s]) =>
+      s && s.ep && (a.only ? a.only.includes(id) : !(s.topics && s.topics[a.topic || 'news'] === false)));
+  }
   const payload = JSON.stringify({ title: a.title || 'Darby Band', body: a.body || '', url: a.url || '/', tag: a.id });
   let ok = 0, fail = 0, dead = 0;
   await Promise.all(targets.map(async ([id, s]) => {
