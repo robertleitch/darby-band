@@ -24,8 +24,15 @@
   "url": "/",
   "topic": "news",
   "at": "2026-10-15T20:29:12.458Z",
-  "status": "scheduled",
+  "status": "sent",
   "created": "2026-10-15T20:29:12.458Z",
-  "only": "newest"
+  "only": "newest",
+  "sent": "2026-10-15T20:29:28.901Z",
+  "result": {
+   "phones": 1,
+   "delivered": 1,
+   "expired": 0,
+   "failed": 0
+  }
  }
 ]
