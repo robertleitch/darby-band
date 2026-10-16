@@ -42,7 +42,14 @@
   "url": "/",
   "topic": "news",
   "at": "2026-10-16T11:18:21.469Z",
-  "status": "scheduled",
-  "created": "2026-10-16T11:18:21.470Z"
+  "status": "sent",
+  "created": "2026-10-16T11:18:21.470Z",
+  "sent": "2026-10-16T11:18:43.976Z",
+  "result": {
+   "phones": 14,
+   "delivered": 14,
+   "expired": 0,
+   "failed": 0
+  }
  }
 ]
