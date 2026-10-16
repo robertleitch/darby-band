@@ -310,7 +310,7 @@ button.day:focus-visible{outline:3px solid #2f6fae;outline-offset:2px}
 <script>(function(){var t=new Date().toLocaleDateString("en-CA",{timeZone:"America/New_York"});[].slice.call(document.querySelectorAll('.pp[data-p="up"] .show[data-d]')).forEach(function(c){if(c.getAttribute("data-d")<t)c.remove()})})()</script>
 <script>(function(){var t=new Date().toLocaleDateString("en-CA",{timeZone:"America/New_York"});
  var cs=[].slice.call(document.querySelectorAll('.pp[data-p="up"] .show[data-d="'+t+'"]'));if(!cs.length)return;
- var box=cs[0].parentNode,lab=document.createElement('div');lab.className='cdlabel';lab.textContent='Competition Day';box.insertBefore(lab,box.firstChild);
+ var box=cs[0].parentNode,lab=document.createElement('div');lab.className='cdlabel';var fb=cs.filter(function(c){return c.classList.contains('fbg')}).length;lab.textContent=fb===cs.length?'Game Day':(fb?'Today':'Competition Day');box.insertBefore(lab,box.firstChild);
  var ref=lab.nextSibling;while(ref&&cs.indexOf(ref)>-1)ref=ref.nextSibling;
  cs.forEach(function(c){c.classList.add('cday');box.insertBefore(c,ref);var d=c.querySelector('details.evinfo'),s=c.querySelector('.seatrow');if(d){d.open=true;if(s)c.insertBefore(s,d)}});
 })()</script>
