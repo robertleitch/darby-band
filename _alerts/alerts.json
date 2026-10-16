@@ -34,5 +34,15 @@
    "expired": 0,
    "failed": 0
   }
+ },
+ {
+  "id": "mvavjhge",
+  "title": "Rehearsal cancelled",
+  "body": "Friday morning rehearsal is cancelled due to rain, wind and cold. See you this evening for the game! — Mr. Kozman",
+  "url": "/",
+  "topic": "news",
+  "at": "2026-10-16T11:18:21.469Z",
+  "status": "scheduled",
+  "created": "2026-10-16T11:18:21.470Z"
  }
 ]
