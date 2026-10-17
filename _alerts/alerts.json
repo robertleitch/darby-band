@@ -59,7 +59,14 @@
   "url": "/seats/",
   "topic": "news",
   "at": "2026-10-17T21:04:50.136Z",
-  "status": "scheduled",
-  "created": "2026-10-17T21:04:50.136Z"
+  "status": "sent",
+  "created": "2026-10-17T21:04:50.136Z",
+  "sent": "2026-10-17T21:05:07.048Z",
+  "result": {
+   "phones": 15,
+   "delivered": 15,
+   "expired": 0,
+   "failed": 0
+  }
  }
 ]
