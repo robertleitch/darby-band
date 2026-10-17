@@ -203,9 +203,9 @@ button.day:focus-visible{outline:3px solid #2f6fae;outline-offset:2px}
 <div class="cdf"><div><b>5:00</b><span>Gates open</span></div><div><b>$10 / $7</b><span>Adults / Students</span></div><div><b>Cash/card</b><span>Tickets &amp; food</span></div></div>
 <a class="cdseat" href="/seats/">📍 Where are you sitting?</a>
 </div><div class="e">Tap to enter</div></div><script>(function(){var sp=document.getElementById('splash');if(!sp)return;var c=sp.querySelector('.cdx');if(!c)return;
- var t=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});if(t!==c.dataset.day){c.remove();return}
+ var TEST=/[?&]cdtest/.test(location.search);var t=new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'});if(t!==c.dataset.day&&!TEST){c.remove();return}
  c.hidden=false;sp.classList.add('cd');
- var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,seen=false;try{seen=sessionStorage.getItem('darby-as')==='1';sessionStorage.setItem('darby-as','1')}catch(e){}
+ var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,seen=false;try{seen=!TEST&&sessionStorage.getItem('darby-as')==='1';if(!TEST)sessionStorage.setItem('darby-as','1')}catch(e){}
  var ax=sp.querySelector('.asx');if(rm||seen){if(ax)ax.remove()}else{sp.classList.add('as-run');var st=[[900,'as-strike'],[1500,'as-drop'],[1900,'as-here'],[3600,'as-done']];
   st.forEach(function(x){setTimeout(function(){sp.classList.add(x[1]);if(x[1]==='as-done'){sp.classList.remove('as-run');setTimeout(function(){ax&&ax.remove()},700)}},x[0])})}var P=Date.parse(c.dataset.perf),A=Date.parse(c.dataset.awards),S=Date.parse(c.dataset.seat),seat=c.querySelector('.cdseat');
  seat.addEventListener('click',function(e){e.stopPropagation();if(Date.now()<S){e.preventDefault()}});
