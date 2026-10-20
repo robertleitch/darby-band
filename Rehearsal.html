@@ -559,6 +559,55 @@ aside{overflow:visible!important}
 .ptab i{display:block;width:5px;height:34px;border-radius:5px;background:#ffffff88}
 main{padding-right:52px!important}
 body.noside .ptab{display:none}
+
+/* ===== full-length thin strips ===== */
+.htabrow{display:block!important;border:0!important;margin:6px 0 0!important;position:relative}
+.htab{display:flex!important;width:100%!important;justify-content:center;min-height:0!important;height:14px;padding:0!important;gap:6px!important;font:700 8.5px/14px system-ui!important;letter-spacing:.14em!important;border-radius:4px!important;box-shadow:none!important;position:relative}
+.htab::before{content:'';position:absolute;left:0;right:0;top:-12px;bottom:-12px}
+.htab i{display:none!important}
+.htab .chev{font-size:9px!important}
+.tlwrap{border-top:0!important;padding-top:4px!important}
+.edge{top:0!important;bottom:0!important;transform:none!important;height:auto!important;width:14px!important;padding:0!important;gap:6px!important;border-radius:0!important;box-shadow:none!important;justify-content:center}
+.edge::before{content:'';position:absolute;top:0;bottom:0;right:0;width:36px}
+.edge b{font:700 8.5px system-ui!important;letter-spacing:.14em!important}
+.edge .chev{font-size:10px!important}
+.edge i{display:none!important}
+.ptab{left:-14px!important;top:0!important;bottom:0!important;transform:none!important;width:14px!important;padding:0!important;gap:6px!important;border-radius:0!important;box-shadow:none!important;justify-content:center}
+.ptab::before{content:'';position:absolute;top:0;bottom:0;left:-16px;width:36px}
+.ptab b{font:700 8.5px system-ui!important}
+.ptab .chev{font-size:10px!important}
+.ptab i{display:none!important}
+.notepeek{right:22px!important}
+main{padding-right:22px!important}
+aside{border-radius:0!important}
+/* ===== recording sync ===== */
+#syncView{position:fixed;inset:0;z-index:55;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#syncView[hidden]{display:none}
+.syin{max-width:1000px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 18px 60px;font-family:system-ui}
+.sytop{display:flex;align-items:center;gap:14px}.sytop h2{margin:0;font-size:24px}
+.sytop button{font:inherit;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 13px;min-height:44px;cursor:pointer}
+.syintro{color:var(--muted);font-size:13.5px;margin:6px 0 12px}
+.syplayer{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.syplayer .pbtn{width:52px;height:52px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:19px;cursor:pointer}
+.syplayer .sm{height:44px;padding:0 12px;border-radius:10px;border:1px solid #4b5451;background:transparent;color:#fff;font:700 14px system-ui;cursor:pointer}
+.syplayer .tm{font:800 22px system-ui;font-variant-numeric:tabular-nums;min-width:96px}
+.syplayer input[type=range]{flex:1;min-width:200px}
+.sytap{width:100%;height:84px;border-radius:16px;border:0;background:#3b4fd8;color:#fff;font:800 22px system-ui;margin-bottom:6px;cursor:pointer}
+.sytap small{display:block;font:600 14px system-ui;opacity:.85}
+.sytap:active{transform:scale(.99)}
+.syrow{display:grid;grid-template-columns:1fr 120px auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:7px}
+.syrow.next{border:2px solid #3b4fd8}
+.syrow.set .t{color:#2e7d4f}
+.syrow b{font-size:16px}.syrow small{display:block;color:var(--muted);font-size:12.5px}
+.syrow .t{font:800 18px system-ui;font-variant-numeric:tabular-nums;color:var(--muted)}
+.syrow .ctl{display:flex;gap:6px;flex-wrap:wrap}
+.syrow .ctl button{height:40px;min-width:40px;padding:0 10px;border-radius:10px;border:1px solid var(--line);background:#fff;font:700 14px system-ui;cursor:pointer}
+.syrow .ctl button.mk{border-color:#3b4fd8;color:#3b4fd8}
+.syrow .ctl button.ck{background:var(--ink);color:#fff;border-color:var(--ink)}
+.syadd{display:flex;gap:8px;align-items:center;margin:10px 0}
+.syadd select,.syadd button{height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font:600 14px system-ui;padding:0 10px}
+.mrec .sybtn{height:40px;padding:0 14px;border-radius:10px;border:2px solid #3b4fd8;background:#fff;color:#3b4fd8;font:800 14px system-ui;cursor:pointer}
+@media (max-width:700px){.syrow{grid-template-columns:1fr auto}.syrow .ctl{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -699,6 +748,16 @@ body.noside .ptab{display:none}
   <button class="tapb" id="dTap">TAP TEMPO</button>
   <div class="dbtns"><button class="dsm" id="dReset">Reset to 120</button><button class="dsm" id="dDone">Done</button></div>
 </div>
+<div id="syncView" hidden>
+ <div class="syin">
+  <div class="sytop"><button id="syBack">‹ Settings</button><h2>Sync recording</h2></div>
+  <p class="syintro">Line up any recording with the drill. Play the recording and tap <b>TAP</b> at each spot on the list as you hear it (the downbeat where that set's move starts). The app stretches the timing in between using the score. Use ◀ ▶ to nudge a spot by 0.05 s, and <b>Check</b> to hear it with the click.</p>
+  <div class="syplayer"><button class="pbtn" id="syPlay">▶</button><button class="sm" id="syBk">−5 s</button><span class="tm" id="syTime">0:00.0</span><input type="range" id="sySeek" min="0" max="100" step="0.1" value="0"><button class="sm" id="syFw">+5 s</button><span id="syName" style="color:#aab3af;font-size:13px"></span></div>
+  <button class="sytap" id="syTap">TAP<small id="syTapFor">at the start of …</small></button>
+  <div id="syRows"></div>
+  <div class="syadd"><span>Add a spot:</span><select id="syAddSel"></select><button id="syAddBtn">+ Add</button><span style="flex:1"></span><button id="syClear">Clear all</button></div>
+ </div>
+</div>
 <div id="scoreView" hidden>
  <div class="svin">
   <div class="svtop"><button id="svBack">‹ Settings</button><h2>Score setup</h2><div class="svprog"><span id="svProgT"></span><div class="pbar"><i id="svProgB"></i></div></div></div>
@@ -751,7 +810,7 @@ body.noside .ptab{display:none}
     <div class="sl">Music<small>Score = the band parts from the MusicXML, played by the app (basic sounds; follows the tempo slider exactly; Part 4 has no score so it's silent). Recording = your show audio file, synced to the drill's counts.</small></div>
     <div class="seg" role="group" id="msrcSeg"></div>
     <div class="mvol"><span>Music volume</span><input type="range" id="mVol" min="0" max="100" step="1" aria-label="Music volume"><span id="mVolV"></span></div>
-    <div class="mrec"><label class="filebtn">Load recording…<input type="file" id="recFile" accept="audio/*,.ogg,.mp3,.m4a,.wav" hidden></label><button id="recClear" hidden>Remove</button><small id="recMsg">No recording loaded. It stays on this device only.</small></div>
+    <div class="mrec"><label class="filebtn">Load recording…<input type="file" id="recFile" accept="audio/*,.ogg,.mp3,.m4a,.wav" hidden></label><button id="recClear" hidden>Remove</button><button class="sybtn" id="syOpen" hidden>Sync recording…</button><small id="recMsg">No recording loaded. It stays on this device only.</small></div>
   </div>
   <div class="srow">
     <div class="sl">Click sound<small>Tap a sound to hear it</small></div>
@@ -1458,7 +1517,7 @@ function tempoMap(){ ritsUI(); const box=$('tmap'); box.innerHTML='';
     const rr=RITS.find(r=>r.a<=m.a&&m.b<=r.a+r.n-1); if(rr) b.textContent=ritOf(rr)?`rit. ${ritOf(rr)}%`:'no rit';
     const c=document.createElement('small'); c.textContent=(m.brk?'after a pause · ':'')+`taps averaged ${m.raw}`;
     r.append(a,b,c); box.appendChild(r);}); }
-function setTempoSource(v){ prefs.tsrc=v; S=(v==='steady'&&D.steady)?steadyS():D.sync; if(playing) stop(); setListTempos(); tempoMap(); render(); save(); }
+function setTempoSource(v){ prefs.tsrc=v; S=(v==='steady'&&D.steady)?steadyS():syncS(); if(playing) stop(); setListTempos(); tempoMap(); render(); save(); }
 /* ---------- go to measure ---------- */
 (function(){
   const mvs=[...new Set(BT.map(b=>b.mv))]; const sel=$('gMv');
@@ -1646,16 +1705,61 @@ function idb(){ return new Promise((res,rej)=>{ try{ const r=indexedDB.open('rm_
 async function recPut(blob,name){ try{ const db=await idb(); const tx=db.transaction('f','readwrite'); tx.objectStore('f').put({blob,name},'rec'); }catch(e){} }
 async function recGet(){ try{ const db=await idb(); return await new Promise(res=>{ const q=db.transaction('f').objectStore('f').get('rec'); q.onsuccess=()=>res(q.result); q.onerror=()=>res(null); }); }catch(e){ return null; } }
 async function recDel(){ try{ const db=await idb(); db.transaction('f','readwrite').objectStore('f').delete('rec'); }catch(e){} }
+/* ---- recording sync: anchor spots {l: set label, r: seconds in the recording} ---- */
+let recName='', anchors=[];
+function loadAnchors(){ try{ const a=JSON.parse(localStorage.getItem('rm_anchors')||'{}'); return a[recName]||[]; }catch(e){ return []; } }
+function saveAnchors(){ try{ const a=JSON.parse(localStorage.getItem('rm_anchors')||'{}'); a[recName]=anchors; localStorage.setItem('rm_anchors',JSON.stringify(a)); }catch(e){} }
+const anchorCount=l=>{ const i=SETS.findIndex(s=>s.l===l); return i>0?SETS[i-1].s+1:1; };
+function syncAt(n){ const s=D.sync; if(n>=1&&n<=s.length) return s[n-1]; if(n<1) return s[0]-(1-n)*(s[1]-s[0]); return s[s.length-1]+(n-s.length)*(s[s.length-1]-s[s.length-2]); }
+function addedBefore(n){ let a=0; SETS.forEach(st=>{ if(!st.added) return; const lo=st.s-st.c; if(n>=st.s) a+=syncAt(st.s)-syncAt(lo); else if(n>lo) a+=syncAt(n)-syncAt(lo); }); return a; }
+// count times for the recording: drill timing, stretched piecewise between the anchor spots
+function syncS(){ if(!D.sync) return D.sync; const A=anchors.map(a=>{ const c=anchorCount(a.l); return {x:syncAt(c)-addedBefore(c),r:a.r}; }).sort((p,q)=>p.x-q.x);
+  if(!A.length) return D.sync;
+  const f=x=>{ if(x<=A[0].x) return A[0].r+(x-A[0].x); for(let k=0;k<A.length-1;k++) if(x<=A[k+1].x){ const p=A[k],q=A[k+1]; return p.r+(x-p.x)*(q.r-p.r)/((q.x-p.x)||1); } const L=A[A.length-1]; return L.r+(x-L.x); };
+  return D.sync.map((_,j)=>{ const n=j+1, ab=addedBefore(n); return f(syncAt(n)-ab)+ab; }); }
+function applySync(){ if(prefs.tsrc!=='steady'){ if(playing) stop(); S=syncS(); setListTempos(); tempoMap(); render(); } }
+function fmtT(s){ s=Math.max(0,s); const m=Math.floor(s/60); return `${m}:${(s-m*60).toFixed(1).padStart(4,'0')}`; }
+function sySpots(){ const out=[]; const seen=new Set(); SETS.forEach((s,i)=>{ if(i>0&&!s.added&&!seen.has(s.p)){ seen.add(s.p); out.push(s.l); } }); return out; }
+function syRows(){ const box=$('syRows'); box.innerHTML='';
+  const labels=[...new Set([...sySpots(),...anchors.map(a=>a.l)])].sort((a,b)=>SETS.findIndex(s=>s.l===a)-SETS.findIndex(s=>s.l===b));
+  const next=labels.find(l=>!anchors.some(a=>a.l===l));
+  labels.forEach(l=>{ const i=SETS.findIndex(s=>s.l===l), s=SETS[i], a=anchors.find(x=>x.l===l), mm=MM[i];
+    const r=document.createElement('div'); r.className='syrow'+(a?' set':'')+(l===next?' next':'');
+    r.innerHTML=`<div><b></b><small></small></div><span class="t"></span><div class="ctl"></div>`;
+    r.querySelector('b').textContent=`Set ${l} starts`; r.querySelector('small').textContent=`${s.p}${mm?` · m. ${mm.a}`:''} · count ${anchorCount(l)}`;
+    r.querySelector('.t').textContent=a?fmtT(a.r):'not set';
+    const c=r.querySelector('.ctl'); const btn=(txt,cls,fn)=>{ const b=document.createElement('button'); b.textContent=txt; if(cls) b.className=cls; b.onclick=fn; c.appendChild(b); };
+    btn('Mark now','mk',()=>setAnchor(l,recEl.currentTime));
+    if(a){ btn('◀','',()=>setAnchor(l,a.r-0.05)); btn('▶','',()=>setAnchor(l,a.r+0.05)); btn('Check','ck',()=>checkAt(l)); btn('✕','',()=>{ anchors=anchors.filter(x=>x.l!==l); saveAnchors(); applySync(); syRows(); }); }
+    box.appendChild(r); });
+  $('syTapFor').textContent=next?`at the start of set ${next}`:'all spots set · add more below or nudge';
+  const sel=$('syAddSel'); sel.innerHTML=''; SETS.forEach((s,i)=>{ if(i>0&&!s.added&&!labels.includes(s.l)){ const o=document.createElement('option'); o.value=s.l; o.textContent=`Set ${s.l}`+(MM[i]?` · m. ${MM[i].a}`:''); sel.appendChild(o); } }); }
+function setAnchor(l,r){ anchors=anchors.filter(x=>x.l!==l); anchors.push({l,r:Math.max(0,+r.toFixed(3))}); saveAnchors(); applySync(); syRows(); }
+function checkAt(l){ if(!recEl) return; recEl.pause(); const i=SETS.findIndex(s=>s.l===l); if(prefs.tsrc==='steady') setTempoSource('taps');
+  pv.on=true; pv.hear='both'; pv.ci=false; pv.from=Math.max(0,barBefore(anchorCount(l))); count=pv.from; mus.on=true; mus.src='rec'; play(); }
+$('syOpen').onclick=()=>{ if(!recEl) return; dlg.close(); $('syncView').hidden=false; $('syName').textContent=recName; syRows(); syTick(); };
+$('syBack').onclick=()=>{ if(playing) stop(); pv.on=false; if(recEl) recEl.pause(); $('syncView').hidden=true; openSettings(); };
+$('syPlay').onclick=()=>{ if(playing){ stop(); pv.on=false; } if(!recEl) return; if(recEl.paused){ recEl.muted=false; recEl.playbackRate=1; recEl.play().catch(()=>{}); } else recEl.pause(); };
+$('syBk').onclick=()=>{ if(recEl) recEl.currentTime=Math.max(0,recEl.currentTime-5); };
+$('syFw').onclick=()=>{ if(recEl) recEl.currentTime=recEl.currentTime+5; };
+$('sySeek').oninput=()=>{ if(recEl&&recEl.duration) recEl.currentTime=$('sySeek').value/100*recEl.duration; };
+$('syTap').onclick=()=>{ if(!recEl) return; const labels=[...new Set([...sySpots(),...anchors.map(a=>a.l)])].sort((a,b)=>SETS.findIndex(s=>s.l===a)-SETS.findIndex(s=>s.l===b));
+  const next=labels.find(l=>!anchors.some(a=>a.l===l)); if(next) setAnchor(next,recEl.currentTime-0.03); };
+$('syAddBtn').onclick=()=>{ const l=$('syAddSel').value; if(!l||!recEl) return; setAnchor(l,recEl.currentTime); };
+$('syClear').onclick=()=>{ if(!confirm('Clear all sync spots for this recording?')) return; anchors=[]; saveAnchors(); applySync(); syRows(); };
+function syTick(){ if($('syncView').hidden) return; requestAnimationFrame(syTick); if(!recEl) return;
+  $('syTime').textContent=fmtT(recEl.currentTime); if(recEl.duration&&document.activeElement!==$('sySeek')) $('sySeek').value=recEl.currentTime/recEl.duration*100;
+  $('syPlay').textContent=(!recEl.paused&&!playing)||playing?'❚❚':'▶'; }
 function useRecording(blob,name){ if(recURL) URL.revokeObjectURL(recURL); recURL=URL.createObjectURL(blob);
   recEl=new Audio(); recEl.preload='auto'; recEl.src=recURL; recEl.preservesPitch=true; recEl.webkitPreservesPitch=true;
-  recEl.onloadedmetadata=()=>{ const len=recEl.duration, need=D.sync?D.sync[D.sync.length-1]:0;
+  recName=name; anchors=loadAnchors(); recEl.onloadedmetadata=()=>{ const len=recEl.duration, need=D.sync?D.sync[D.sync.length-1]:0; $('syOpen').hidden=false; if(prefs.tsrc!=='steady'){ S=syncS(); setListTempos(); }
     $('recMsg').textContent=`${name} · ${Math.floor(len/60)}:${String(Math.round(len%60)).padStart(2,'0')}`+(need&&Math.abs(len-need)>30?` · the drill ends at ${Math.floor(need/60)}:${String(Math.round(need%60)).padStart(2,'0')}, check this is the show audio`:' · synced to the drill');
   };
   recEl.onerror=()=>{ $('recMsg').textContent="This device can't play that file. Try an .mp3 or .m4a."; };
   setMusicUI(); }
 $('recFile').onchange=async()=>{ const f=$('recFile').files[0]; if(!f) return; useRecording(f,f.name); await recPut(f,f.name); setMusic('rec'); };
 $('recClear').onclick=async()=>{ if(playing) stop(); recEl=null; if(recURL) URL.revokeObjectURL(recURL); recURL=null; await recDel();
-  if(mus.src==='rec'){ mus.src='synth'; } $('recMsg').textContent='No recording loaded. It stays on this device only.'; musSave(); setMusicUI(); };
+  if(mus.src==='rec'){ mus.src='synth'; } $('recMsg').textContent='No recording loaded. It stays on this device only.'; $('syOpen').hidden=true; anchors=[]; musSave(); setMusicUI(); };
 recGet().then(r=>{ if(r&&r.blob) useRecording(r.blob,r.name||'Recording'); });
 // beat-in-bar for a click (Beats-per-bar override wins over the score)
 function bibOf(tk){ return {bib:tk.bib||1,bar:tk.bar||4}; }  // the show always follows the score's bars
@@ -2063,7 +2167,7 @@ try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
   sections=JSON.parse(localStorage.getItem('rm_sections')||'[]').filter(s=>s&&s.a<NS&&s.b<NS);
 }catch(e){}
 $('bLoop').classList.toggle('on',prefs.loop);
-S=(prefs.tsrc==='steady'&&D.steady)?steadyS():D.sync; setListTempos(); tempoMap();
+S=(prefs.tsrc==='steady'&&D.steady)?steadyS():syncS(); setListTempos(); tempoMap();
 applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); freeUI(); playLabel();
 runChips(); $('tBpm').textContent=prefs.testBpm;
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
