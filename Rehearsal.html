@@ -913,12 +913,12 @@ body.zoomed svg#field{border-radius:8px!important}
 #free .fgo:active{transform:scale(.98)}
 .wheel .t.tm{height:7%!important;width:4px!important;margin-left:-2px!important;background:#fff!important}
 /* sideways Metronome only: tabs ride in the top row, Start beside the dial */
-#free:not(.port) .ftabs{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:4}
-#free:not(.port){padding-top:44px!important}
+#free.roomy:not(.port) .ftabs{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:4}
+#free.roomy:not(.port){padding-top:44px!important}
 #free:not(.port) .fside{gap:8px}
 #free:not(.port) .fbeats span{width:min(40px,8vh)!important;height:min(40px,8vh)!important;font-size:min(17px,3.6vh)!important}
 #free:not(.port) .fside .fgo{width:min(300px,100%);height:40px;font-size:15px;border-radius:10px;margin-top:0}
-body.lay-phoneL #free:not(.port) .ftabs{top:12px}
+body.lay-phoneL #free.roomy:not(.port) .ftabs{top:12px}
 body.lay-phoneL.met .viewseg button,body.lay-phoneL.met #moBtn{font-size:9px!important}
 body.lay-phoneL #moBtn{max-width:150px}
 /* upright big info: music fits */
@@ -927,6 +927,19 @@ body.lay-phoneL #free:not(.port) .fside{gap:5px}
 body.lay-phoneL #free:not(.port) .fbeats span{width:30px!important;height:30px!important;font-size:14px!important}
 body.lay-phoneL #free:not(.port) .fside .fgo{height:32px;font-size:13px}
 body.lay-phoneP.info-big #hud .hmus .v{font-size:clamp(17px,5vw,24px)!important;letter-spacing:-.02em}
+/* never overlap: if it truly can't fit, the panel scrolls instead */
+body.met.freem #free{overflow-y:auto!important;overflow-x:hidden!important;justify-content:flex-start!important}
+#free .fpage{flex:1 0 auto!important}
+#free.port #fpTempo{gap:10px!important}
+#free .fdialbox{flex:none}
+
+.wheel{--dz:240px}
+.wheel .wc b{font-size:calc(var(--dz)*.24)!important}
+.wheel .wc small{font-size:max(10px,calc(var(--dz)*.06))!important}
+#free:not(.port):not(.roomy) .fbeats span{width:34px!important;height:34px!important;font-size:15px!important}
+#free:not(.port):not(.roomy) #fTs{max-width:240px}
+/* Metronome only: drill-only strips (subsets, run, timeline) step aside to give the metronome the room */
+body.met.freem #sbWrap, body.met.freem #upCard, body.met.freem .htabrow:has(#tlGrab), body.met.freem .tlwrap, body.met.freem .runsplit{display:none!important}
 
 </style>
 </head>
@@ -2758,7 +2771,7 @@ window.addEventListener('resize',()=>requestAnimationFrame(()=>{ if(Z.s>1.01) ap
 let fHudKey='';
 (function freeHud(){ requestAnimationFrame(freeHud); if(!(freeOn&&view==='met')){ if(fHudKey){ fHudKey=''; hud(); } return; }
   const [n,d]=freeTs(); let col=-1; if(testing&&ac){ const now=ac.currentTime; for(const x of tLog) if(x.t<=now) col=x.col; }
-  const k=`${prefs.testBpm}|${n}/${d}|${col}`; if(k===fHudKey) return; fHudKey=k;
+  const k=`${prefs.testBpm}|${n}/${d}|${col}`; if(k===fHudKey&&$('hBpm').textContent===String(prefs.testBpm)&&$('hTs').textContent===`${n}${d}`) return; fHudKey=k;
   $('hBpm').textContent=prefs.testBpm; setTs($('hTs'),`${n}/${d}`); $('hCount').textContent=col>=0?`${col+1} / ${n}`:'–'; })();
 
 /* ---- tap a dot: card with label, coordinates and next spot ---- */
@@ -2878,6 +2891,31 @@ const _setDial0=setDial; setDial=function(b,f){ _setDial0(b,f); tickPos(); };
 (function goPlace(){ requestAnimationFrame(goPlace); if(!freeOn||view!=='met') return; const port=$('free').classList.contains('port');
   const want=port||fPage!=='tempo'?$('free'):document.querySelector('#fpTempo .fside'); if(fGo.parentNode!==want) want.appendChild(fGo); })();
 const _layMode0=layMode; layMode=function(){ _layMode0(); const mt=$('moBtn').lastChild; if(mt&&mt.nodeType===3) mt.textContent=document.body.classList.contains('lay-wide')?'♩ Metronome only':'♩ Met only'; };
+
+/* ---- Metronome only: size the dial from the space that's really left, so nothing overlaps ---- */
+freeLayout=function(){ if(!freeOn||view!=='met') return; const fr=$('free'), wh=$('wheel'); if(wh.parentNode!==$('fDialBox')) $('fDialBox').appendChild(wh);
+  const r=fr.getBoundingClientRect(); if(!r.width||!r.height) return; const port=r.height>r.width*0.85; fr.classList.toggle('port',port);
+  const cs=getComputedStyle(fr), padV=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom), avW=r.width-24;
+  const h=e=>e&&e.offsetParent!==null&&getComputedStyle(e).position!=='absolute'?e.offsetHeight:0;
+  let sz;
+  if(port){ const side=document.querySelector('#fpTempo .fside'); const used=h(document.querySelector('#free .ftabs'))+h(side)+(fGo.parentNode===fr?h(fGo):0)+8*3+12;
+    sz=Math.min(avW*0.78,r.height-padV-used,360); }
+  else { sz=Math.min(r.height-padV-8,avW*0.42,360); }
+  sz=Math.max(90,Math.floor(sz)); wh.style.width=wh.style.height=sz+'px'; tickPos(); setDial(prefs.testBpm,false); };
+try{ new ResizeObserver(()=>requestAnimationFrame(freeLayout)).observe($('free')); }catch(e){}
+freeLayout=function(){ if(!freeOn||view!=='met') return; const fr=$('free'), wh=$('wheel'); if(wh.parentNode!==$('fDialBox')) $('fDialBox').appendChild(wh);
+  const r=fr.getBoundingClientRect(); if(!r.width||!r.height) return; const avW=r.width-24;
+  const h=e=>e&&e.offsetParent!==null?e.offsetHeight:0, side=document.querySelector('#fpTempo .fside'), tabs=document.querySelector('#free .ftabs');
+  const roomy=r.width>=600; fr.classList.toggle('roomy',roomy);
+  const padV=(roomy?44:48)+10;
+  // stacked (dial on top) vs side-by-side: pick whichever gives the bigger dial
+  fr.classList.add('port'); fGo.parentNode!==fr&&fr.appendChild(fGo);
+  const stacked=Math.min(avW*0.78, r.height-padV-h(tabs)-h(side)-h(fGo)-8*3-12, 360);
+  fr.classList.remove('port'); if(fPage==='tempo') side.appendChild(fGo);
+  const sideBy=Math.min(r.height-padV-(roomy?0:h(tabs)+8)-8, avW*0.46, 360);
+  const port=stacked>=sideBy||stacked>=200; fr.classList.toggle('port',port);
+  const want=port||fPage!=='tempo'?fr:side; if(fGo.parentNode!==want) want.appendChild(fGo);
+  const sz=Math.max(90,Math.floor(port?stacked:sideBy)); wh.style.width=wh.style.height=sz+'px'; wh.style.setProperty('--dz',sz+'px'); tickPos(); setDial(prefs.testBpm,false); };
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
