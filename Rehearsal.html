@@ -488,6 +488,52 @@ body:not(.noside) .edge{display:none}
 .lane.s::before{content:attr(data-n);position:absolute;left:-5px;top:-9px;min-width:15px;height:15px;padding:0 2px;box-sizing:border-box;border-radius:8px;background:inherit;color:#fff;font:700 10px/15px system-ui;text-align:center}
 .lane.e::after{content:'';position:absolute;left:-3px;bottom:-4px;width:11px;height:4px;border-radius:2px;background:inherit}
 #runChips button i.rc{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:1px}
+
+/* ===== Metronome only + tempo dial ===== */
+.mobtn{position:absolute;z-index:4;height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:#fff;font:700 15px system-ui;display:none;align-items:center;gap:8px;color:var(--ink);cursor:pointer}
+body.met .mobtn{display:flex}
+.mobtn.on{background:#3b4fd8;color:#fff;border-color:#3b4fd8}
+.mobtn .sw{width:34px;height:20px;border-radius:20px;background:#cfd5d1;position:relative;flex:none}.mobtn .sw::after{content:'';position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.mobtn.on .sw{background:#ffffff66}.mobtn.on .sw::after{left:16px}
+#free{display:none;width:var(--fw,100%);height:var(--fh,100%);flex:none;box-sizing:border-box;background:#eef0fb;border-radius:8px 8px 0 0;flex-direction:column;align-items:center;justify-content:center;gap:2.2vh;font-family:system-ui;overflow:hidden}
+body.met.freem #free{display:flex}
+body.met.freem #met{display:none!important}
+.flab{font-size:14px;letter-spacing:.12em;color:#3b4fd8;font-weight:700;text-transform:uppercase}
+.fbpmrow{display:flex;align-items:center;gap:12px}
+.fbpmrow>button[data-d]{width:66px;height:58px;border-radius:12px;border:1px solid var(--line);background:#fff;font:700 18px system-ui;cursor:pointer}
+.fbpm{min-width:240px;border:0;background:transparent;cursor:pointer;text-align:center;color:var(--ink)}
+.fbpm b{display:block;font-size:min(120px,13vh);line-height:1;font-weight:800;font-variant-numeric:tabular-nums}.fbpm small{color:var(--muted);font-size:14px}
+.fbeats{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}.fbeats span{width:56px;height:56px;border-radius:50%;background:#dfe3f5;display:flex;align-items:center;justify-content:center;font:800 22px system-ui;color:#6b73a8}.fbeats span.on{background:#3b4fd8;color:#fff}.fbeats span.acc{box-shadow:inset 0 0 0 3px #3b4fd8}
+.frow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.frow button{border:1px solid var(--line);border-radius:10px;padding:9px 15px;font:600 15px system-ui;background:#fff;cursor:pointer;min-height:44px}.frow button.sel{background:var(--ink);color:#fff;border-color:var(--ink)}.frow button.tap{border:2px solid var(--ink);font-weight:800}
+.dscrim{position:fixed;inset:0;background:rgba(20,24,40,.55);z-index:60}
+.dscrim[hidden],.dial[hidden]{display:none!important}
+.dial{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:61;display:flex;flex-direction:column;align-items:center;gap:12px;font-family:system-ui}
+.dhint{color:#fff;opacity:.85;font-size:14px}
+.wheel{position:relative;width:min(340px,70vw,52vh);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 40%,#5a6cf0,#3b4fd8 70%);box-shadow:0 10px 40px rgba(0,0,0,.35),inset 0 -8px 20px rgba(0,0,0,.15);touch-action:none;cursor:grab}
+.wheel .t{position:absolute;left:50%;top:50%;width:3px;height:4.5%;margin-left:-1.5px;background:#ffffff77;border-radius:2px;transform-origin:50% 0}
+.wheel .knob{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.3);pointer-events:none}
+.wheel .wc{position:absolute;inset:29%;border-radius:50%;background:#2f3fb8;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;pointer-events:none}
+.wheel .wc b{font:800 min(64px,9vh) system-ui;line-height:1;font-variant-numeric:tabular-nums}.wheel .wc small{opacity:.8;font-size:14px}
+.tapb{width:300px;max-width:80vw;height:64px;border-radius:18px;border:0;background:#fff;color:#3b4fd8;font:800 24px system-ui;cursor:pointer}
+.tapb:active{transform:scale(.97)}
+.dbtns{display:flex;gap:12px}.dsm{height:52px;padding:0 22px;border-radius:14px;border:0;background:#ffffff33;color:#fff;font:700 17px system-ui;cursor:pointer}
+
+/* ===== director-added sets ===== */
+.addbtn{height:40px;padding:0 12px;border-radius:10px;border:2px solid #3b4fd8;background:#fff;color:#3b4fd8;font:800 14px system-ui;white-space:nowrap;cursor:pointer}
+.addpop{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(380px,92vw);background:#fff;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.35);z-index:80;padding:16px 18px;font-family:system-ui;display:flex;flex-direction:column;gap:12px;box-sizing:border-box}
+.addpop[hidden],#addScrim[hidden]{display:none!important}
+#addScrim{z-index:79}
+.addpop h3{margin:0;font-size:19px}.apsub{color:var(--muted);font-size:13px;margin-top:-8px}
+.addpop .nm{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.addpop .nm input{width:90px;font:800 26px system-ui;color:var(--ink);background:#eef0fb;border:0;border-radius:10px;padding:4px 10px}
+.addpop .r{display:flex;align-items:center;gap:8px}.addpop .r .lb{width:84px;flex:none;font-weight:700;font-size:14px}
+.addpop .st{display:flex;align-items:center;gap:6px}.addpop .st button{min-width:40px;height:42px;border-radius:10px;border:1px solid var(--line);background:#fff;font:700 16px system-ui;cursor:pointer}.addpop .st b{min-width:44px;text-align:center;font-size:20px}
+.addpop .chips{display:flex;gap:6px;flex-wrap:wrap}.addpop .chips button{border:1px solid var(--line);border-radius:9px;padding:7px 10px;font:600 14px system-ui;background:#fff;cursor:pointer;min-height:38px}.addpop .chips button.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+.addpop .note{font-size:12.5px;color:var(--muted);background:#f4f5f2;border-radius:8px;padding:8px 10px}
+.addpop .go{display:flex;gap:10px}.addpop .go button{flex:1;height:48px;border-radius:12px;border:0;font:800 16px system-ui;cursor:pointer}.addpop .go .ok{background:#3b4fd8;color:#fff}.addpop .go .no{background:#eceeec}
+#setList .row.added{background:#eef0fb}#setList .row.added .n::after{content:' +';color:#3b4fd8}
+#setList .row.added.cur{background:color-mix(in srgb,#3b4fd8 22%,transparent)}
 </style>
 </head>
 <body>
@@ -541,6 +587,13 @@ body:not(.noside) .edge{display:none}
           <small id="tsMsg"><b>120b:</b> tempo (♩) · <b>4@6/8</b> 4 bars of 6/8 · <b> - </b> next section. Each section becomes a set you can Run and Loop.</small>
         </div>
       </div>
+      <button class="mobtn" id="moBtn" aria-pressed="false"><span class="sw"></span>♩ Metronome only</button>
+      <div id="free" hidden>
+        <div class="flab">Metronome only · not following the show</div>
+        <div class="fbpmrow"><button data-d="-10">−10</button><button data-d="-1">−1</button><button class="fbpm" id="fBpm" title="Tap for the tempo dial"><b id="fBpmV">120</b><small id="fUnit">♩ = BPM · tap for dial</small></button><button data-d="1">+1</button><button data-d="10">+10</button></div>
+        <div class="fbeats" id="fBeats"></div>
+        <div class="frow" id="fTs"></div>
+      </div>
       <div id="met" aria-live="off">
         <div class="flash" id="mFlash"></div>
         <div class="mset" id="mSet">Set 1</div>
@@ -591,7 +644,7 @@ body:not(.noside) .edge{display:none}
       <p class="notes" id="notes"></p>
     </div>
     <div class="card">
-      <div class="abhead"><h2>Sets</h2><button class="abbtn" id="abA" title="Mark the selected set as the start of a run">A</button><button class="abbtn" id="abB" title="Mark the selected set as the end of the run">B</button></div>
+      <div class="abhead"><h2>Sets</h2><button class="addbtn" id="addSet" title="Add measures after the selected set">+ Set</button><button class="abbtn" id="abA" title="Mark the selected set as the start of a run">A</button><button class="abbtn" id="abB" title="Mark the selected set as the end of the run">B</button></div>
       <div class="abhint" id="abHint">Tap a set, then <b>A</b>. Tap the last set, then <b>B</b>. That makes a run.</div>
       <div id="setList"></div>
     </div>
@@ -604,6 +657,23 @@ body:not(.noside) .edge{display:none}
 <div class="edge" id="edge" title="Swipe left (or tap) for the sets panel"><i></i><b>NOTE</b></div>
 <div class="notepeek" id="notePeek" hidden><small id="npHead"></small><span id="npText"></span></div>
 <div class="scrim" id="scrim"></div>
+<div class="dscrim" id="addScrim" hidden></div>
+<div class="addpop" id="addPop" hidden>
+  <h3 id="apHead">Add a set</h3><small class="apsub">For measures the director adds in</small>
+  <div class="nm">New set will be <input id="apName" maxlength="6" autocomplete="off" spellcheck="false"></div>
+  <div class="r"><span class="lb">Measures</span><div class="st"><button data-m="-1">−</button><b id="apMeas">2</b><button data-m="1">+</button></div></div>
+  <div class="r"><span class="lb">Time sig.</span><div class="chips" id="apTs"></div></div>
+  <div class="r"><span class="lb">Tempo</span><div class="st"><button data-t="-5">−5</button><button data-t="-1">−</button><b id="apBpm">120</b><button data-t="1">+</button><button data-t="5">+5</button></div></div>
+  <div class="note" id="apNote"></div>
+  <div class="go"><button class="no" id="apNo">Cancel</button><button class="ok" id="apOk">Add</button></div>
+</div>
+<div class="dscrim" id="dScrim" hidden></div>
+<div class="dial" id="dial" hidden>
+  <div class="dhint">Spin the knob · each tick = 1 bpm</div>
+  <div class="wheel" id="wheel"><div class="knob" id="knob"></div><div class="wc"><b id="dVal">120</b><small>BPM</small></div></div>
+  <button class="tapb" id="dTap">TAP TEMPO</button>
+  <div class="dbtns"><button class="dsm" id="dReset">Reset to 120</button><button class="dsm" id="dDone">Done</button></div>
+</div>
 <div id="scoreView" hidden>
  <div class="svin">
   <div class="svtop"><button id="svBack">‹ Settings</button><h2>Score setup</h2><div class="svprog"><span id="svProgT"></span><div class="pbar"><i id="svProgB"></i></div></div></div>
@@ -713,7 +783,38 @@ function buildTestShow(s){
 }
 let TEST_SRC=null; try{ TEST_SRC=localStorage.getItem('rm_testshow'); }catch(e){}
 const D=(()=>{ try{ if(TEST_SRC) return buildTestShow(TEST_SRC); if(typeof EMBED==='string') return buildTestShow(EMBED); }catch(e){ try{localStorage.removeItem('rm_testshow');}catch(_){} }
-  return typeof EMBED==='string'?buildTestShow('120b:4@4/4'):EMBED; })();
+  return typeof EMBED==='string'?buildTestShow('120b:4@4/4'):applyAdds(EMBED); })();
+/* Director-added sets: extra measures inserted after a set. Stored on the device as a list and applied
+   to the show data before anything else is built. Everyone holds the previous set's spot; metronome only. */
+function loadAdds(){ try{ return JSON.parse(localStorage.getItem('rm_added')||'[]'); }catch(e){ return []; } }
+function applyAdds(D0){ const adds=loadAdds(); if(!adds.length) return D0;
+  const D=JSON.parse(JSON.stringify(D0)); if(!D.mv) D.mv=[]; D.mv[9]={score:'Added by director (no music)',reh:[]};
+  (D.rits||[]).forEach(r=>{ if(r.k===undefined) r.k=r.a; });
+  for(const ad of adds){
+    const i=D.sets.findIndex(s=>s.l===ad.after); if(i<0) continue;
+    const [n,den]=ad.ts.split('/').map(Number), k=n*ad.meas, d=60/ad.bpm*4/den, c0=D.sets[i].s;
+    const ins=(arr)=>{ if(Array.isArray(arr)&&arr.length===D.sets.length) arr.splice(i+1,0,JSON.parse(JSON.stringify(arr[i]))); };
+    // per-set arrays
+    D.perf.forEach(p=>{ ins(p.xy); ins(p.t); });
+    if(D.props){ Object.values(D.props.desks||{}).forEach(ins); ins(D.props.panels); ins(D.props.box); }
+    if(D.mm) D.mm.splice(i+1,0,{mv:9,a:'+1',b:'+'+ad.meas,r:1,sc:1,bar:n,nb:k,ts:[[ad.ts,'+1']]});
+    // counts after c0 move later by k
+    D.sets.forEach((s,j)=>{ if(j>i) s.s+=k; });
+    D.sets.splice(i+1,0,{l:ad.l,s:c0+k,c:k,p:D.sets[i].p,m:'+'+ad.meas+' bar'+(ad.meas>1?'s':''),i:`All - Hold ${k}`,n:'',added:true,ts:ad.ts,bpm:ad.bpm});
+    const tins=(S)=>{ if(!S) return S; const base=c0>0?S[c0-1]:S[0]-(S[1]-S[0]); const out=S.slice(0,c0);
+      for(let j=1;j<=k;j++) out.push(base+j*d); for(let j=c0;j<S.length;j++) out.push(S[j]+k*d); return out; };
+    D.sync=tins(D.sync); D.steady=tins(D.steady);
+    D.beats=(D.beats||[]).map(b=>b[0]>c0+1e-6?[b[0]+k,...b.slice(1)]:b);
+    for(let j=1;j<=k;j++) D.beats.push([c0+j,9,'+'+Math.ceil(j/n),((j-1)%n)+1,n,ad.ts]);
+    D.beats.sort((a,b)=>a[0]-b[0]);
+    const sh=x=>x>c0+0.99?x+k:x;
+    const shN=a=>(a||[]).map(x=>{ if(x[0]>c0+0.99) return [x[0]+k,x[1]+k,...x.slice(2)]; if(x[1]>c0+1) return [x[0],c0+1,...x.slice(2)]; return x; });
+    D.notes=shN(D.notes); if(D.alts) Object.values(D.alts).forEach(o=>Object.keys(o).forEach(key=>o[key]=shN(o[key])));
+    (D.rits||[]).forEach(r=>{ if(r.a>c0) r.a+=k; });
+    (D.score||[]).forEach(x=>{ x.p=sh(x.p); ['a','b','rit'].forEach(q=>{ if(typeof x.ctl[q]==='number'&&x.ctl[q]>c0) x.ctl[q]+=k; }); if(x.ctl.moves) x.ctl.moves=x.ctl.moves.map(j=>j>i?j+1:j); });
+    (D.tmap||[]).forEach(m=>{ if(m.a>c0) m.a+=k; if(m.b>c0) m.b+=k; });
+  }
+  return D; }
 const SETS=D.sets, P=D.perf, NS=SETS.length, LAST=SETS[NS-1].s;
 let S=D.steady||D.sync; // count times: steady tempo map (default) or the drill's hand-tapped sync
 document.getElementById('title').textContent=D.title;
@@ -1038,7 +1139,7 @@ function applyFlip(){
   $('vBottom').classList.toggle('sel',!flipped); $('vTop').classList.toggle('sel',flipped);
   save();
 }
-function setView(v){ if(v!=='mset') testStop(); requestAnimationFrame(()=>typeof layoutField==='function'&&layoutField()); view=v; metMode=v==='met'; document.body.classList.toggle('met',v==='met'); document.body.classList.toggle('mset',v==='mset');
+function setView(v){ if(v!=='mset') testStop(); if(typeof playLabel==='function') setTimeout(()=>{ playLabel(); placeMo(); },0); requestAnimationFrame(()=>typeof layoutField==='function'&&layoutField()); view=v; metMode=v==='met'; document.body.classList.toggle('met',v==='met'); document.body.classList.toggle('mset',v==='mset');
   [['vDrill','drill'],['vMet','met'],['vSet','mset']].forEach(([id,k])=>$(id).classList.toggle('sel',v===k));
   if(v==='mset') buildPattern(); lastPanel=-1; render(); save(); }
 function setMode(m){ setView(m?'met':'drill'); }
@@ -1300,7 +1401,8 @@ function setListTempos(){ document.querySelectorAll('#setList .row .t').forEach(
    Starts from the tempo just before the bar. Steady mode only (the taps already have their own rits). */
 const RITS=D.rits||[]; let ritPct={};
 try{ ritPct=JSON.parse(localStorage.getItem('rm_rits')||'{}'); }catch(e){}
-const ritOf=r=>ritPct[r.a]!==undefined?ritPct[r.a]:r.def;
+const ritKey=r=>r.k!==undefined?r.k:r.a;
+const ritOf=r=>ritPct[ritKey(r)]!==undefined?ritPct[ritKey(r)]:r.def;
 function steadyS(){ const base=D.steady;
   const dur=base.map((v,k)=>k?v-base[k-1]:0);            // dur[c] = length of beat c (count c to c+1)
   if(typeof sc!=='undefined'){ (D.score||[]).forEach(x=>{ const c=x.ctl;
@@ -1318,7 +1420,7 @@ function ritsUI(){ const box=$('ritBox'); if(!box) return; box.innerHTML='';
     const val=document.createElement('b'); val.className='ritv'; val.textContent=v?`${v}%`:'Off';
     const up=document.createElement('button'); up.textContent='+'; up.setAttribute('aria-label','More rit');
     const h=document.createElement('small'); h.textContent=v?`${base} → ${Math.round(base*(1-v/100))} bpm`:`stays ${base} bpm`;
-    const set=x=>{ ritPct[r.a]=Math.max(0,Math.min(40,x)); try{ localStorage.setItem('rm_rits',JSON.stringify(ritPct)); }catch(e){}
+    const set=x=>{ ritPct[ritKey(r)]=Math.max(0,Math.min(40,x)); try{ localStorage.setItem('rm_rits',JSON.stringify(ritPct)); }catch(e){}
       if(playing) stop(); S=steadyS(); setListTempos(); ritsUI(); render(); };
     dn.onclick=()=>set(v-5); up.onclick=()=>set(v+5);
     const ctl=document.createElement('span'); ctl.className='ritctl'; ctl.append(dn,val,up);
@@ -1672,7 +1774,7 @@ function ritStep(a){ const r=RITS.find(x=>x.a===a); const w=document.createEleme
   const v=ritOf(r), base=Math.round(60/(steadyBase(a-1)));
   const dn=document.createElement('button'); dn.textContent='−'; const val=document.createElement('b'); val.className='ritv'; val.textContent=v?`${v}%`:'Off';
   const up=document.createElement('button'); up.textContent='+'; const h=document.createElement('span'); h.className='hint'; h.textContent=v?`${base} → ${Math.round(base*(1-v/100))} bpm`:`stays ${base} bpm`;
-  const set=x=>{ ritPct[a]=Math.max(0,Math.min(40,x)); try{ localStorage.setItem('rm_rits',JSON.stringify(ritPct)); }catch(e){} scApply(); svRows(); };
+  const set=x=>{ ritPct[ritKey(r)]=Math.max(0,Math.min(40,x)); try{ localStorage.setItem('rm_rits',JSON.stringify(ritPct)); }catch(e){} scApply(); svRows(); };
   dn.onclick=e=>{e.stopPropagation(); set(v-5);}; up.onclick=e=>{e.stopPropagation(); set(v+5);};
   const lab=document.createElement('span'); lab.textContent='Rit';
   w.append(lab,dn,val,up,h); return w; }
@@ -1837,6 +1939,85 @@ function drawLanes(){ const rows=[...document.querySelectorAll('#setList .row')]
     longPress(e,()=>editRun(r.k)); row.appendChild(e); } });
   abUI(); }
 
+/* ---------- Metronome only (free metronome) + tempo dial ---------- */
+let freeOn=false;
+try{ freeOn=localStorage.getItem('rm_free')==='1'; }catch(e){}
+const FTS=[[2,4],[3,4],[4,4],[5,4],[6,8],[7,8],[9,8],[12,8]];
+function freeTs(){ return prefs.bpm?[prefs.bpm,prefs.tsD||4]:[4,4]; }
+function freeUI(){ $('moBtn').classList.toggle('on',freeOn); $('moBtn').setAttribute('aria-pressed',freeOn); document.body.classList.toggle('freem',freeOn);
+  $('fBpmV').textContent=prefs.testBpm; $('dVal').textContent=prefs.testBpm; $('fUnit').textContent=unitLabel()+' · tap for dial';
+  const [n,d]=freeTs(), P=patFor(`${n}/${d}`), bx=$('fBeats'); if(bx.children.length!==n){ bx.innerHTML=''; for(let k=0;k<n;k++){ const s=document.createElement('span'); s.textContent=k+1; bx.appendChild(s); } }
+  [...bx.children].forEach((s,k)=>s.classList.toggle('acc',!!P.acc[k]));
+  const tr=$('fTs'); tr.innerHTML=''; FTS.forEach(([a,b])=>{ const x=document.createElement('button'); x.textContent=`${a}/${b}`; x.classList.toggle('sel',a===n&&b===d); x.onclick=()=>{ setFreeTs(a,b); }; tr.appendChild(x); });
+  const tp=document.createElement('button'); tp.className='tap'; tp.textContent='TAP'; tp.onclick=tapTempo; tr.appendChild(tp);
+  placeMo(); }
+function setFreeTs(n,d){ const was=testing; if(was) testStop(); prefs.bpm=n; prefs.tsD=d; buildPattern(); save(); freeUI(); if(was) testStart(); }
+function setFree(on){ freeOn=on; try{ localStorage.setItem('rm_free',on?'1':'0'); }catch(e){} if(playing) stop(); if(testing) testStop();
+  if(on&&!prefs.bpm){ prefs.bpm=4; prefs.tsD=4; buildPattern(); } freeUI(); playLabel(); }
+function placeMo(){ const st=$('stage'), r=st.getBoundingClientRect(), fw=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fw'))||r.width;
+  const b=$('moBtn'); b.style.left=((r.width-fw)/2+14)+'px'; b.style.top='10px'; }
+$('moBtn').onclick=()=>setFree(!freeOn);
+document.querySelectorAll('.fbpmrow>button[data-d]').forEach(b=>b.onclick=()=>{ setTestBpm(prefs.testBpm+ +b.dataset.d); freeUI(); });
+function playLabel(){ if(freeOn&&view==='met') $('bPlay').textContent=testing?'❚❚ Stop':'▶ Play'; }
+// Play on the play bar runs the free metronome while it's on
+const _bPlay=$('bPlay').onclick; $('bPlay').onclick=()=>{ if(freeOn&&view==='met'){ testing?testStop():testStart(); playLabel(); return; } _bPlay(); };
+// beat lights
+(function freeLights(){ requestAnimationFrame(freeLights); if(!testing||!freeOn||!ac) { if(freeLights.last!==-1){ document.querySelectorAll('#fBeats span.on').forEach(s=>s.classList.remove('on')); freeLights.last=-1; } return; }
+  const now=ac.currentTime; let c=null; for(const x of tLog) if(x.t<=now) c=x; const col=c?c.col:-1;
+  if(col!==freeLights.last){ freeLights.last=col; [...$('fBeats').children].forEach((s,k)=>s.classList.toggle('on',k===col)); } })();
+// tap tempo: average of the last few taps; resets after a 2 s gap
+let taps=[];
+function tapTempo(){ const t=performance.now(); if(taps.length&&t-taps[taps.length-1]>2000) taps=[]; taps.push(t); if(taps.length>6) taps.shift();
+  if(taps.length>=2){ const g=(taps[taps.length-1]-taps[0])/(taps.length-1); setTestBpm(60000/g); freeUI(); setDial(prefs.testBpm,false); } }
+// dial: drag the knob around; 10 degrees = 1 bpm, so one full turn = 36 bpm
+const wheel=$('wheel'); for(let k=0;k<36;k++){ const i=document.createElement('i'); i.className='t'; i.style.transform=`rotate(${k*10}deg) translateY(-${47}cqw)`; wheel.appendChild(i); }
+function tickPos(){ const w=wheel.clientWidth; wheel.querySelectorAll('.t').forEach((e,k)=>e.style.transform=`rotate(${k*10+180}deg) translateY(${w*0.44}px)`); }
+let dialAng=0;
+function setDial(bpm,fromDrag){ if(!fromDrag) dialAng=((bpm-120)*10)%360;
+  const w=wheel.clientWidth, R=w*0.355, k=$('knob'), a=(dialAng-90)*Math.PI/180, kw=k.offsetWidth;
+  k.style.left=(w/2+R*Math.cos(a)-kw/2)+'px'; k.style.top=(w/2+R*Math.sin(a)-kw/2)+'px'; k.style.margin='0'; $('dVal').textContent=Math.round(bpm); }
+let drag=null;
+function angAt(e){ const r=wheel.getBoundingClientRect(); return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI; }
+wheel.addEventListener('pointerdown',e=>{ wheel.setPointerCapture(e.pointerId); drag={a:angAt(e),acc:0,b0:prefs.testBpm}; e.preventDefault(); });
+wheel.addEventListener('pointermove',e=>{ if(!drag) return; const a=angAt(e); let d=a-drag.a; if(d>180) d-=360; if(d<-180) d+=360; drag.a=a; drag.acc+=d; dialAng+=d;
+  const nb=Math.max(30,Math.min(300,Math.round(drag.b0+drag.acc/10))); if(nb!==prefs.testBpm){ setTestBpm(nb); freeUI(); try{ navigator.vibrate&&navigator.vibrate(4); }catch(_){} }
+  setDial(prefs.testBpm,true); });
+['pointerup','pointercancel'].forEach(ev=>wheel.addEventListener(ev,()=>{ drag=null; }));
+function openDial(){ $('dScrim').hidden=false; $('dial').hidden=false; requestAnimationFrame(()=>{ tickPos(); setDial(prefs.testBpm,false); }); }
+function closeDial(){ $('dScrim').hidden=true; $('dial').hidden=true; }
+$('fBpm').onclick=openDial; $('dDone').onclick=closeDial; $('dScrim').onclick=closeDial;
+$('dReset').onclick=()=>{ setTestBpm(120); freeUI(); setDial(120,false); };
+$('dTap').onclick=tapTempo;
+window.addEventListener('resize',()=>{ if(!$('dial').hidden){ tickPos(); setDial(prefs.testBpm,false); } placeMo(); });
+
+/* ---------- + Set: add measures after the selected set ---------- */
+const AP={meas:2,ts:'4/4',bpm:120,after:0};
+const APTS=['2/4','3/4','4/4','5/4','6/8','7/8','9/8','12/8'];
+function nextName(i){ const L=SETS[i].l, used=new Set(SETS.map(s=>s.l));
+  if(/[A-Za-z]$/.test(L)){ for(let n=2;n<100;n++) if(!used.has(L+n)) return L+n; }
+  for(let c=65;c<91;c++){ const x=L+String.fromCharCode(c); if(!used.has(x)) return x; } return L+'+'; }
+function apUI(){ $('apMeas').textContent=AP.meas; $('apBpm').textContent=AP.bpm;
+  const b=$('apTs'); b.innerHTML=''; APTS.forEach(x=>{ const e=document.createElement('button'); e.textContent=x; e.classList.toggle('sel',x===AP.ts); e.onclick=()=>{ AP.ts=x; apUI(); }; b.appendChild(e); });
+  const [n,d]=AP.ts.split('/').map(Number), k=n*AP.meas, nm=$('apName').value||'?';
+  $('apNote').innerHTML=`<b>${k} counts</b> (${AP.meas} bar${AP.meas>1?'s':''} of ${AP.ts}${d===8?', counting 8ths':''}) · everyone holds set ${SETS[AP.after].l}'s spot · metronome only, no music · shows as <b>${nm} +</b> in the list`;
+  $('apOk').textContent=`Add ${nm}`; }
+function openAdd(){ if(TEST_SRC||typeof EMBED==='string'){ alert('Adding sets works on the real show, not a test show.'); return; }
+  AP.after=cur; AP.meas=2; const mu=MM[Math.max(1,cur)]; AP.ts=(mu&&mu.ts&&mu.ts[mu.ts.length-1][0])||'4/4'; AP.bpm=Math.round(bpmInto(Math.max(1,cur)));
+  $('apHead').textContent=`Add a set after ${SETS[cur].l}`; $('apName').value=nextName(cur); apUI(); $('addScrim').hidden=false; $('addPop').hidden=false; }
+function closeAdd(){ $('addScrim').hidden=true; $('addPop').hidden=true; }
+$('addSet').onclick=openAdd; $('apNo').onclick=closeAdd; $('addScrim').onclick=closeAdd; $('apName').oninput=apUI;
+document.querySelectorAll('#addPop [data-m]').forEach(b=>b.onclick=()=>{ AP.meas=Math.max(1,Math.min(32,AP.meas+ +b.dataset.m)); apUI(); });
+document.querySelectorAll('#addPop [data-t]').forEach(b=>b.onclick=()=>{ AP.bpm=Math.max(30,Math.min(300,AP.bpm+ +b.dataset.t)); apUI(); });
+function shiftRuns(at,by){ sections.forEach(s=>{ if(s.a>at) s.a+=by; if(s.b>at) s.b+=by; }); sections=sections.filter(s=>s.a>=0&&s.b>=0&&s.a<NS+by&&s.b<NS+by); }
+$('apOk').onclick=()=>{ const nm=($('apName').value||'').trim(); if(!nm) return; if(SETS.some(s=>s.l===nm)){ alert(`There's already a set ${nm}.`); return; }
+  const adds=loadAdds(); adds.push({after:SETS[AP.after].l,l:nm,meas:AP.meas,ts:AP.ts,bpm:AP.bpm});
+  shiftRuns(AP.after,1); save(); try{ localStorage.setItem('rm_added',JSON.stringify(adds)); localStorage.setItem('rm_goto',nm); }catch(e){} if(playing) stop(); location.reload(); };
+// mark added sets in the list; long-press one to delete it
+document.querySelectorAll('#setList .row').forEach(r=>{ const s=SETS[+r.dataset.i]; if(!s||!s.added) return; r.classList.add('added'); r.title='Added by you · long-press to delete';
+  longPress(r,()=>{ if(!confirm(`Delete added set ${s.l} (${s.m}, ${s.ts} at ${s.bpm})?`)) return;
+    const adds=loadAdds().filter(a=>a.l!==s.l).map(a=>a.after===s.l?Object.assign(a,{after:SETS[+r.dataset.i-1].l}):a);
+    shiftRuns(+r.dataset.i-1,-1); save(); try{ localStorage.setItem('rm_added',JSON.stringify(adds)); }catch(e){} if(playing) stop(); location.reload(); }); });
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -1851,8 +2032,10 @@ try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
 }catch(e){}
 $('bLoop').classList.toggle('on',prefs.loop);
 S=(prefs.tsrc==='steady'&&D.steady)?steadyS():D.sync; setListTempos(); tempoMap();
-applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); runChips(); $('tBpm').textContent=prefs.testBpm;
+applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); freeUI(); playLabel();
+runChips(); $('tBpm').textContent=prefs.testBpm;
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
+try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 </script>
 </body>
 </html>
