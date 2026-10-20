@@ -627,7 +627,7 @@ aside{border-radius:0!important}
         <div><span class="lbl">Music</span><span class="v" id="hMusic">–</span></div>
         <div><span class="lbl">Tempo (bpm)</span><span class="v" id="hBpm">–</span></div>
         <div><span class="lbl">Part</span><span class="v" id="hPart">–</span></div>
-        <div class="hudbtns"><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
+        <div class="hudbtns"><button id="bReload" class="gear" title="Reload the newest version" aria-label="Reload">↻</button><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
       </div>
       <div id="stage">
       <div class="seg viewseg" role="tablist" aria-label="View"><button id="vDrill" class="sel">Drill</button><button id="vMet">Met</button><button id="vSet">Settings</button></div>
@@ -774,7 +774,7 @@ aside{border-radius:0!important}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead"><h3>Settings</h3><button id="sClose" aria-label="Close">✕</button></div>
+  <div class="dhead"><h3>Settings <small style="font-size:12px;color:var(--muted);font-weight:500">version 17 · Oct 19</small></h3><button id="sClose" aria-label="Close">✕</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -1557,6 +1557,7 @@ function refreshSettings(){
 function infoLine(){ $('cInfo').textContent=`Count-in: ${ciText(count)} · clicks on ${prefs.unit==='beats'?'beats':'counts'}`; }
 $('ciCustom').addEventListener('input',()=>{ const v=parseInt($('ciCustom').value,10); if(v>=1&&v<=32){ prefs.ciCustom=v; infoLine(); save(); } });
 $('bGear').onclick=openSettings;
+$('bReload').onclick=()=>{ if(playing) stop(); const u=location.pathname+'?v='+Date.now()+location.hash; location.replace(u); };
 $('rL').onclick=()=>$('runScroll').scrollBy({left:-220});$('rR').onclick=()=>$('runScroll').scrollBy({left:220});
 
 /* full screen where the device / viewer allows it (hidden where it can't work) */
@@ -1693,8 +1694,12 @@ function setMusicUI(){ $('bMusic').classList.toggle('on',mus.on); $('bMusic').ti
   [['off','Off'],['synth','Score'],['rec','Recording']].forEach(([v,l])=>{ const b=document.createElement('button'); b.textContent=l;
     b.classList.toggle('sel',v==='off'?!mus.on:(mus.on&&mus.src===v)); b.onclick=()=>setMusic(v); el.appendChild(b); });
   $('recClear').hidden=!recEl; }
-function setMusic(v){ const was=playing; if(was) stop();
+function setMusic(v){
+  // live toggle while playing; only switching the tempo source (for a recording) needs a stop
+  const needStop=v==='rec'&&prefs.tsrc!=='taps'&&D.sync;
+  if(playing&&needStop) stop();
   if(v==='off') mus.on=false; else { mus.on=true; mus.src=v; }
+  if(playing&&ac){ killMusic(); recStop(); if(mus.on&&mus.src==='synth'){ nNote=firstNoteFrom(count+0.05); } }
   if(mus.on&&mus.src==='rec'){ if(prefs.tsrc!=='taps'&&D.sync) setTempoSource('taps');
     if(!recEl) $('recMsg').textContent='Load the show audio file below to use Recording.'; }
   musSave(); setMusicUI(); refreshSettings(); }
