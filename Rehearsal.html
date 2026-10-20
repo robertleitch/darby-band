@@ -534,6 +534,31 @@ body.met.freem #met{display:none!important}
 .addpop .go{display:flex;gap:10px}.addpop .go button{flex:1;height:48px;border-radius:12px;border:0;font:800 16px system-ui;cursor:pointer}.addpop .go .ok{background:#3b4fd8;color:#fff}.addpop .go .no{background:#eceeec}
 #setList .row.added{background:#eef0fb}#setList .row.added .n::after{content:' +';color:#3b4fd8}
 #setList .row.added.cur{background:color-mix(in srgb,#3b4fd8 22%,transparent)}
+
+/* ===== matching pull tabs ===== */
+.htabrow{display:flex;justify-content:center;flex:none}
+.htab{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border:0;padding:7px 18px 6px;border-radius:14px 14px 0 0;font:700 13px system-ui;letter-spacing:.14em;cursor:pointer;touch-action:none;min-height:38px;box-shadow:0 -3px 12px rgba(0,0,0,.15)}
+.htab i{display:block;width:34px;height:5px;border-radius:5px;background:#ffffff88}
+.htab .chev{font-size:15px;letter-spacing:0}
+.sbwrap>.htabrow{margin-top:8px;border-bottom:3px solid var(--ink)}
+.sbwrap.coll>.htabrow{margin-bottom:0}
+.tlwrap{border-top:3px solid var(--ink);padding-top:8px;margin-top:0!important}
+#fieldWrap>.htabrow{margin-top:6px}
+.tlgrab{display:none!important}
+.sbsum{display:none!important}
+.edge{width:44px!important;height:auto!important;padding:16px 0!important;background:var(--ink)!important;border-radius:14px 0 0 14px!important;box-shadow:-3px 3px 14px rgba(0,0,0,.28)!important;gap:10px!important}
+.edge i{background:#ffffff88!important;height:34px!important;width:5px!important}
+.edge b{display:block!important;writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font:700 13px system-ui;letter-spacing:.14em}
+.edge .chev{color:#fff;font:700 20px system-ui;line-height:1}
+.edge.note{background:var(--accent)!important}
+aside::before{display:none!important}
+aside{overflow:visible!important}
+.ptab{position:absolute;left:-44px;top:50%;transform:translateY(-50%);width:44px;padding:16px 0;background:var(--ink);border:0;border-radius:14px 0 0 14px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:-3px 3px 14px rgba(0,0,0,.2);cursor:pointer;touch-action:none}
+.ptab b{writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font:700 13px system-ui;letter-spacing:.14em}
+.ptab .chev{color:#fff;font:700 20px system-ui}
+.ptab i{display:block;width:5px;height:34px;border-radius:5px;background:#ffffff88}
+main{padding-right:52px!important}
+body.noside .ptab{display:none}
 </style>
 </head>
 <body>
@@ -620,8 +645,8 @@ body.met.freem #met{display:none!important}
       </div>
       <span id="cInfo" hidden></span>
       </div>
-      <div class="sbwrap" id="sbWrap"><div class="sbsum" id="sbSum" hidden><i class="grabbar"></i><span class="sbsl">swipe up for bars</span><span class="mini" id="sbMini"></span></div><div id="subBars" aria-label="Who is holding and moving in this set"></div><div class="sbarrows" id="sbArrows" hidden><button id="sbUp" aria-label="Scroll bars up">▲</button><small id="sbMore"></small><button id="sbDn" aria-label="Scroll bars down">▼</button></div></div>
-      <div class="tlwrap"><div class="tlgrab" id="tlGrab"><i class="grabbar"></i><span id="tlGrabT">swipe up for Run</span></div><div id="timeline" title="Tap to jump to a set"></div><button class="tltab" id="runTab" aria-expanded="false">Run ▾</button></div>
+      <div class="sbwrap" id="sbWrap"><div class="htabrow"><button class="htab" id="sbTab"><span class="chev" id="sbTabC">⌄</span><span id="sbTabT">HIDE SUBSETS</span><i></i></button></div><span id="sbMini" hidden></span><span id="sbSum" hidden></span><div id="subBars" aria-label="Who is holding and moving in this set"></div><div class="sbarrows" id="sbArrows" hidden><button id="sbUp" aria-label="Scroll bars up">▲</button><small id="sbMore"></small><button id="sbDn" aria-label="Scroll bars down">▼</button></div></div>
+      <div class="htabrow"><button class="htab" id="tlGrab"><span class="chev" id="tlGrabC">⌃</span><span id="tlGrabT">RUN</span><i></i></button></div><div class="tlwrap"><div id="timeline" title="Tap to jump to a set"></div><button class="tltab" id="runTab" aria-expanded="false">Run ▾</button></div>
       <div class="transport opts runsplit">
         <div class="runleft"><button class="sarrow" id="rL" aria-label="Scroll left">‹</button><div class="runscroll" id="runScroll"><div class="runchips" id="runChips"></div></div><button class="sarrow" id="rR" aria-label="Scroll right">›</button></div>
         <div class="runright"><span class="goto" title="Start from any measure">
@@ -654,7 +679,7 @@ body.met.freem #met{display:none!important}
     </div>
   </aside>
 </main>
-<div class="edge" id="edge" title="Swipe left (or tap) for the sets panel"><i></i><b>NOTE</b></div>
+<div class="edge" id="edge" title="Swipe left (or tap) for the sets panel"><span class="chev">‹</span><b id="edgeT">SETS</b><i></i></div>
 <div class="notepeek" id="notePeek" hidden><small id="npHead"></small><span id="npText"></span></div>
 <div class="scrim" id="scrim"></div>
 <div class="dscrim" id="addScrim" hidden></div>
@@ -1867,14 +1892,16 @@ const ui={side:false,run:false,bars:true};
 try{ Object.assign(ui,JSON.parse(localStorage.getItem('rm_ui')||'{}')); }catch(e){}
 const uiSave=()=>{ try{ localStorage.setItem('rm_ui',JSON.stringify(ui)); }catch(e){} };
 function applyUI(){ document.body.classList.toggle('noside',!ui.side); if(ui.side) $('notePeek').hidden=true;
-  document.body.classList.toggle('runhide',!ui.run); $('tlGrabT').textContent=ui.run?'swipe down to hide Run':'swipe up for Run';
-  $('sbWrap').classList.toggle('coll',!ui.bars); $('sbSum').hidden=ui.bars; if(!ui.bars) sbSum();
+  document.body.classList.toggle('runhide',!ui.run); $('tlGrabT').textContent=ui.run?'HIDE RUN':'RUN'; $('tlGrabC').textContent=ui.run?'⌄':'⌃';
+  $('sbWrap').classList.toggle('coll',!ui.bars); $('sbTabT').textContent=ui.bars?'HIDE SUBSETS':'SUBSETS'; $('sbTabC').textContent=ui.bars?'⌄':'⌃';
   requestAnimationFrame(()=>{ layoutField(); lastPanel=-1; render(); }); }
 const setUI=(k,v)=>{ if(ui[k]===v) return; ui[k]=v; uiSave(); applyUI(); };
 // swipe helper: works with touch (iPad) and mouse drags; quick taps still count as taps
+let lastSwipe=0; const notSwipe=()=>Date.now()-lastSwipe>350;
 function swipe(el,h,opt={}){ let x0=0,y0=0,ok=false,st=0;
   const start=(x,y)=>{ x0=x; y0=y; ok=true; st=opt.scroller?opt.scroller.scrollTop:0; };
   const end=(x,y)=>{ if(!ok) return; ok=false; const dx=x-x0, dy=y-y0, ax=Math.abs(dx), ay=Math.abs(dy);
+    if((ay>40&&ay>ax*1.3)||(ax>40&&ax>ay*1.3)) lastSwipe=Date.now();
     if(ay>40&&ay>ax*1.3){ if(dy<0&&h.up) h.up(); if(dy>0&&h.down&&!(opt.scroller&&st>2)) h.down(); }
     else if(ax>40&&ax>ay*1.3){ if(dx<0&&h.left) h.left(); if(dx>0&&h.right) h.right(); } };
   el.addEventListener('touchstart',e=>{ const p=e.changedTouches[0]; start(p.clientX,p.clientY); },{passive:true});
@@ -1885,10 +1912,11 @@ function longPress(el,fn){ let t=0; const go=()=>{ clearTimeout(t); t=setTimeout
   el.addEventListener('click',e=>{ if(el.dataset.lp){ delete el.dataset.lp; e.stopImmediatePropagation(); e.preventDefault(); } },true); }
 swipe($('fieldWrap').querySelector('.tlwrap'),{up:()=>setUI('run',true),down:()=>setUI('run',false)});
 swipe(document.querySelector('.runsplit'),{down:()=>setUI('run',false)});
-$('tlGrab').onclick=()=>setUI('run',!ui.run);
+$('tlGrab').onclick=()=>{ if(notSwipe()) setUI('run',!ui.run); };
 swipe($('sbWrap'),{down:()=>setUI('bars',false),up:()=>setUI('bars',true)},{scroller:$('subBars')});
-$('sbSum').onclick=()=>setUI('bars',true);
-swipe($('edge'),{left:()=>setUI('side',true)}); $('edge').onclick=()=>setUI('side',true);
+$('sbTab').onclick=()=>{ if(notSwipe()) setUI('bars',!ui.bars); }; swipe($('sbTab'),{up:()=>setUI('bars',true),down:()=>setUI('bars',false)}); swipe($('tlGrab'),{up:()=>setUI('run',true),down:()=>setUI('run',false)});
+(()=>{ const h=document.createElement('button'); h.className='ptab'; h.id='sideHide'; h.setAttribute('aria-label','Hide the sets panel'); h.innerHTML='<span class="chev">›</span><b>HIDE</b><i></i>'; document.querySelector('aside').appendChild(h); h.onclick=()=>{ if(notSwipe()) setUI('side',false); }; swipe(h,{right:()=>setUI('side',false)}); })();
+swipe($('edge'),{left:()=>setUI('side',true)}); $('edge').onclick=()=>{ if(notSwipe()) setUI('side',true); };
 swipe(document.querySelector('aside'),{right:()=>setUI('side',false)});
 $('scrim').onclick=()=>setUI('side',false);
 // a swipe in from the right edge anywhere opens the panel
@@ -1903,7 +1931,7 @@ try{ new MutationObserver(()=>{ if(!ui.bars) sbSum(); }).observe($('subBars'),{c
 let peekT=0, lastNoteSet=-1;
 function noteText(i){ const s=SETS[i]; const out=[]; if(s&&s.n&&s.n.trim()) out.push(s.n.trim().replace(/^\*/,''));
   (D.score||[]).filter(x=>x.ctl.t==='note'&&sc.ch[x.id]!=='no'&&setIdxOf(x.p)===i).forEach(x=>out.push(`Score, m. ${x.m}: ${x.ctl.txt}`)); return out.join(' · '); }
-function noteFlag(i){ const txt=noteText(i); $('edge').classList.toggle('note',!!txt);
+function noteFlag(i){ const txt=noteText(i); $('edge').classList.toggle('note',!!txt); $('edgeT').textContent=txt?'NOTE · SETS':'SETS';
   if(i===lastNoteSet) return; lastNoteSet=i; clearTimeout(peekT); const pk=$('notePeek');
   if(!txt||ui.side){ pk.hidden=true; return; }
   $('npHead').textContent=`Note · set ${SETS[i].l}`; $('npText').textContent=txt.length>140?txt.slice(0,137)+'…':txt;
