@@ -366,6 +366,76 @@ main{padding-top:8px}
 .runright{display:flex;justify-content:flex-end;min-width:0}
 .runright .goto{flex-wrap:nowrap}
 @media (max-width:760px){.runsplit{grid-template-columns:1fr}.runright{justify-content:flex-start}}
+
+/* ===== director layout v2: fits the screen ===== */
+html,body{height:100%;overflow:hidden}
+main{height:100vh;height:100dvh;box-sizing:border-box;grid-template-rows:minmax(0,1fr);padding:8px 14px 10px!important}
+main>section{min-height:0;display:flex;flex-direction:column}
+#fieldWrap{flex:1;min-height:0;display:flex;flex-direction:column;box-sizing:border-box}
+#fieldWrap>*{flex:none}
+#fieldWrap>#stage{flex:1 1 auto;min-height:140px;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;overflow:hidden}
+svg#field{width:var(--fw,100%);height:var(--fh,100%);max-height:100%;flex:none;border-radius:8px 8px 0 0}
+#met{aspect-ratio:auto!important;width:var(--fw,100%);height:var(--fh,100%);flex:none;box-sizing:border-box;border-radius:8px 8px 0 0}
+#msettings{width:var(--fw,100%);height:100%;flex:1 1 auto;padding-top:60px!important;box-sizing:border-box;overflow:auto;min-height:0!important;border-radius:8px 8px 0 0}
+aside{min-height:0;overflow:hidden}
+aside .card{flex:none}
+aside .card:has(#setList){flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+aside .card:has(#setList) #setList{flex:1;min-height:0;overflow-y:auto;max-height:none!important}
+aside .card:has(#moveHead){max-height:42%;overflow-y:auto}
+body.noside main{grid-template-columns:minmax(0,1fr)!important}
+body.noside aside{display:none!important}
+@media (max-width:900px){
+  aside{position:fixed;top:0;right:0;bottom:0;width:min(360px,88vw);z-index:40;background:var(--bg);padding:12px;box-shadow:-6px 0 24px rgba(0,0,0,.25);display:flex!important;flex-direction:column}
+  body.noside aside{display:none!important}
+}
+.sidebtn{font-size:15px;font-weight:600;padding:0 14px}
+.sidebtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* the Drill / Met / Settings switch sits on the green */
+.viewseg{right:auto!important;box-shadow:none!important;background:rgba(255,255,255,.92)!important}
+#gridBtn{display:none!important}
+label.chk:has(#cGrid){display:none}
+/* play bar joined to the bottom of the field */
+#controls{width:var(--fw,100%);margin:0 auto;background:#24502f;border-radius:0 0 10px 10px;padding:10px 12px!important;box-sizing:border-box}
+#controls .transport{padding:0!important;flex-wrap:nowrap}
+#controls #tVal{color:#fff}
+body.met #controls,body.mset #controls{background:#3a4340}
+/* who-moves bars: room for exactly 4, swipe or arrows for more */
+.sbwrap{position:relative;flex:none}
+.sbwrap #subBars{height:154px;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:12px 0 2px!important;gap:8px!important;align-content:start;scroll-snap-type:y proximity}
+.sbwrap #subBars::-webkit-scrollbar{display:none}
+.sbwrap.more #subBars{padding-right:56px!important}
+.sbwrap .sbr{height:30px;scroll-snap-align:start}
+body.mset .sbwrap{display:none}
+.sbarrows{position:absolute;right:0;top:12px;bottom:2px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;width:46px}
+.sbarrows[hidden]{display:none}
+.sbarrows button{width:46px;height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:17px;font-weight:700;color:var(--ink)}
+.sbarrows button:disabled{opacity:.3}
+.sbarrows small{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.1}
+.sbr{grid-template-columns:150px 1fr 96px!important}
+.sbr .nm small{display:none!important}
+.sbr .nm{font-size:14px;font-weight:600;white-space:nowrap;text-overflow:ellipsis}
+/* timeline always visible; Run row opens from its tab */
+.tlwrap{display:flex;align-items:center;gap:8px;margin-top:10px}
+.tlwrap #timeline{flex:1;margin-top:0!important;height:20px!important}
+.tltab{flex:none;height:30px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px;color:var(--muted);cursor:pointer}
+.tltab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+body.runhide .runsplit{display:none!important}
+/* top line: even columns */
+#fieldWrap>.hud{display:flex!important;flex-wrap:nowrap!important;align-items:stretch!important;gap:0!important;padding:0 0 10px!important}
+#fieldWrap>.hud>div:not(.hudbtns){flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:flex-start;gap:6px;padding:4px 14px;border-left:1px solid var(--line)}
+#fieldWrap>.hud>div:first-child{border-left:0;padding-left:6px;flex:0 0 92px}
+#fieldWrap>.hud>div.hts{flex:0 0 82px}
+#fieldWrap>.hud>div.hcnt{flex:0 0 120px}
+#fieldWrap>.hud .lbl{font-size:11px!important;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);line-height:1}
+#fieldWrap>.hud .v,#fieldWrap>.hud .big{font-size:24px!important;font-weight:700!important;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#fieldWrap>.hud .big{font-size:30px!important;line-height:1!important;margin-top:-3px}
+#hTs,#hTs *{font-size:21px!important}
+#fieldWrap>.hud .ts.md{line-height:.85;height:30px;min-height:0!important;align-items:flex-start}
+#fieldWrap>.hud .hudbtns{flex:none;border:0;padding-left:14px;align-items:center}
+#fieldWrap.tighthud>.hud>div:not(.hudbtns){padding:4px 9px} #fieldWrap.tighthud>.hud .v{font-size:19px!important} #fieldWrap.tighthud>.hud>div:nth-child(4){display:none} #fieldWrap.tighthud>.hud>div.hcnt{flex-basis:96px} #fieldWrap.tighthud>.hud>div:nth-child(5){flex-grow:1.6}
+#controls.tight .transport{gap:6px} #controls.tight #speed{display:none} #controls.tight button{white-space:nowrap;padding-left:10px;padding-right:10px}
+#controls button{white-space:nowrap}
+@media (max-width:900px){#fieldWrap>.hud>div:not(.hudbtns){padding:4px 8px} #fieldWrap>.hud .v{font-size:18px!important} #fieldWrap>.hud>div:nth-child(4){display:none} .sidebtn{padding:0 10px}}
 </style>
 </head>
 <body>
@@ -379,13 +449,13 @@ main{padding-top:8px}
     <div class="card" id="fieldWrap">
       <div class="hud">
         <div><span class="lbl">Set</span><span class="big" id="hSet">1</span></div>
-        <div><span class="lbl">Count</span><span class="v" id="hCount">–</span></div>
+        <div class="hcnt"><span class="lbl">Count</span><span class="v" id="hCount">–</span></div>
         <div class="hts"><span class="lbl">Meter</span><span class="ts md" id="hTs">–</span></div>
         <div><span class="lbl">Measures</span><span class="v" id="hMeas">–</span></div>
         <div><span class="lbl">Music</span><span class="v" id="hMusic">–</span></div>
-        <div><span class="lbl">Tempo</span><span class="v" id="hBpm">–</span></div>
+        <div><span class="lbl">Tempo (bpm)</span><span class="v" id="hBpm">–</span></div>
         <div><span class="lbl">Part</span><span class="v" id="hPart">–</span></div>
-        <div class="hudbtns"><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
+        <div class="hudbtns"><button id="bSide" class="gear sidebtn" title="Show / hide the sets panel">☰ Sets</button><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
       </div>
       <div id="stage">
       <div class="seg viewseg" role="tablist" aria-label="View"><button id="vDrill" class="sel">Drill</button><button id="vMet">Met</button><button id="vSet">Settings</button></div>
@@ -445,8 +515,8 @@ main{padding-top:8px}
       </div>
       <span id="cInfo" hidden></span>
       </div>
-      <div id="subBars" aria-label="Who is holding and moving in this set"></div>
-      <div id="timeline" title="Click to jump to a set"></div>
+      <div class="sbwrap" id="sbWrap"><div id="subBars" aria-label="Who is holding and moving in this set"></div><div class="sbarrows" id="sbArrows" hidden><button id="sbUp" aria-label="Scroll bars up">▲</button><small id="sbMore"></small><button id="sbDn" aria-label="Scroll bars down">▼</button></div></div>
+      <div class="tlwrap"><div id="timeline" title="Tap to jump to a set"></div><button class="tltab" id="runTab" aria-expanded="false">Run ▾</button></div>
       <div class="transport opts runsplit">
         <div class="runleft"><button class="sarrow" id="rL" aria-label="Scroll left">‹</button><div class="runscroll" id="runScroll"><div class="runchips" id="runChips"></div></div><button class="sarrow" id="rR" aria-label="Scroll right">›</button></div>
         <div class="runright"><span class="goto" title="Start from any measure">
@@ -667,7 +737,7 @@ function renderProps(){ const on=PR&&$('cProps').checked; propG.style.display=on
   panelEls.forEach((ln,n)=>{ const a=PA[n], b=PB[n]||a; if(!a){ ln.style.display='none'; return; } ln.style.display='';
     ln.setAttribute('x1',lerp(a[0][0],b[0][0],f)); ln.setAttribute('y1',-lerp(a[0][1],b[0][1],f)); ln.setAttribute('x2',lerp(a[1][0],b[1][0],f)); ln.setAttribute('y2',-lerp(a[1][1],b[1][1],f)); });
   const bx=PR.box[f<.5?i:j]; if(bx) boxEl.setAttribute('points',bx.map(p=>`${p[0]},${-p[1]}`).join(' ')); }
-function applyGrid(){ const on=$('cGrid').checked; gridG.style.display=on?'':'none'; $('gridBtn').classList.toggle('on',on); }
+function applyGrid(){ $('cGrid').checked=true; const on=true; gridG.style.display=on?'':'none'; $('gridBtn').classList.toggle('on',on); }
 const pathG=el('g',{stroke:'#fff','stroke-opacity':.35,'stroke-width':.18,fill:'none'});
 const dotG=el('g',{});
 const meG=el('g',{});
@@ -840,7 +910,7 @@ function renderSubBars(){ const box=$('subBars'); if(view==='mset'){ return; }
         if(g.desc&&g.desc!==g.title) parts.push(g.desc);
         parts.push(n?`${n}${g.unknown.length?'+':''} performer${n===1&&!g.unknown.length?'':'s'}`:'performers not linked yet');
         sm.textContent=parts.join(' · '); sm.title=g.unknown.length?`Not linked to performers yet: ${g.unknown.join(', ')}`:''; }
-      nm.appendChild(sm);
+      nm.appendChild(sm); nm.title=(main?'Whole set':g.title)+(sm.textContent?' · '+sm.textContent:'');
       const bar=document.createElement('div'); bar.className='sbar';
       if(main){ const sg=document.createElement('div'); sg.className='sg whole'; sg.style.flex=S0.span; sg.textContent=`1–${S0.span}`; bar.appendChild(sg); }
       else { const lead=S0.span-g.total; if(lead>0){ const gp=document.createElement('div'); gp.className='sg gap'; gp.style.flex=lead; bar.appendChild(gp); }
@@ -912,7 +982,7 @@ function applyFlip(){
   $('vBottom').classList.toggle('sel',!flipped); $('vTop').classList.toggle('sel',flipped);
   save();
 }
-function setView(v){ if(v!=='mset') testStop(); view=v; metMode=v==='met'; document.body.classList.toggle('met',v==='met'); document.body.classList.toggle('mset',v==='mset');
+function setView(v){ if(v!=='mset') testStop(); requestAnimationFrame(()=>typeof layoutField==='function'&&layoutField()); view=v; metMode=v==='met'; document.body.classList.toggle('met',v==='met'); document.body.classList.toggle('mset',v==='mset');
   [['vDrill','drill'],['vMet','met'],['vSet','mset']].forEach(([id,k])=>$(id).classList.toggle('sel',v===k));
   if(v==='mset') buildPattern(); lastPanel=-1; render(); save(); }
 function setMode(m){ setView(m?'met':'drill'); }
@@ -921,13 +991,13 @@ let lastPanel=-1;
 function hud(){
   const V=viewIdx(), ti=V.ti, s=SETS[ti];
   $('hSet').textContent=s.l;
-  if(V.ci) $('hCount').textContent=`count-in → ${s.l}`;
-  else if(V.moving&&ti>0&&V.k>=1) $('hCount').textContent=`${V.k} / ${s.c} → ${s.l}`;
-  else $('hCount').textContent=s.c?`${s.c} cts`:'start';
+  if(V.ci) $('hCount').textContent='count-in';
+  else if(V.moving&&ti>0&&V.k>=1) $('hCount').textContent=`${V.k} / ${s.c}`;
+  else $('hCount').textContent=s.c?`– / ${s.c}`:'–';
   $('hMeas').textContent=measText(ti)||'–';
-  $('hMusic').textContent=musicLabel(count);
+  $('hMusic').textContent=musicLabel(count).replace(' · beat ',' · b');
   { const mu=musicAt(count)||(MM[ti]?{ts:MM[ti].ts[MM[ti].ts.length-1][0]}:null); setTs($('hTs'),mu&&mu.ts,MM[ti]&&!MM[ti].sc); }
-  $('hBpm').textContent=Math.round(bpmInto(ti)*speed())+' bpm'+(speed()<1?` (${Math.round(speed()*100)}%)`:'');
+  $('hBpm').textContent=Math.round(bpmInto(ti)*speed())+(speed()<1?` (${Math.round(speed()*100)}%)`:'');
   $('hPart').textContent=s.p;
   if(ti!==lastPanel){ lastPanel=ti; panel(ti); }
 }
@@ -1617,6 +1687,33 @@ $('ssOpen').onclick=svOpenFn; $('svBack').onclick=svClose;
 window.addEventListener('resize',()=>{ if(svOpen) svFrame(); });
 ssBadge();
 
+/* ---------- layout: field size, switch on the green, bars, side panel, Run row ---------- */
+function layoutField(){ const st=$('stage'), sv=$('field'); if(!st||!sv.viewBox||!sv.viewBox.baseVal) return;
+  const r=st.getBoundingClientRect(), vb=sv.viewBox.baseVal, ar=vb.width/vb.height; if(!r.width||!r.height) return;
+  let w=r.width,h=r.height; if(w/h>ar) w=h*ar; else h=w/ar;
+  document.documentElement.style.setProperty('--fw',w+'px'); document.documentElement.style.setProperty('--fh',h+'px');
+  const vs=document.querySelector('.viewseg'); const vw=vs.getBoundingClientRect().width||220;
+  vs.style.left=((r.width-w)/2+w-vw-12)+'px'; vs.style.top=(view==='mset'?10:r.height-h+10)+'px';
+  $('controls').classList.toggle('tight',w<720); const fw=$('fieldWrap'); fw.classList.toggle('tighthud',fw.clientWidth<1150); }
+try{ new ResizeObserver(()=>layoutField()).observe($('stage')); }catch(e){ window.addEventListener('resize',layoutField); }
+function sbArrows(){ const sb=$('subBars'), n=sb.querySelectorAll('.sbr').length, extra=Math.max(0,n-4), a=$('sbArrows');
+  a.hidden=!extra; $('sbWrap').classList.toggle('more',!!extra); if(!extra) return;
+  const max=sb.scrollHeight-sb.clientHeight, below=Math.round((max-sb.scrollTop)/38);
+  $('sbUp').disabled=sb.scrollTop<4; $('sbDn').disabled=sb.scrollTop>max-4; $('sbMore').textContent=below>0?`${below} more`:`${extra} more`; }
+$('subBars').addEventListener('scroll',sbArrows,{passive:true});
+try{ new MutationObserver(()=>sbArrows()).observe($('subBars'),{childList:true}); }catch(e){}
+$('sbUp').onclick=()=>$('subBars').scrollBy({top:-38,behavior:'smooth'});
+$('sbDn').onclick=()=>$('subBars').scrollBy({top:38,behavior:'smooth'});
+const ui={side:innerWidth>900,run:false};
+try{ Object.assign(ui,JSON.parse(localStorage.getItem('rm_ui')||'{}')); }catch(e){}
+const uiSave=()=>{ try{ localStorage.setItem('rm_ui',JSON.stringify(ui)); }catch(e){} };
+function applyUI(){ document.body.classList.toggle('noside',!ui.side); $('bSide').classList.toggle('on',ui.side); $('bSide').textContent=ui.side?'Hide ⟩':'☰ Sets';
+  document.body.classList.toggle('runhide',!ui.run); $('runTab').classList.toggle('on',ui.run); $('runTab').textContent=ui.run?'Run ▴':'Run ▾'; $('runTab').setAttribute('aria-expanded',ui.run);
+  requestAnimationFrame(()=>{ layoutField(); lastPanel=-1; render(); }); }
+$('bSide').onclick=()=>{ ui.side=!ui.side; uiSave(); applyUI(); };
+$('runTab').onclick=()=>{ ui.run=!ui.run; uiSave(); applyUI(); };
+document.addEventListener('pointerdown',e=>{ if(innerWidth<=900&&ui.side&&!e.target.closest('aside')&&!e.target.closest('#bSide')&&!e.target.closest('dialog')){ ui.side=false; uiSave(); applyUI(); } });
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -1631,7 +1728,7 @@ try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
 }catch(e){}
 $('bLoop').classList.toggle('on',prefs.loop);
 S=(prefs.tsrc==='steady'&&D.steady)?steadyS():D.sync; setListTempos(); tempoMap();
-applyFlip(); applyGrid(); setMusicUI(); setView(view); runChips(); $('tBpm').textContent=prefs.testBpm;
+applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); runChips(); $('tBpm').textContent=prefs.testBpm;
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 </script>
 </body>
