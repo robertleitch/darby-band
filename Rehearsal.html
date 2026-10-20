@@ -436,6 +436,58 @@ body.runhide .runsplit{display:none!important}
 #controls.tight .transport{gap:6px} #controls.tight #speed{display:none} #controls.tight button{white-space:nowrap;padding-left:10px;padding-right:10px}
 #controls button{white-space:nowrap}
 @media (max-width:900px){#fieldWrap>.hud>div:not(.hudbtns){padding:4px 8px} #fieldWrap>.hud .v{font-size:18px!important} #fieldWrap>.hud>div:nth-child(4){display:none} .sidebtn{padding:0 10px}}
+
+/* ===== v3: swipe-driven panels ===== */
+footer{display:none!important}
+main{height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important}
+.grabbar{display:block;width:54px;height:5px;border-radius:5px;background:#b9c0bb;flex:none}
+/* run row */
+.tltab{display:none!important}
+.tlwrap{position:relative;flex-wrap:wrap;margin-top:4px!important;touch-action:pan-x}
+.tlgrab{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 0 6px;color:var(--muted);font:600 11px system-ui;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;user-select:none}
+.runsplit{touch-action:pan-x}
+/* side panel: always slides over the screen */
+main{grid-template-columns:minmax(0,1fr)!important}
+aside{position:fixed!important;top:0;right:0;bottom:0;width:min(370px,90vw);z-index:40;background:var(--bg);padding:calc(14px + env(safe-area-inset-top,0px)) 14px 14px 30px!important;box-shadow:-8px 0 30px rgba(0,0,0,.28);display:flex!important;flex-direction:column;gap:12px;border-radius:16px 0 0 16px;transform:translateX(0);transition:transform .25s ease;box-sizing:border-box}
+body.noside aside{display:flex!important;transform:translateX(105%);box-shadow:none}
+aside::before{content:'';position:absolute;left:10px;top:50%;transform:translateY(-50%);width:6px;height:70px;border-radius:6px;background:#b9c0bb}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.18);z-index:39;opacity:1;transition:opacity .25s}
+body.noside .scrim{opacity:0;pointer-events:none}
+.edge{position:fixed;right:0;top:50%;transform:translateY(-50%);width:22px;height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:30;cursor:pointer;touch-action:none}
+.edge i{display:block;width:5px;height:64px;border-radius:5px;background:#b9c0bb}
+.edge b{display:none}
+.edge.note{width:auto;height:auto;padding:14px 8px;background:var(--accent);border-radius:12px 0 0 12px;box-shadow:-2px 2px 10px rgba(0,0,0,.25)}
+.edge.note i{background:#fff8;height:30px}
+.edge.note b{display:block;writing-mode:vertical-rl;transform:rotate(180deg);color:#fff;font:700 13px system-ui;letter-spacing:.12em}
+body:not(.noside) .edge{display:none}
+.notepeek{position:fixed;right:46px;top:50%;transform:translateY(-50%);max-width:320px;background:#fff;border:2px solid var(--accent);border-radius:12px;padding:10px 12px;font:14px/1.35 system-ui;color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.18);z-index:31;transition:opacity .4s}
+.notepeek[hidden]{display:none}
+.notepeek.fade{opacity:0}
+.notepeek small{display:block;color:var(--accent);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+#notes.flag{border-left:4px solid var(--accent);background:#b3261e0d;padding:6px 10px;border-radius:6px;color:var(--ink)!important}
+/* who-moves bars: swipe down to hide */
+.sbwrap{touch-action:pan-y}
+.sbwrap.coll #subBars,.sbwrap.coll .sbarrows{display:none!important}
+.sbsum{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 0 4px;color:var(--muted);font:600 11px system-ui;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;user-select:none;touch-action:none}
+.sbsum[hidden]{display:none}
+.sbsum .mini{display:flex;gap:6px;text-transform:none;letter-spacing:0;font-size:12.5px;flex-wrap:nowrap;overflow:hidden;max-width:70%}
+.sbsum .mini span{padding:2px 8px;border-radius:99px;background:#e6eae7;color:var(--ink);white-space:nowrap}
+.sbsum .mini span.m{background:#2f80ed;color:#fff}
+/* A / B runs on the set list */
+.abhead{display:flex;align-items:center;gap:8px}
+.abhead h2{margin:0!important;flex:1}
+.abbtn{min-width:46px;height:40px;border-radius:10px;border:2px solid var(--line);background:#fff;font:800 15px system-ui;color:var(--ink);cursor:pointer}
+.abbtn.set{border-color:#2e7d4f;background:#2e7d4f;color:#fff}
+.abbtn.wait{border-color:var(--accent);color:var(--accent);border-style:dashed}
+.abhint{font-size:12px;color:var(--muted);margin:6px 0 2px}
+.abhint b{color:var(--ink)}
+#setList .row{position:relative}
+#setList .row.pickA{outline:2px solid #2e7d4f;outline-offset:-2px}
+.lane{position:absolute;top:-3px;bottom:-3px;width:5px;cursor:pointer}
+.lane.s{top:50%;border-radius:5px 5px 0 0}.lane.e{bottom:50%;border-radius:0 0 5px 5px}.lane.s.e{top:30%;bottom:30%;border-radius:5px}
+.lane.s::before{content:attr(data-n);position:absolute;left:-5px;top:-9px;min-width:15px;height:15px;padding:0 2px;box-sizing:border-box;border-radius:8px;background:inherit;color:#fff;font:700 10px/15px system-ui;text-align:center}
+.lane.e::after{content:'';position:absolute;left:-3px;bottom:-4px;width:11px;height:4px;border-radius:2px;background:inherit}
+#runChips button i.rc{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -455,7 +507,7 @@ body.runhide .runsplit{display:none!important}
         <div><span class="lbl">Music</span><span class="v" id="hMusic">–</span></div>
         <div><span class="lbl">Tempo (bpm)</span><span class="v" id="hBpm">–</span></div>
         <div><span class="lbl">Part</span><span class="v" id="hPart">–</span></div>
-        <div class="hudbtns"><button id="bSide" class="gear sidebtn" title="Show / hide the sets panel">☰ Sets</button><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
+        <div class="hudbtns"><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
       </div>
       <div id="stage">
       <div class="seg viewseg" role="tablist" aria-label="View"><button id="vDrill" class="sel">Drill</button><button id="vMet">Met</button><button id="vSet">Settings</button></div>
@@ -515,8 +567,8 @@ body.runhide .runsplit{display:none!important}
       </div>
       <span id="cInfo" hidden></span>
       </div>
-      <div class="sbwrap" id="sbWrap"><div id="subBars" aria-label="Who is holding and moving in this set"></div><div class="sbarrows" id="sbArrows" hidden><button id="sbUp" aria-label="Scroll bars up">▲</button><small id="sbMore"></small><button id="sbDn" aria-label="Scroll bars down">▼</button></div></div>
-      <div class="tlwrap"><div id="timeline" title="Tap to jump to a set"></div><button class="tltab" id="runTab" aria-expanded="false">Run ▾</button></div>
+      <div class="sbwrap" id="sbWrap"><div class="sbsum" id="sbSum" hidden><i class="grabbar"></i><span class="sbsl">swipe up for bars</span><span class="mini" id="sbMini"></span></div><div id="subBars" aria-label="Who is holding and moving in this set"></div><div class="sbarrows" id="sbArrows" hidden><button id="sbUp" aria-label="Scroll bars up">▲</button><small id="sbMore"></small><button id="sbDn" aria-label="Scroll bars down">▼</button></div></div>
+      <div class="tlwrap"><div class="tlgrab" id="tlGrab"><i class="grabbar"></i><span id="tlGrabT">swipe up for Run</span></div><div id="timeline" title="Tap to jump to a set"></div><button class="tltab" id="runTab" aria-expanded="false">Run ▾</button></div>
       <div class="transport opts runsplit">
         <div class="runleft"><button class="sarrow" id="rL" aria-label="Scroll left">‹</button><div class="runscroll" id="runScroll"><div class="runchips" id="runChips"></div></div><button class="sarrow" id="rR" aria-label="Scroll right">›</button></div>
         <div class="runright"><span class="goto" title="Start from any measure">
@@ -539,7 +591,8 @@ body.runhide .runsplit{display:none!important}
       <p class="notes" id="notes"></p>
     </div>
     <div class="card">
-      <h2>Sets</h2>
+      <div class="abhead"><h2>Sets</h2><button class="abbtn" id="abA" title="Mark the selected set as the start of a run">A</button><button class="abbtn" id="abB" title="Mark the selected set as the end of the run">B</button></div>
+      <div class="abhint" id="abHint">Tap a set, then <b>A</b>. Tap the last set, then <b>B</b>. That makes a run.</div>
       <div id="setList"></div>
     </div>
     <div class="card">
@@ -548,6 +601,9 @@ body.runhide .runsplit{display:none!important}
     </div>
   </aside>
 </main>
+<div class="edge" id="edge" title="Swipe left (or tap) for the sets panel"><i></i><b>NOTE</b></div>
+<div class="notepeek" id="notePeek" hidden><small id="npHead"></small><span id="npText"></span></div>
+<div class="scrim" id="scrim"></div>
 <div id="scoreView" hidden>
  <div class="svin">
   <div class="svtop"><button id="svBack">‹ Settings</button><h2>Score setup</h2><div class="svprog"><span id="svProgT"></span><div class="pbar"><i id="svProgB"></i></div></div></div>
@@ -1012,8 +1068,9 @@ function panel(i){
       add(ratioText(mm.r), mm.r===1?'':'warn'); if(!mm.sc) mus.append(' · estimated, no score'); }
     else mus.append('♪ No measure info for this move: counts only'); }
   $('instr').textContent=s.i||(i===0?'Starting position':'');
-  $('notes').textContent=s.n||'';
-  (D.score||[]).filter(x=>x.ctl.t==='note'&&sc.ch[x.id]!=='no'&&setIdxOf(x.p)===i).forEach(x=>{ const d=document.createElement('div'); d.className='scnote'; d.textContent=`♪ Score, m. ${x.m}: ${x.ctl.txt}`; $('notes').appendChild(d); });
+  $('notes').textContent=s.n||''; $('notes').classList.toggle('flag',!!(s.n&&s.n.trim()));
+  (D.score||[]).filter(x=>x.ctl.t==='note'&&sc.ch[x.id]!=='no'&&setIdxOf(x.p)===i).forEach(x=>{ const d=document.createElement('div'); d.className='scnote'; d.textContent=`♪ Score, m. ${x.m}: ${x.ctl.txt}`; $('notes').appendChild(d); $('notes').classList.add('flag'); });
+  if(typeof noteFlag==='function') noteFlag(i);
   document.querySelectorAll('#setList .row').forEach(r=>r.classList.toggle('cur',+r.dataset.i===i));
   const r=document.querySelector(`#setList .row[data-i="${i}"]`);
   if(r){ const top=r.offsetTop-sl.offsetTop, h=sl.clientHeight;
@@ -1099,11 +1156,11 @@ function runChips(){
   const box=$('runChips'); box.innerHTML='';
   const items=[['show','Whole show'],['move','This move'],...PARTS.map(p=>['p:'+p,p]),...sections.map((s,i)=>['s:'+i,s.name||'Section',`${SETS[Math.min(s.a,s.b)].l}–${SETS[Math.max(s.a,s.b)].l}`])];
   if(!items.some(x=>x[0]===prefs.run)) prefs.run='show';
-  for(const [id,lab,sub] of items){ const b=document.createElement('button'); b.textContent=lab; if(sub){const s=document.createElement('small');s.textContent=sub;b.appendChild(s);}
+  for(const [id,lab,sub] of items){ const b=document.createElement('button'); b.textContent=lab; if(id.startsWith('s:')){ const k=+id.slice(2), dot=document.createElement('i'); dot.className='rc'; dot.style.background=runColor(k); b.prepend(dot); longPress(b,()=>editRun(k)); } if(sub){const s=document.createElement('small');s.textContent=sub;b.appendChild(s);}
     b.classList.toggle('sel',id===prefs.run);
     b.onclick=()=>{ prefs.run=id; if(playing) stop(); if(id!=='show'&&id!=='move') goSet(rangeOf(id)[0]); else if(id==='move'&&cur===0) goSet(1); runChips(); drawLoopZone(); save(); };
     box.appendChild(b); }
-  const add=document.createElement('button'); add.textContent='+ Section'; add.title='Add a rehearsal section'; add.onclick=()=>{openSettings(); addSection();}; box.appendChild(add);
+  drawLanes();
 }
 function drawLoopZone(){
   if(prefs.run==='show'){loopEl.style.display='none';return;}
@@ -1694,7 +1751,7 @@ function layoutField(){ const st=$('stage'), sv=$('field'); if(!st||!sv.viewBox|
   document.documentElement.style.setProperty('--fw',w+'px'); document.documentElement.style.setProperty('--fh',h+'px');
   const vs=document.querySelector('.viewseg'); const vw=vs.getBoundingClientRect().width||220;
   vs.style.left=((r.width-w)/2+w-vw-12)+'px'; vs.style.top=(view==='mset'?10:r.height-h+10)+'px';
-  $('controls').classList.toggle('tight',w<720); const fw=$('fieldWrap'); fw.classList.toggle('tighthud',fw.clientWidth<1150); }
+  $('controls').classList.toggle('tight',w<720); const fw=$('fieldWrap'); fw.classList.toggle('tighthud',fw.clientWidth<1000); }
 try{ new ResizeObserver(()=>layoutField()).observe($('stage')); }catch(e){ window.addEventListener('resize',layoutField); }
 function sbArrows(){ const sb=$('subBars'), n=sb.querySelectorAll('.sbr').length, extra=Math.max(0,n-4), a=$('sbArrows');
   a.hidden=!extra; $('sbWrap').classList.toggle('more',!!extra); if(!extra) return;
@@ -1704,15 +1761,81 @@ $('subBars').addEventListener('scroll',sbArrows,{passive:true});
 try{ new MutationObserver(()=>sbArrows()).observe($('subBars'),{childList:true}); }catch(e){}
 $('sbUp').onclick=()=>$('subBars').scrollBy({top:-38,behavior:'smooth'});
 $('sbDn').onclick=()=>$('subBars').scrollBy({top:38,behavior:'smooth'});
-const ui={side:innerWidth>900,run:false};
+const ui={side:false,run:false,bars:true};
 try{ Object.assign(ui,JSON.parse(localStorage.getItem('rm_ui')||'{}')); }catch(e){}
 const uiSave=()=>{ try{ localStorage.setItem('rm_ui',JSON.stringify(ui)); }catch(e){} };
-function applyUI(){ document.body.classList.toggle('noside',!ui.side); $('bSide').classList.toggle('on',ui.side); $('bSide').textContent=ui.side?'Hide ⟩':'☰ Sets';
-  document.body.classList.toggle('runhide',!ui.run); $('runTab').classList.toggle('on',ui.run); $('runTab').textContent=ui.run?'Run ▴':'Run ▾'; $('runTab').setAttribute('aria-expanded',ui.run);
+function applyUI(){ document.body.classList.toggle('noside',!ui.side); if(ui.side) $('notePeek').hidden=true;
+  document.body.classList.toggle('runhide',!ui.run); $('tlGrabT').textContent=ui.run?'swipe down to hide Run':'swipe up for Run';
+  $('sbWrap').classList.toggle('coll',!ui.bars); $('sbSum').hidden=ui.bars; if(!ui.bars) sbSum();
   requestAnimationFrame(()=>{ layoutField(); lastPanel=-1; render(); }); }
-$('bSide').onclick=()=>{ ui.side=!ui.side; uiSave(); applyUI(); };
-$('runTab').onclick=()=>{ ui.run=!ui.run; uiSave(); applyUI(); };
-document.addEventListener('pointerdown',e=>{ if(innerWidth<=900&&ui.side&&!e.target.closest('aside')&&!e.target.closest('#bSide')&&!e.target.closest('dialog')){ ui.side=false; uiSave(); applyUI(); } });
+const setUI=(k,v)=>{ if(ui[k]===v) return; ui[k]=v; uiSave(); applyUI(); };
+// swipe helper: works with touch (iPad) and mouse drags; quick taps still count as taps
+function swipe(el,h,opt={}){ let x0=0,y0=0,ok=false,st=0;
+  const start=(x,y)=>{ x0=x; y0=y; ok=true; st=opt.scroller?opt.scroller.scrollTop:0; };
+  const end=(x,y)=>{ if(!ok) return; ok=false; const dx=x-x0, dy=y-y0, ax=Math.abs(dx), ay=Math.abs(dy);
+    if(ay>40&&ay>ax*1.3){ if(dy<0&&h.up) h.up(); if(dy>0&&h.down&&!(opt.scroller&&st>2)) h.down(); }
+    else if(ax>40&&ax>ay*1.3){ if(dx<0&&h.left) h.left(); if(dx>0&&h.right) h.right(); } };
+  el.addEventListener('touchstart',e=>{ const p=e.changedTouches[0]; start(p.clientX,p.clientY); },{passive:true});
+  el.addEventListener('touchend',e=>{ const p=e.changedTouches[0]; end(p.clientX,p.clientY); },{passive:true});
+  el.addEventListener('mousedown',e=>{ start(e.clientX,e.clientY); const up=ev=>{ document.removeEventListener('mouseup',up); end(ev.clientX,ev.clientY); }; document.addEventListener('mouseup',up); }); }
+function longPress(el,fn){ let t=0; const go=()=>{ clearTimeout(t); t=setTimeout(()=>{ el.dataset.lp='1'; fn(); },600); }, no=()=>clearTimeout(t);
+  el.addEventListener('touchstart',go,{passive:true}); el.addEventListener('mousedown',go); ['touchend','touchmove','mouseup','mouseleave'].forEach(ev=>el.addEventListener(ev,no,{passive:true}));
+  el.addEventListener('click',e=>{ if(el.dataset.lp){ delete el.dataset.lp; e.stopImmediatePropagation(); e.preventDefault(); } },true); }
+swipe($('fieldWrap').querySelector('.tlwrap'),{up:()=>setUI('run',true),down:()=>setUI('run',false)});
+swipe(document.querySelector('.runsplit'),{down:()=>setUI('run',false)});
+$('tlGrab').onclick=()=>setUI('run',!ui.run);
+swipe($('sbWrap'),{down:()=>setUI('bars',false),up:()=>setUI('bars',true)},{scroller:$('subBars')});
+$('sbSum').onclick=()=>setUI('bars',true);
+swipe($('edge'),{left:()=>setUI('side',true)}); $('edge').onclick=()=>setUI('side',true);
+swipe(document.querySelector('aside'),{right:()=>setUI('side',false)});
+$('scrim').onclick=()=>setUI('side',false);
+// a swipe in from the right edge anywhere opens the panel
+document.addEventListener('touchstart',e=>{ const p=e.changedTouches[0]; if(!ui.side&&p.clientX>innerWidth-24){ const x0=p.clientX,y0=p.clientY;
+  const end=ev=>{ const q=ev.changedTouches[0]; if(x0-q.clientX>40&&Math.abs(q.clientY-y0)<x0-q.clientX) setUI('side',true); document.removeEventListener('touchend',end); };
+  document.addEventListener('touchend',end,{passive:true}); } },{passive:true});
+function sbSum(){ const box=$('sbMini'); if(!box) return; box.innerHTML='';
+  [...$('subBars').querySelectorAll('.sbr:not(.main)')].forEach(r=>{ const n=r.querySelector('.nm'), s=r.querySelector('.st'); if(!n) return;
+    const c=document.createElement('span'); const st=(s?s.textContent:'').trim(); c.textContent=`${n.firstChild?n.firstChild.textContent:n.textContent} · ${st}`; if(/^move/i.test(st)&&!/hold/i.test(st)) c.className='m'; box.appendChild(c); }); }
+try{ new MutationObserver(()=>{ if(!ui.bars) sbSum(); }).observe($('subBars'),{childList:true,subtree:true,characterData:true}); }catch(e){}
+// drill notes: the edge handle turns into a red NOTE tab, with a short preview when you land on the set
+let peekT=0, lastNoteSet=-1;
+function noteText(i){ const s=SETS[i]; const out=[]; if(s&&s.n&&s.n.trim()) out.push(s.n.trim().replace(/^\*/,''));
+  (D.score||[]).filter(x=>x.ctl.t==='note'&&sc.ch[x.id]!=='no'&&setIdxOf(x.p)===i).forEach(x=>out.push(`Score, m. ${x.m}: ${x.ctl.txt}`)); return out.join(' · '); }
+function noteFlag(i){ const txt=noteText(i); $('edge').classList.toggle('note',!!txt);
+  if(i===lastNoteSet) return; lastNoteSet=i; clearTimeout(peekT); const pk=$('notePeek');
+  if(!txt||ui.side){ pk.hidden=true; return; }
+  $('npHead').textContent=`Note · set ${SETS[i].l}`; $('npText').textContent=txt.length>140?txt.slice(0,137)+'…':txt;
+  pk.hidden=false; pk.classList.remove('fade'); peekT=setTimeout(()=>{ pk.classList.add('fade'); peekT=setTimeout(()=>{ pk.hidden=true; },450); },4000); }
+$('notePeek').onclick=()=>setUI('side',true);
+// A / B runs (saved with the rehearsal sections)
+const RUNC=['#2f80ed','#e08a00','#8e44ad','#2e9d6a','#d6336c','#0f8b8d','#7a5c2e','#5c6bc0'];
+function runColor(k){ const s=sections[k]; return (s&&s.c)||RUNC[k%RUNC.length]; }
+let abA=null;
+function abUI(){ $('abA').classList.toggle('set',abA!==null); $('abB').classList.toggle('wait',abA!==null);
+  document.querySelectorAll('#setList .row').forEach(r=>r.classList.toggle('pickA',abA!==null&&+r.dataset.i===abA));
+  $('abHint').innerHTML=abA===null?'Tap a set, then <b>A</b>. Tap the last set, then <b>B</b>. That makes a run.':`A = <b>${SETS[abA].l}</b> · now tap the last set, then <b>B</b>`; }
+$('abA').onclick=()=>{ abA=abA===cur?null:cur; abUI(); };
+$('abB').onclick=()=>{ if(abA===null){ $('abHint').innerHTML='Tap a set and press <b>A</b> first.'; return; }
+  const a=Math.min(abA,cur), b=Math.max(abA,cur); if(a===b){ $('abHint').innerHTML='Pick a different set for <b>B</b>.'; return; }
+  const used=new Set(sections.map(s=>s.name)); let n=1; while(used.has(String(n))) n++;
+  sections.push({name:String(n),a,b,c:RUNC[sections.length%RUNC.length]}); abA=null; prefs.run='s:'+(sections.length-1);
+  runChips(); drawLoopZone(); save(); abUI(); };
+function editRun(k){ const s=sections[k]; if(!s) return;
+  const v=prompt(`Run ${s.name}: sets ${SETS[s.a].l}–${SETS[s.b].l}\nType a new name, or clear it and press OK to delete this run.`,s.name);
+  if(v===null) return; if(!v.trim()){ if(prefs.run==='s:'+k) prefs.run='show'; sections.splice(k,1); } else s.name=v.trim();
+  runChips(); drawLoopZone(); save(); }
+function drawLanes(){ const rows=[...document.querySelectorAll('#setList .row')]; if(!rows.length) return;
+  document.querySelectorAll('#setList .lane').forEach(e=>e.remove());
+  const lanes=[]; const order=sections.map((s,k)=>({k,a:Math.min(s.a,s.b),b:Math.max(s.a,s.b)})).sort((x,y)=>x.a-y.a||y.b-x.b);
+  order.forEach(r=>{ let L=0; while(lanes[L]&&lanes[L].some(o=>!(r.b<o.a||r.a>o.b))) L++; (lanes[L]=lanes[L]||[]).push(r); r.L=L; });
+  const pad=lanes.length?10+lanes.length*9:6; rows.forEach(r=>r.style.paddingLeft=pad+'px');
+  const byI={}; rows.forEach(r=>byI[+r.dataset.i]=r);
+  order.forEach(r=>{ for(let i=r.a;i<=r.b;i++){ const row=byI[i]; if(!row) continue; const e=document.createElement('span');
+    e.className='lane'+(i===r.a?' s':'')+(i===r.b?' e':''); e.style.left=(6+r.L*9)+'px'; e.style.background=runColor(r.k); if(i===r.a) e.dataset.n=sections[r.k].name;
+    e.title=`Run ${sections[r.k].name}: ${SETS[r.a].l}–${SETS[r.b].l} (long-press to rename or delete)`;
+    e.onclick=ev=>{ ev.stopPropagation(); prefs.run='s:'+r.k; if(playing) stop(); goSet(r.a); runChips(); drawLoopZone(); save(); };
+    longPress(e,()=>editRun(r.k)); row.appendChild(e); } });
+  abUI(); }
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
