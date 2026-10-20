@@ -900,6 +900,33 @@ body.zoomed svg#field{border-radius:8px!important}
 .dotcard .dcarrow{position:absolute;width:14px;height:14px;background:var(--panel);transform:rotate(45deg);left:var(--ax,50%);margin-left:-7px}
 .dotcard.below .dcarrow{top:-6px}.dotcard.above .dcarrow{bottom:-6px}
 .dot.picked circle{stroke:#fff!important;stroke-width:.3!important}
+/* note tag */
+.notechip{position:absolute;z-index:5;display:flex;align-items:center;gap:6px;height:24px;padding:0 9px;border:0;border-radius:6px;background:var(--accent);color:#fff;font:800 10px system-ui;letter-spacing:.12em;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer}
+.notechip[hidden]{display:none!important}
+.notechip small{font:700 10px system-ui;letter-spacing:.06em;opacity:.85;text-transform:uppercase}
+.notechip.open{background:#fff;color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent),0 2px 8px rgba(0,0,0,.25)}
+.notechip::after{content:'';position:absolute;inset:-8px -4px}
+.notepeek{max-height:50vh;overflow:auto}
+/* big start / stop */
+#free .fgo{flex:none;align-self:center;width:min(340px,86%);height:58px;border:0;border-radius:14px;background:#2e8b57;color:#fff;font:900 20px system-ui;letter-spacing:.14em;box-shadow:0 4px 14px rgba(0,0,0,.22);cursor:pointer;margin-top:4px}
+#free .fgo.on{background:var(--accent)}
+#free .fgo:active{transform:scale(.98)}
+.wheel .t.tm{height:7%!important;width:4px!important;margin-left:-2px!important;background:#fff!important}
+/* sideways Metronome only: tabs ride in the top row, Start beside the dial */
+#free:not(.port) .ftabs{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:4}
+#free:not(.port){padding-top:44px!important}
+#free:not(.port) .fside{gap:8px}
+#free:not(.port) .fbeats span{width:min(40px,8vh)!important;height:min(40px,8vh)!important;font-size:min(17px,3.6vh)!important}
+#free:not(.port) .fside .fgo{width:min(300px,100%);height:40px;font-size:15px;border-radius:10px;margin-top:0}
+body.lay-phoneL #free:not(.port) .ftabs{top:12px}
+body.lay-phoneL.met .viewseg button,body.lay-phoneL.met #moBtn{font-size:9px!important}
+body.lay-phoneL #moBtn{max-width:150px}
+/* upright big info: music fits */
+body.lay-phoneP.info-big #hud .hmus .v{font-size:clamp(18px,5.6vw,26px)}
+body.lay-phoneL #free:not(.port) .fside{gap:5px}
+body.lay-phoneL #free:not(.port) .fbeats span{width:30px!important;height:30px!important;font-size:14px!important}
+body.lay-phoneL #free:not(.port) .fside .fgo{height:32px;font-size:13px}
+body.lay-phoneP.info-big #hud .hmus .v{font-size:clamp(17px,5vw,24px)!important;letter-spacing:-.02em}
 
 </style>
 </head>
@@ -2813,6 +2840,44 @@ function mediaUnlock(){ try{ if(navigator.audioSession&&navigator.audioSession.t
   const r=box.getBoundingClientRect(); pk.dataset.mv='1';
   pk.style.transform='none'; pk.style.maxWidth=Math.min(520,r.width-24)+'px'; pk.style.left=(r.left+12)+'px'; pk.style.right='auto';
   pk.style.top=(r.bottom-pk.offsetHeight-12)+'px'; })();
+
+/* ---- drill notes: no automatic pop-up; a small NOTE tag shows there is one, tap it to read ---- */
+const noteChip=document.createElement('button'); noteChip.id='noteChip'; noteChip.className='notechip'; noteChip.hidden=true; $('stage').appendChild(noteChip);
+let chipSet=-1;
+function peekOpen(i){ const txt=noteText(i); if(!txt) return; const pk=$('notePeek'); clearTimeout(peekT);
+  $('npHead').textContent=`Note · set ${SETS[i].l}`; $('npText').textContent=txt; pk.classList.remove('fade'); pk.hidden=false; noteChip.classList.add('open'); }
+function peekClose(){ $('notePeek').hidden=true; noteChip.classList.remove('open'); }
+noteFlag=function(i){ const txt=noteText(i); $('edge').classList.toggle('note',!!txt); $('edgeT').textContent=txt?'NOTE · SETS':'SETS';
+  if(i===chipSet) return; chipSet=i; lastNoteSet=i; peekClose();
+  noteChip.hidden=!txt; if(txt){ noteChip.innerHTML=''; const b=document.createElement('b'); b.textContent='✎ NOTE'; const sm=document.createElement('small'); sm.textContent=`set ${SETS[i].l}`; noteChip.append(b,sm); } };
+noteChip.onclick=e=>{ e.stopPropagation(); $('notePeek').hidden?peekOpen(chipSet):peekClose(); };
+$('notePeek').onclick=()=>{ peekClose(); setUI('side',true); };
+document.addEventListener('pointerdown',e=>{ if(!$('notePeek').hidden&&!e.target.closest('#notePeek,#noteChip')) peekClose(); },true);
+(function chipPlace(){ requestAnimationFrame(chipPlace); if(noteChip.hidden) return;
+  const showIt=view==='drill'||(view==='met'&&!freeOn); noteChip.style.display=showIt?'':'none'; if(!showIt) return;
+  const st=$('stage').getBoundingClientRect(), fw=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fw'))||st.width, fh=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fh'))||st.height;
+  if(view==='drill'){ noteChip.style.left=((st.width-fw)/2+10)+'px'; noteChip.style.top=(st.height-fh+10)+'px'; }
+  else { noteChip.style.left='12px'; noteChip.style.top='44px'; } })();
+
+/* ---- Metronome only: big Start / Stop ---- */
+const fGo=document.createElement('button'); fGo.id='fGo'; fGo.className='fgo'; $('free').appendChild(fGo);
+fGo.onclick=()=>{ testing?testStop():testStart(); playLabel(); fGoUI(); };
+function fGoUI(){ fGo.classList.toggle('on',testing); fGo.textContent=testing?'■  STOP':'▶  START'; }
+(function fGoTick(){ requestAnimationFrame(fGoTick); if(fGo.classList.contains('on')!==!!testing) fGoUI(); })(); fGoUI();
+
+/* ---- the dial's lines turn with the tempo, like a real knob ---- */
+(function(){ const old=wheel.querySelectorAll('.t'); old.forEach(e=>e.remove()); for(let k=0;k<30;k++){ const i=document.createElement('i'); i.className='t'+(k%5===0?' tm':''); wheel.insertBefore(i,wheel.firstChild); } })();
+tickPos=function(){ const w=wheel.clientWidth; wheel.querySelectorAll('.t').forEach((e,k)=>e.style.transform=`rotate(${k*12+180+dialAng}deg) translateY(${w*0.44}px)`); };
+const _setDial0=setDial; setDial=function(b,f){ _setDial0(b,f); tickPos(); };
+
+/* note pop-up opens right under its tag (drill view) */
+(function peekUnderChip(){ requestAnimationFrame(peekUnderChip); const pk=$('notePeek'); if(pk.hidden||view!=='drill'||noteChip.hidden) { if(pk.dataset.ch){ pk.dataset.ch=''; if(!pk.dataset.mv) pk.style.top=pk.style.left=pk.style.right=pk.style.transform=pk.style.maxWidth=''; } return; }
+  const c=noteChip.getBoundingClientRect(), st=$('stage').getBoundingClientRect(); pk.dataset.ch='1';
+  pk.style.transform='none'; pk.style.right='auto'; pk.style.left=c.left+'px'; pk.style.maxWidth=Math.min(420,st.right-c.left-12)+'px'; pk.style.top=(c.bottom+8)+'px'; })();
+/* sideways: Start sits beside the dial instead of under it */
+(function goPlace(){ requestAnimationFrame(goPlace); if(!freeOn||view!=='met') return; const port=$('free').classList.contains('port');
+  const want=port||fPage!=='tempo'?$('free'):document.querySelector('#fpTempo .fside'); if(fGo.parentNode!==want) want.appendChild(fGo); })();
+const _layMode0=layMode; layMode=function(){ _layMode0(); const mt=$('moBtn').lastChild; if(mt&&mt.nodeType===3) mt.textContent=document.body.classList.contains('lay-wide')?'♩ Metronome only':'♩ Met only'; };
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
