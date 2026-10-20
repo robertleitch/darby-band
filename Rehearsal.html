@@ -290,6 +290,27 @@ aside .card{padding:12px 12px}
 footer{color:var(--muted);font-size:12px;padding:0 16px 20px;max-width:900px}
 .dot{transition:none}
 .lbltxt{font:600 1.05px system-ui,sans-serif;fill:#fff;pointer-events:none;text-anchor:middle;dominant-baseline:central}
+
+/* director layout (stills 1-10) */
+header{display:none!important}
+main{padding-top:8px}
+#fieldWrap > .hud{padding:0 6px 10px;align-items:center}
+.hudbtns{margin-left:auto;display:flex;gap:10px}
+.hudbtns button{min-height:44px;min-width:44px}
+#controls{padding:8px 0 4px}
+#timeline{margin-top:14px;height:20px!important}
+#timeline .part{font-size:9.5px;padding:1px 4px;line-height:1.2}
+#subBars .sbh{display:none!important}
+#subBars{padding-top:12px}
+.runsplit{display:grid!important;grid-template-columns:1fr 1fr;gap:14px;align-items:center;padding-top:8px}
+.runleft{display:flex;align-items:center;gap:6px;min-width:0}
+.runscroll{overflow-x:auto;scrollbar-width:none;min-width:0;flex:1;scroll-behavior:smooth;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}
+.runscroll::-webkit-scrollbar{display:none}
+.runscroll .runchips{flex-wrap:nowrap;width:max-content;padding:2px 12px}
+.sarrow{width:40px;min-height:44px;font-size:24px;font-weight:700;padding:0;border-radius:10px;flex:none}
+.runright{display:flex;justify-content:flex-end;min-width:0}
+.runright .goto{flex-wrap:nowrap}
+@media (max-width:760px){.runsplit{grid-template-columns:1fr}.runright{justify-content:flex-start}}
 </style>
 </head>
 <body>
@@ -301,35 +322,6 @@ footer{color:var(--muted);font-size:12px;padding:0 16px 20px;max-width:900px}
 <main>
   <section>
     <div class="card" id="fieldWrap">
-      <div id="controls">
-      <div class="transport">
-        <button id="bPrev" title="Previous set (←)">◀ Set</button>
-        <button id="bPlay" class="primary" title="Play / pause (space)">▶ Play</button>
-        <button id="bNext" title="Next set (→)">Set ▶</button>
-        <button id="bLoop" title="Repeat the selected section">⟲ Loop</button>
-        <div class="tempo" title="Rehearsal tempo (50–100%)">
-          <button id="tDown" aria-label="Slower 5%">−</button>
-          <input type="range" id="speed" min="50" max="100" step="5" value="100" aria-label="Tempo percent">
-          <button id="tUp" aria-label="Faster 5%">+</button>
-          <span id="tVal">100%</span>
-        </div>
-      </div>
-      <div class="transport opts">
-        <span class="runlbl">Run</span>
-        <div class="runchips" id="runChips"></div>
-      </div>
-      <div class="transport opts">
-
-        <span class="goto" title="Start from any measure">
-          <label for="gM">Go to m.</label><input id="gM" inputmode="numeric" autocomplete="off" list="gList" placeholder="#">
-          <datalist id="gList"></datalist><select id="gMv" aria-label="Music"></select><button id="gGo">Go</button>
-        </span>
-        <span class="spacer"></span>
-        <span class="cinfo" id="cInfo"></span>
-        <button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button>
-        <button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button>
-      </div>
-      <div id="timeline" title="Click to jump to a set"></div>
       <div class="hud">
         <div><span class="lbl">Set</span><span class="big" id="hSet">1</span></div>
         <div><span class="lbl">Count</span><span class="v" id="hCount">–</span></div>
@@ -338,7 +330,7 @@ footer{color:var(--muted);font-size:12px;padding:0 16px 20px;max-width:900px}
         <div><span class="lbl">Music</span><span class="v" id="hMusic">–</span></div>
         <div><span class="lbl">Tempo</span><span class="v" id="hBpm">–</span></div>
         <div><span class="lbl">Part</span><span class="v" id="hPart">–</span></div>
-      </div>
+        <div class="hudbtns"><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
       </div>
       <div id="stage">
       <div class="seg viewseg" role="tablist" aria-label="View"><button id="vDrill" class="sel">Drill</button><button id="vMet">Met</button><button id="vSet">Settings</button></div>
@@ -382,7 +374,30 @@ footer{color:var(--muted);font-size:12px;padding:0 16px 20px;max-width:900px}
         <div class="beats" id="mBeats"></div>
       </div>
       </div>
+      <div id="controls">
+      <div class="transport">
+        <button id="bPrev" title="Previous set (←)">◀ Set</button>
+        <button id="bPlay" class="primary" title="Play / pause (space)">▶ Play</button>
+        <button id="bNext" title="Next set (→)">Set ▶</button>
+        <button id="bLoop" title="Repeat the selected section">⟲ Loop</button>
+        <div class="tempo" title="Rehearsal tempo (50–100%)">
+          <button id="tDown" aria-label="Slower 5%">−</button>
+          <input type="range" id="speed" min="50" max="100" step="5" value="100" aria-label="Tempo percent">
+          <button id="tUp" aria-label="Faster 5%">+</button>
+          <span id="tVal">100%</span>
+        </div>
+      </div>
+      <span id="cInfo" hidden></span>
+      </div>
       <div id="subBars" aria-label="Who is holding and moving in this set"></div>
+      <div id="timeline" title="Click to jump to a set"></div>
+      <div class="transport opts runsplit">
+        <div class="runleft"><button class="sarrow" id="rL" aria-label="Scroll left">‹</button><div class="runscroll" id="runScroll"><div class="runchips" id="runChips"></div></div><button class="sarrow" id="rR" aria-label="Scroll right">›</button></div>
+        <div class="runright"><span class="goto" title="Start from any measure">
+          <label for="gM">Go to m.</label><input id="gM" inputmode="numeric" autocomplete="off" list="gList" placeholder="#">
+          <datalist id="gList"></datalist><select id="gMv" aria-label="Music"></select><button id="gGo">Go</button>
+        </span></div>
+      </div>
     </div>
   </section>
   <aside>
@@ -1121,6 +1136,8 @@ function refreshSettings(){
 function infoLine(){ $('cInfo').textContent=`Count-in: ${ciText(count)} · clicks on ${prefs.unit==='beats'?'beats':'counts'}`; }
 $('ciCustom').addEventListener('input',()=>{ const v=parseInt($('ciCustom').value,10); if(v>=1&&v<=32){ prefs.ciCustom=v; infoLine(); save(); } });
 $('bGear').onclick=openSettings;
+$('rL').onclick=()=>$('runScroll').scrollBy({left:-220});$('rR').onclick=()=>$('runScroll').scrollBy({left:220});
+
 /* full screen where the device / viewer allows it (hidden where it can't work) */
 (function(){ const el=document.documentElement, req=el.requestFullscreen||el.webkitRequestFullscreen, exit=document.exitFullscreen||document.webkitExitFullscreen;
   const isFull=()=>!!(document.fullscreenElement||document.webkitFullscreenElement), b=$('bFull');
