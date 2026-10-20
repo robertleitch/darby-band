@@ -608,6 +608,31 @@ aside{border-radius:0!important}
 .syadd select,.syadd button{height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;font:600 14px system-ui;padding:0 10px}
 .mrec .sybtn{height:40px;padding:0 14px;border-radius:10px;border:2px solid #3b4fd8;background:#fff;color:#3b4fd8;font:800 14px system-ui;cursor:pointer}
 @media (max-width:700px){.syrow{grid-template-columns:1fr auto}.syrow .ctl{grid-column:1/-1}}
+
+/* A·B runs row */
+.runs2{display:flex;align-items:center;gap:10px;padding-top:8px;flex-wrap:nowrap;min-width:0}
+.runs2[hidden],body.runhide .runs2{display:none!important}
+.r2lbl{font:700 11px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex:none}
+.r2chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.r2chips::-webkit-scrollbar{display:none}
+.r2chips button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.r2chips button small{display:inline!important;color:var(--muted);font-size:12px}
+.r2chips button.sel{background:var(--ink)!important;color:#fff!important;border-color:var(--ink)!important}
+.r2chips button.sel small{color:#ffffffcc}
+.r2chips button i.rc{width:11px;height:11px;border-radius:50%;display:inline-block}
+.r2clear,.abclear{flex:none;height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:#fff;font:700 13px system-ui;color:var(--accent);cursor:pointer}
+.abclear{margin:6px 0 0;height:34px}
+
+/* ===== voice ===== */
+.mic{font-size:20px}
+.mic.on{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important;animation:micp 1s ease-in-out infinite}
+@keyframes micp{50%{box-shadow:0 0 0 8px #b3261e33}}
+.vban{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:95;background:var(--ink);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:min(560px,92vw);font-family:system-ui}
+.vban[hidden]{display:none}
+.vban b{font-size:17px;display:block}.vban small{display:block;color:#b8f0c8;font-size:14px;margin-top:2px}
+.vban small.err{color:#ffb4ac}
+.vdot{width:14px;height:14px;border-radius:50%;background:#e5534b;flex:none}
+.vban.done .vdot{background:#2e9d6a}
 </style>
 </head>
 <body>
@@ -627,7 +652,7 @@ aside{border-radius:0!important}
         <div><span class="lbl">Music</span><span class="v" id="hMusic">–</span></div>
         <div><span class="lbl">Tempo (bpm)</span><span class="v" id="hBpm">–</span></div>
         <div><span class="lbl">Part</span><span class="v" id="hPart">–</span></div>
-        <div class="hudbtns"><button id="bReload" class="gear" title="Reload the newest version" aria-label="Reload">↻</button><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
+        <div class="hudbtns"><button id="bMic" class="gear mic" title="Hold to talk" aria-label="Voice command">🎤</button><button id="bReload" class="gear" title="Reload the newest version" aria-label="Reload">↻</button><button id="bFull" class="gear" title="Full screen" aria-label="Full screen">⛶</button><button id="bGear" class="gear" title="Settings" aria-label="Settings">⚙</button></div>
       </div>
       <div id="stage">
       <div class="seg viewseg" role="tablist" aria-label="View"><button id="vDrill" class="sel">Drill</button><button id="vMet">Met</button><button id="vSet">Settings</button></div>
@@ -703,6 +728,7 @@ aside{border-radius:0!important}
           <datalist id="gList"></datalist><select id="gMv" aria-label="Music"></select><button id="gGo">Go</button>
         </span></div>
       </div>
+      <div class="runs2" id="runs2" hidden><span class="r2lbl">A·B runs</span><div class="r2chips" id="runChips2"></div><button class="r2clear" id="runsClear">Clear all</button></div>
     </div>
   </section>
   <aside>
@@ -719,7 +745,7 @@ aside{border-radius:0!important}
     </div>
     <div class="card">
       <div class="abhead"><h2>Sets</h2><button class="addbtn" id="addSet" title="Add measures after the selected set">+ Set</button><button class="abbtn" id="abA" title="Mark the selected set as the start of a run">A</button><button class="abbtn" id="abB" title="Mark the selected set as the end of the run">B</button></div>
-      <div class="abhint" id="abHint">Tap a set, then <b>A</b>. Tap the last set, then <b>B</b>. That makes a run.</div>
+      <button class="abclear" id="abClear" hidden>Clear all runs</button><div class="abhint" id="abHint">Tap a set, then <b>A</b>. Tap the last set, then <b>B</b>. That makes a run.</div>
       <div id="setList"></div>
     </div>
     <div class="card">
@@ -731,6 +757,7 @@ aside{border-radius:0!important}
 <div class="edge" id="edge" title="Swipe left (or tap) for the sets panel"><span class="chev">‹</span><b id="edgeT">SETS</b><i></i></div>
 <div class="notepeek" id="notePeek" hidden><small id="npHead"></small><span id="npText"></span></div>
 <div class="scrim" id="scrim"></div>
+<div class="vban" id="vBan" hidden><span class="vdot" id="vDot"></span><div><b id="vHeard">Listening…</b><small id="vDid"></small></div></div>
 <div class="dscrim" id="addScrim" hidden></div>
 <div class="addpop" id="addPop" hidden>
   <h3 id="apHead">Add a set</h3><small class="apsub">For measures the director adds in</small>
@@ -774,7 +801,7 @@ aside{border-radius:0!important}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead"><h3>Settings <small style="font-size:12px;color:var(--muted);font-weight:500">version 17 · Oct 19</small></h3><button id="sClose" aria-label="Close">✕</button></div>
+  <div class="dhead"><h3>Settings <small style="font-size:12px;color:var(--muted);font-weight:500">version 19 · Oct 20</small></h3><button id="sClose" aria-label="Close">✕</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -1311,7 +1338,7 @@ const chips=$('chips');
 const VOICES=[['acc','>','Accent'],['q','♩','Beat'],['e','♪','8ths'],['s','♬','16ths'],['t','3','Triplets']];
 const prefs={pats:{},tsD:4,grp:'',pulse:'note',pat:{acc:[1,0,0,0,0,0,0,0,0,0,0,0],q:Array(12).fill(1),e:Array(12).fill(0),s:Array(12).fill(0),t:Array(12).fill(0)},
   mix:{acc:100,q:85,e:65,s:55,t:65}, testBpm:120, mute:{acc:0,q:0,e:0,s:0,t:0}, snd:'pip',ci:1,ciMode:'std',ciStd:4,ciCustom:6,bpm:0,run:'show',loop:false,unit:'counts',show:'both',tsrc:'steady'};
-function save(){ try{ localStorage.setItem('rm_prefs',JSON.stringify({view,pats:prefs.pats,tsD:prefs.tsD,grp:prefs.grp,pulse:prefs.pulse,testBpm:prefs.testBpm,mix:prefs.mix,mute:prefs.mute,met:metMode,flip:flipped,spd:$('speed').value,ci:prefs.ci,ciMode:prefs.ciMode,snd:prefs.snd,ciStd:prefs.ciStd,ciCustom:prefs.ciCustom,bpm:prefs.bpm,run:prefs.run,loop:prefs.loop,unit:prefs.unit,show:prefs.show,tsrc:prefs.tsrc,down:$('cDown').checked,
+function save(){ try{ localStorage.setItem('rm_prefs',JSON.stringify({view,pats:prefs.pats,tsD:prefs.tsD,grp:prefs.grp,pulse:prefs.pulse,testBpm:prefs.testBpm,mix:prefs.mix,mute:prefs.mute,met:metMode,flip:flipped,spd:$('speed').value,ci:prefs.ci,ciMode:prefs.ciMode,snd:prefs.snd,ciStd:prefs.ciStd,ciCustom:prefs.ciCustom,bpm:prefs.bpm,run:prefs.run,loop:prefs.loop,freeTs:prefs.freeTs,unit:prefs.unit,show:prefs.show,tsrc:prefs.tsrc,down:$('cDown').checked,
   click:$('cClick').checked,accent:$('cAccent').checked,labels:$('cLabels').checked,paths:$('cPaths').checked,grid:$('cGrid').checked,props:$('cProps').checked}));
   localStorage.setItem('rm_sections',JSON.stringify(sections)); }catch(e){} }
 
@@ -1338,13 +1365,14 @@ function rangeOf(id){
   return [0,NS-1];
 }
 function runChips(){
-  const box=$('runChips'); box.innerHTML='';
-  const items=[['show','Whole show'],['move','This move'],...PARTS.map(p=>['p:'+p,p]),...sections.map((s,i)=>['s:'+i,s.name||'Section',`${SETS[Math.min(s.a,s.b)].l}–${SETS[Math.max(s.a,s.b)].l}`])];
+  const box=$('runChips'); box.innerHTML=''; $('runChips2').innerHTML='';
+  const items=[['show','Whole show'],['move','This move'],...PARTS.map(p=>['p:'+p,p]),...sections.map((s,i)=>['s:'+i,/^\d+$/.test(s.name||'')?'Run '+s.name:(s.name||'Run'),`${SETS[Math.min(s.a,s.b)].l}–${SETS[Math.max(s.a,s.b)].l}`])];
   if(!items.some(x=>x[0]===prefs.run)) prefs.run='show';
   for(const [id,lab,sub] of items){ const b=document.createElement('button'); b.textContent=lab; if(id.startsWith('s:')){ const k=+id.slice(2), dot=document.createElement('i'); dot.className='rc'; dot.style.background=runColor(k); b.prepend(dot); longPress(b,()=>editRun(k)); } if(sub){const s=document.createElement('small');s.textContent=sub;b.appendChild(s);}
     b.classList.toggle('sel',id===prefs.run);
     b.onclick=()=>{ prefs.run=id; if(playing) stop(); if(id!=='show'&&id!=='move') goSet(rangeOf(id)[0]); else if(id==='move'&&cur===0) goSet(1); runChips(); drawLoopZone(); save(); };
-    box.appendChild(b); }
+    (id.startsWith('s:')?$('runChips2'):box).appendChild(b); }
+  $('runs2').hidden=!sections.length;
   drawLanes();
 }
 function drawLoopZone(){
@@ -2057,6 +2085,7 @@ let abA=null;
 function abUI(){ $('abA').classList.toggle('set',abA!==null); $('abB').classList.toggle('wait',abA!==null);
   document.querySelectorAll('#setList .row').forEach(r=>r.classList.toggle('pickA',abA!==null&&+r.dataset.i===abA));
   $('abHint').innerHTML=abA===null?'Tap a set, then <b>A</b>. Tap the last set, then <b>B</b>. That makes a run.':`A = <b>${SETS[abA].l}</b> · now tap the last set, then <b>B</b>`; }
+$('runsClear').onclick=clearRuns; $('abClear').onclick=clearRuns;
 $('abA').onclick=()=>{ abA=abA===cur?null:cur; abUI(); };
 $('abB').onclick=()=>{ if(abA===null){ $('abHint').innerHTML='Tap a set and press <b>A</b> first.'; return; }
   const a=Math.min(abA,cur), b=Math.max(abA,cur); if(a===b){ $('abHint').innerHTML='Pick a different set for <b>B</b>.'; return; }
@@ -2067,7 +2096,8 @@ function editRun(k){ const s=sections[k]; if(!s) return;
   const v=prompt(`Run ${s.name}: sets ${SETS[s.a].l}–${SETS[s.b].l}\nType a new name, or clear it and press OK to delete this run.`,s.name);
   if(v===null) return; if(!v.trim()){ if(prefs.run==='s:'+k) prefs.run='show'; sections.splice(k,1); } else s.name=v.trim();
   runChips(); drawLoopZone(); save(); }
-function drawLanes(){ const rows=[...document.querySelectorAll('#setList .row')]; if(!rows.length) return;
+function clearRuns(){ if(!sections.length||!confirm(`Clear all ${sections.length} A·B run${sections.length>1?'s':''}?`)) return; sections=[]; if(prefs.run.startsWith('s:')) prefs.run='show'; runChips(); drawLoopZone(); save(); }
+function drawLanes(){ $('abClear').hidden=!sections.length; const rows=[...document.querySelectorAll('#setList .row')]; if(!rows.length) return;
   document.querySelectorAll('#setList .lane').forEach(e=>e.remove());
   const lanes=[]; const order=sections.map((s,k)=>({k,a:Math.min(s.a,s.b),b:Math.max(s.a,s.b)})).sort((x,y)=>x.a-y.a||y.b-x.b);
   order.forEach(r=>{ let L=0; while(lanes[L]&&lanes[L].some(o=>!(r.b<o.a||r.a>o.b))) L++; (lanes[L]=lanes[L]||[]).push(r); r.L=L; });
@@ -2084,7 +2114,7 @@ function drawLanes(){ const rows=[...document.querySelectorAll('#setList .row')]
 let freeOn=false;
 try{ freeOn=localStorage.getItem('rm_free')==='1'; }catch(e){}
 const FTS=[[2,4],[3,4],[4,4],[5,4],[6,8],[7,8],[9,8],[12,8]];
-function freeTs(){ return prefs.bpm?[prefs.bpm,prefs.tsD||4]:[4,4]; }
+function freeTs(){ const f=prefs.freeTs||[4,4]; return [f[0],f[1]]; }
 function freeUI(){ $('moBtn').classList.toggle('on',freeOn); $('moBtn').setAttribute('aria-pressed',freeOn); document.body.classList.toggle('freem',freeOn);
   $('fBpmV').textContent=prefs.testBpm; $('dVal').textContent=prefs.testBpm; $('fUnit').textContent=unitLabel()+' · tap for dial';
   const [n,d]=freeTs(), P=patFor(`${n}/${d}`), bx=$('fBeats'); if(bx.children.length!==n){ bx.innerHTML=''; for(let k=0;k<n;k++){ const s=document.createElement('span'); s.textContent=k+1; bx.appendChild(s); } }
@@ -2092,9 +2122,11 @@ function freeUI(){ $('moBtn').classList.toggle('on',freeOn); $('moBtn').setAttri
   const tr=$('fTs'); tr.innerHTML=''; FTS.forEach(([a,b])=>{ const x=document.createElement('button'); x.textContent=`${a}/${b}`; x.classList.toggle('sel',a===n&&b===d); x.onclick=()=>{ setFreeTs(a,b); }; tr.appendChild(x); });
   const tp=document.createElement('button'); tp.className='tap'; tp.textContent='TAP'; tp.onclick=tapTempo; tr.appendChild(tp);
   placeMo(); }
-function setFreeTs(n,d){ const was=testing; if(was) testStop(); prefs.bpm=n; prefs.tsD=d; buildPattern(); save(); freeUI(); if(was) testStart(); }
+function setFreeTs(n,d){ const was=testing; if(was) testStop(); prefs.freeTs=[n,d]; prefs.bpm=n; prefs.tsD=d; buildPattern(); save(); freeUI(); if(was) testStart(); }
 function setFree(on){ freeOn=on; try{ localStorage.setItem('rm_free',on?'1':'0'); }catch(e){} if(playing) stop(); if(testing) testStop();
-  if(on&&!prefs.bpm){ prefs.bpm=4; prefs.tsD=4; buildPattern(); } freeUI(); playLabel(); }
+  // the free metronome's meter lives in prefs.freeTs; the show always follows the score
+  if(on){ const f=freeTs(); prefs.bpm=f[0]; prefs.tsD=f[1]; } else { prefs.bpm=0; prefs.tsD=4; }
+  buildPattern(); save(); freeUI(); playLabel(); }
 function placeMo(){ const st=$('stage'), r=st.getBoundingClientRect(), fw=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fw'))||r.width;
   const b=$('moBtn'); b.style.left=((r.width-fw)/2+14)+'px'; b.style.top='10px'; }
 $('moBtn').onclick=()=>setFree(!freeOn);
@@ -2159,6 +2191,82 @@ document.querySelectorAll('#setList .row').forEach(r=>{ const s=SETS[+r.dataset.
     const adds=loadAdds().filter(a=>a.l!==s.l).map(a=>a.after===s.l?Object.assign(a,{after:SETS[+r.dataset.i-1].l}):a);
     shiftRuns(+r.dataset.i-1,-1); save(); try{ localStorage.setItem('rm_added',JSON.stringify(adds)); }catch(e){} if(playing) stop(); location.reload(); }); });
 
+/* ---------- Voice commands (push-to-talk) ----------
+   Hold 🎤 (or press V) and speak; let go to run it. Uses the device's built-in speech recognition. */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const NUMW={zero:0,oh:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+function wordsToNums(s){ // "one twenty" -> 120, "one hundred twenty" -> 120, "ninety six" -> 96, "six eight" kept as "6 8"
+  s=s.toLowerCase().replace(/[-,]/g,' ').replace(/(\d+)\s*%/g,'$1 percent');
+  const tok=s.split(/\s+/); const out=[]; let i=0;
+  while(i<tok.length){ const w=tok[i];
+    if(NUMW[w]===undefined&&w!=='hundred'){ out.push(w); i++; continue; }
+    let v=0, got=false;
+    if(NUMW[w]!==undefined){ v=NUMW[w]; got=true; i++; }
+    if(tok[i]==='hundred'){ v=(got?v:1)*100; i++; if(tok[i]==='and') i++; if(NUMW[tok[i]]!==undefined&&NUMW[tok[i]]>=20){ v+=NUMW[tok[i]]; i++; if(NUMW[tok[i]]!==undefined&&NUMW[tok[i]]<10){ v+=NUMW[tok[i]]; i++; } } else if(NUMW[tok[i]]!==undefined){ v+=NUMW[tok[i]]; i++; } }
+    else if(v>=20&&v<100&&NUMW[tok[i]]!==undefined&&NUMW[tok[i]]>0&&NUMW[tok[i]]<10){ v+=NUMW[tok[i]]; i++; }
+    else if(v>0&&v<10&&NUMW[tok[i]]!==undefined&&NUMW[tok[i]]>=20&&!/time|signature|meter|in/.test(out[out.length-1]||'')){ v=v*100+NUMW[tok[i]]; i++; if(NUMW[tok[i]]!==undefined&&NUMW[tok[i]]<10&&NUMW[tok[i]]>0){ v+=NUMW[tok[i]]; i++; } } // "one twenty" -> 120
+    out.push(String(v)); }
+  return out.join(' '); }
+const metFree=()=>freeOn&&view==='met';
+function vStart(){ if(freeOn&&view==='met'){ if(!testing){ testStart(); playLabel(); } return 'Start'; } if(!playing) play(); return 'Play'; }
+function vStop(){ if(testing){ testStop(); playLabel(); } if(playing) stop(); return 'Stop'; }
+function vTempo(n,rel){ // free metronome: bpm; show: percent of score tempo
+  if(metFree()||!view||freeOn){ const v=rel?prefs.testBpm+n:n; setTestBpm(v); freeUI(); return `Tempo ${prefs.testBpm}`; }
+  if(rel){ setSpeed(+$('speed').value+(n>0?5:-5)); } else if(n<=100&&n>=50){ setSpeed(n); } else { setFree(true); setView('met'); setTestBpm(n); freeUI(); return `Metronome only · ${n}`; }
+  return `Tempo ${$('speed').value}%`; }
+function vSub(kind){ const key=freeOn?`${freeTs()[0]}/${freeTs()[1]}`:curKey(), P=patFor(key), n=+key.split('/')[0];
+  for(let c=0;c<12;c++){ const on=c<n?1:0; P.e[c]=kind==='e'?on:0; P.s[c]=kind==='s'?on:0; P.t[c]=kind==='t'?on:0; if(kind==='q'){ P.e[c]=P.s[c]=P.t[c]=0; } }
+  buildPattern(); save(); if(freeOn) freeUI(); return {q:'Quarters only',e:'Subdivide 8ths',t:'Subdivide triplets',s:'Subdivide 16ths'}[kind]; }
+function runVoice(raw){
+  const s=' '+wordsToNums(raw)+' ', has=r=>r.test(s), num=r=>{ const m=s.match(r); return m?+m[1]:null; };
+  let n;
+  if(has(/\b(stop|pause|halt|hold it|cut)\b/)) return vStop();
+  if(has(/\b(metronome only|met only|free metronome)\b/)){ const off=has(/\boff\b/); setView('met'); setFree(!off); return off?'Metronome only off':'Metronome only on'; }
+  if(has(/\b(drill|field) (view|screen)?\b|\bshow (the )?drill\b/)){ setView('drill'); return 'Drill view'; }
+  if(has(/\bmet(ronome)? (view|screen)\b/)){ setView('met'); return 'Met view'; }
+  if((n=num(/(?:time signature|meter|in) (\d+) (?:over |by |\/ )?(\d+)/))!==null){ const m=s.match(/(?:time signature|meter|in) (\d+) (?:over |by |\/ )?(\d+)/); const a=+m[1], d=+m[2]; if([2,4,8,16].includes(d)&&a>=1&&a<=12){ if(!freeOn){ setView('met'); setFree(true); } setFreeTs(a,d); return `Time ${a}/${d}`; } }
+  if(has(/\b(16th|sixteenth|sixteenths|16 th)s?\b/)) return vSub('s');
+  if(has(/\btriplet/)) return vSub('t');
+  if(has(/\b(8th|eighth|eighths|8 th)s?\b/)) return vSub('e');
+  if(has(/\b(quarters?|no subdivision|clear subdivision)\b/)) return vSub('q');
+  if((n=num(/(\d+) ?(?:percent|%)/))!==null){ setSpeed(n); return `Tempo ${$('speed').value}%`; }
+  if((n=num(/\b(?:tempo|bpm|speed|set tempo to|metronome) (?:to |at )?(\d{2,3})\b/))!==null||(n=num(/\b(\d{2,3}) ?(?:bpm|beats)\b/))!==null) return vTempo(n,false);
+  if(has(/\b(faster|speed up|push)\b/)){ n=num(/(?:faster|speed up|push)(?: by)? (\d+)/)||(metFree()?4:5); return vTempo(n,true); }
+  if(has(/\b(slower|slow down|back off)\b/)){ n=num(/(?:slower|slow down|back off)(?: by)? (\d+)/)||(metFree()?4:5); return vTempo(-n,true); }
+  if((n=num(/\bcount ?in (\d+)\b/))!==null){ prefs.ciMode='std'; prefs.ciStd=[4,8,12].includes(n)?n:4; save(); infoLine(); return `Count-in ${prefs.ciStd}`; }
+  if(has(/\bno count ?in\b|\bcount ?in off\b/)){ prefs.ciMode='off'; save(); return 'Count-in off'; }
+  if(has(/\bmusic (on|off)\b|\b(turn )?(on|off) (the )?music\b/)){ const off=has(/\boff\b/); setMusic(off?'off':(mus.src==='rec'&&recEl?'rec':'synth')); return off?'Music off':'Music on'; }
+  if(has(/\bloop (on|off)\b|\bloop\b/)){ prefs.loop=has(/\boff\b/)?false:!prefs.loop||has(/\bon\b/); $('bLoop').classList.toggle('on',prefs.loop); save(); return prefs.loop?'Loop on':'Loop off'; }
+  if(has(/\bnext set\b/)){ goSet(cur+1); return `Set ${SETS[cur].l}`; }
+  if(has(/\b(previous|last|back a) set\b|\bset back\b/)){ goSet(cur-1); return `Set ${SETS[cur].l}`; }
+  { const m=s.match(/\bset (\d+) ?([a-z])?\b/); if(m){ const lab=m[1]+(m[2]&&m[2].length===1&&m[2]!=='a'||m[2]==='a'&&!/\bset \d+ a (tempo|bpm)/.test(s)?(m[2]||'').toUpperCase():''); let k=SETS.findIndex(x=>x.l===lab); if(k<0) k=SETS.findIndex(x=>x.l===m[1]); if(k>=0){ if(freeOn) setFree(false); goSet(k); if(has(/\b(play|start|run)\b/)||/\bgo\b(?! to)/.test(s)) vStart(); return `Set ${SETS[k].l}`; } } }
+  { const m=s.match(/\bmeasure (\d+)\b/); if(m){ $('gM').value=m[1]; $('gGo').click(); return `Measure ${m[1]}`; } }
+  { const m=s.match(/\brun (\d+)\b/); if(m){ const k=sections.findIndex(x=>x.name===m[1]); if(k>=0){ prefs.run='s:'+k; goSet(rangeOf(prefs.run)[0]); runChips(); drawLoopZone(); save(); return `Run ${m[1]}`; } } }
+  if(has(/\bwhole show\b/)){ prefs.run='show'; runChips(); drawLoopZone(); save(); return 'Whole show'; }
+  if(has(/\b(start|play|begin|hit it)\b/)||/\bgo\b(?! to)/.test(s)) return vStart();
+  { const m=s.trim().match(/^(\d{2,3})$/); if(m&&+m[1]>=30&&+m[1]<=300) return vTempo(+m[1],false); }
+  return null; }
+let rec=null, recOn=false, lastHeard='', vT=0;
+function vShow(heard,did,ok){ const b=$('vBan'); b.hidden=false; b.classList.toggle('done',!!ok); $('vHeard').textContent=heard; const d=$('vDid'); d.textContent=did||''; d.classList.toggle('err',ok===false); clearTimeout(vT); if(ok!==undefined) vT=setTimeout(()=>{ b.hidden=true; },2600); }
+function micStart(){ if(!SR){ vShow('Voice isn\'t available here','Try Safari on the iPad (not the Home Screen app), or Chrome',false); return; }
+  if(recOn) return; recOn=true; lastHeard=''; $('bMic').classList.add('on'); vShow('Listening…','say a command, then let go');
+  try{ rec=new SR(); rec.lang='en-US'; rec.interimResults=true; rec.continuous=true; rec.maxAlternatives=3;
+    rec.onresult=e=>{ let txt=''; for(let i=0;i<e.results.length;i++) txt+=e.results[i][0].transcript; lastHeard=txt.trim(); $('vHeard').textContent='“'+lastHeard+'”'; };
+    rec.onerror=e=>{ if(e.error==='not-allowed') vShow('Microphone blocked','Allow the microphone for this site in Settings › Safari',false); };
+    rec.onend=()=>{ if(recOn) micFinish(); };
+    rec.start(); }catch(err){ vShow('Couldn\'t start the microphone',String(err.message||err),false); recOn=false; $('bMic').classList.remove('on'); } }
+function micStop(){ if(!recOn) return; try{ rec.stop(); }catch(e){} setTimeout(()=>{ if(recOn) micFinish(); },700); }
+function micFinish(){ recOn=false; $('bMic').classList.remove('on'); const h=lastHeard;
+  if(!h){ vShow('Didn\'t catch that','hold 🎤 while you talk',false); return; }
+  let did=null; try{ did=runVoice(h); }catch(e){ did=null; }
+  vShow('“'+h+'”', did?'✓ '+did:'Not sure what to do · try “tempo 120”, “eighths”, “six eight”, “start”', !!did); }
+const mb=$('bMic');
+mb.addEventListener('pointerdown',e=>{ e.preventDefault(); micStart(); });
+['pointerup','pointercancel','pointerleave'].forEach(ev=>mb.addEventListener(ev,()=>micStop()));
+document.addEventListener('keydown',e=>{ if((e.key==='v'||e.key==='V')&&!e.repeat&&!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) micStart(); });
+document.addEventListener('keyup',e=>{ if(e.key==='v'||e.key==='V') micStop(); });
+window.runVoice=runVoice;
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -2167,13 +2275,13 @@ try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
   for(const k of ['pat','mix','mute']) if(pr[k]) Object.assign(prefs[k],pr[k]);
   if(pr.pats) prefs.pats=pr.pats; else if(pr.pat) prefs.pats={'4/4':Object.assign({grp:''},pr.pat)};  // older single pattern becomes the 4/4 one
   if(pr.testBpm) prefs.testBpm=pr.testBpm; for(const k of ['tsD','grp','pulse']) if(pr[k]!==undefined) prefs[k]=pr[k];
-  for(const k of ['snd','ci','ciMode','ciStd','ciCustom','bpm','run','loop','unit','show','tsrc']) if(pr[k]!==undefined) prefs[k]=pr[k];
+  for(const k of ['snd','ci','ciMode','ciStd','ciCustom','bpm','run','loop','unit','show','tsrc','freeTs']) if(pr[k]!==undefined) prefs[k]=pr[k];
   for(const [k,id] of [['click','cClick'],['accent','cAccent'],['down','cDown'],['labels','cLabels'],['paths','cPaths'],['grid','cGrid'],['props','cProps']]) if(pr[k]!==undefined) $(id).checked=pr[k];
   sections=JSON.parse(localStorage.getItem('rm_sections')||'[]').filter(s=>s&&s.a<NS&&s.b<NS);
 }catch(e){}
 $('bLoop').classList.toggle('on',prefs.loop);
 S=(prefs.tsrc==='steady'&&D.steady)?steadyS():syncS(); setListTempos(); tempoMap();
-applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); freeUI(); playLabel();
+applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); if(!freeOn){ prefs.bpm=0; prefs.tsD=4; } else { const f=freeTs(); prefs.bpm=f[0]; prefs.tsD=f[1]; } freeUI(); playLabel();
 runChips(); $('tBpm').textContent=prefs.testBpm;
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
