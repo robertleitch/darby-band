@@ -851,6 +851,56 @@ body.met #moBtn{top:14px!important}
 body.met .viewseg{top:14px!important}
 body.met.freem #free{padding-top:48px!important}
 
+
+/* ================= v21 ================= */
+/* Met only switch: really pinned top-left (the strip-button rule had made it position:relative) */
+#moBtn{position:absolute!important}
+body.met #moBtn{left:12px!important;top:14px!important;right:auto!important}
+/* Met view fills the whole stage on every layout */
+body.met #fieldWrap>#stage{justify-content:stretch!important;align-items:stretch!important}
+body.met:not(.freem) #met{width:100%!important;height:auto!important;flex:1 1 auto!important;aspect-ratio:auto!important;border-radius:8px!important;padding-top:44px;box-sizing:border-box}
+body.met:not(.freem) #met .mcorner{top:48px}
+body.lay-phoneP.met:not(.freem) #met .mcorner{left:0;right:0;justify-content:center;top:52px}
+body.lay-phoneP.met #fieldWrap>#stage{flex:1 1 auto!important;aspect-ratio:auto!important}
+body.lay-phoneP.met:not(.freem) #met .mcount{font-size:clamp(120px,42vw,220px)}
+body.lay-phoneP.met:not(.freem) #met .mbpm{font-size:26px}
+body.lay-phoneP.met:not(.freem) #met .mset{font-size:16px}
+body.lay-phoneP.met:not(.freem) #met .beats i{width:16px;height:16px}
+/* metronome dial + beat circles in the band colors */
+.wheel{background:radial-gradient(circle at 50% 38%,var(--b-brand),var(--b-act) 72%)!important}
+.wheel .wc{background:var(--b-deep)!important}
+.wheel .t{background:#ffffff99!important}
+#free .fbeats span{background:var(--b-t2)!important;color:var(--b-deep)!important}
+#free .fbeats span.on{background:var(--b-act)!important;color:#fff!important}
+#free .fbeats span.acc{box-shadow:inset 0 0 0 3px var(--b-act)!important}
+#free .fbeats span.acc.on{box-shadow:inset 0 0 0 3px var(--b-deep)!important}
+/* sideways phone: meter on one line, zoom tag inside the field */
+body.lay-phoneL #hud .hts .ts{flex-direction:row!important;font-size:15px!important;line-height:1.15!important;font-family:system-ui!important;font-weight:800}
+body.lay-phoneL #hud .hts .ts span+span::before{content:'/'}
+body.lay-phoneL #hud .hmeas{display:none}
+/* zoomed: field fills the stage edge to edge */
+body.zoomed svg#field{border-radius:8px!important}
+.zoomtag{left:var(--zl,8px)!important;bottom:var(--zb,8px)!important}
+/* ---- dot card ---- */
+.dotcard{position:absolute;z-index:6;width:min(300px,calc(100% - 16px));background:var(--panel);color:var(--ink);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.35);padding:8px 10px 8px;font:12.5px/1.3 system-ui;pointer-events:auto}
+.dotcard[hidden]{display:none}
+.dotcard .dch{display:flex;align-items:center;gap:7px;margin-bottom:2px}
+.dotcard .dcl{min-width:30px;height:24px;padding:0 5px;border-radius:6px;color:#fff;font:800 13px/24px system-ui;text-align:center;box-shadow:inset 0 0 0 2px #0003}
+.dotcard .dcn{font-weight:800;font-size:14px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dotcard .dcx{width:24px;height:24px;border:0;border-radius:7px;background:var(--b-t1);color:var(--b-deep);font:800 13px system-ui;cursor:pointer;flex:none}
+.dotcard .dcs{font:800 9.5px system-ui;letter-spacing:.12em;color:var(--b-act);text-transform:uppercase;margin-top:5px}
+.dotcard .dct{font-weight:600}
+.dotcard .dct span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dotcard .dcnext{border-top:1px solid var(--b-t2);margin-top:5px;padding-top:0;color:var(--muted)}
+.dotcard .dcb{display:flex;gap:5px;margin-top:9px}
+.dotcard .dcf{height:24px;padding:0 9px;border:0;border-radius:6px;background:var(--b-deep);color:#fff;font:800 9.5px system-ui;letter-spacing:.1em;cursor:pointer;flex:none}
+.dotcard .dcf.on{background:var(--b-brand);color:var(--b-on)}
+.dotcard .dcb button{flex:1;height:26px;border:0;border-radius:6px;background:var(--b-deep);color:#fff;font:800 10px system-ui;letter-spacing:.12em;cursor:pointer}
+.dotcard .dcb button.on{background:var(--b-brand);color:var(--b-on)}
+.dotcard .dcarrow{position:absolute;width:14px;height:14px;background:var(--panel);transform:rotate(45deg);left:var(--ax,50%);margin-left:-7px}
+.dotcard.below .dcarrow{top:-6px}.dotcard.above .dcarrow{bottom:-6px}
+.dot.picked circle{stroke:#fff!important;stroke-width:.3!important}
+
 </style>
 </head>
 <body>
@@ -1032,7 +1082,7 @@ body.met.freem #free{padding-top:48px!important}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 20</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 21</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -1109,7 +1159,7 @@ body.met.freem #free{padding-top:48px!important}
   </div>
   <div class="srow col acard">
     <div class="sl">About</div>
-    <div class="about"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjU0IDEyNTQiPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2wiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjU0IiBoZWlnaHQ9IjEyNTQiIHJ4PSIyNzUiLz48L2NsaXBQYXRoPjxsaW5lYXJHcmFkaWVudCBpZD0ic2t5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDcxODMzIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGMyNDQ3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGcgY2xpcC1wYXRoPSJ1cmwoI2NsKSI+PHJlY3Qgd2lkdGg9IjEyNTQiIGhlaWdodD0iMTI1NCIgZmlsbD0idXJsKCNza3kpIi8+PGVsbGlwc2UgY3g9IjYyNyIgY3k9IjU5OCIgcng9IjI4MCIgcnk9IjEwNCIgZmlsbD0iIzJhMmM0NSIvPjxlbGxpcHNlIGN4PSI2MjciIGN5PSI1OTgiIHJ4PSIxOTAiIHJ5PSI3NCIgZmlsbD0iIzVhM2QzYyIvPjxlbGxpcHNlIGN4PSI2MjciIGN5PSI1OTgiIHJ4PSIxMjAiIHJ5PSI1MCIgZmlsbD0iI2E4NjQyZSIvPjxlbGxpcHNlIGN4PSI2MjciIGN5PSI1OTgiIHJ4PSI2NiIgcnk9IjMwIiBmaWxsPSIjZTg5NjJjIi8+PHBhdGggZD0iTTQxLjEgMzQ2LjAgTDk0LjMgMzQ2LjAgTDQ4OS40IDU5Mi4wIEw0NzcuOCA1OTIuMFoiIGZpbGw9IiNmN2I3MzEiLz48cGF0aCBkPSJNMTE1OS43IDM0Ni4wIEwxMjEyLjkgMzQ2LjAgTDc3Ni4yIDU5Mi4wIEw3NjQuNiA1OTIuMFoiIGZpbGw9IiNmN2I3MzEiLz48cGF0aCBkPSJNMjI4LjUgMjI3LjAgTDI3Mi44IDIyNy4wIEw1NTguMCA1OTIuMCBMNTUyLjQgNTkyLjBaIiBmaWxsPSIjZjdiNzMxIi8+PHBhdGggZD0iTTk4MS4yIDIyNy4wIEwxMDI1LjUgMjI3LjAgTDcwMS42IDU5Mi4wIEw2OTYuMCA1OTIuMFoiIGZpbGw9IiNmN2I3MzEiLz48cGF0aCBkPSJNNDIzLjYgMjE3LjAgTDQ2OS40IDIxNy4wIEw1OTUuMCA1OTIuMCBMNTkxLjAgNTkyLjBaIiBmaWxsPSIjZjdiNzMxIi8+PHBhdGggZD0iTTc4NC42IDIxNy4wIEw4MzAuNCAyMTcuMCBMNjYzLjAgNTkyLjAgTDY1OS4wIDU5Mi4wWiIgZmlsbD0iI2Y3YjczMSIvPjxwYXRoIGQ9Ik02MDcuNSA5Ni4wIEw2NDYuNSA5Ni4wIEw2MzEuMCA1OTIuMCBMNjIzLjAgNTkyLjBaIiBmaWxsPSIjZjdiNzMxIi8+PHBhdGggZD0iTS0yMCA2MDQgUTYyNyA1OTAgMTI3NCA2MDQgTDEyNzQgMTI3MCBMLTIwIDEyNzBaIiBmaWxsPSIjMmY3YTNjIi8+PHBhdGggZD0iTTU3NS44NTcxNDI4NTcxNDI5IDYwMiBMNTg5Ljk1MjM4MDk1MjM4MSA2MDIgTC01NTk3LjAwMDAwMDAwMDAwMSAxMjcwIEwtNzk2NS4wIDEyNzBaIiBmaWxsPSIjM2M5MTQ5Ii8+PHBhdGggZD0iTTYwMC43MTQyODU3MTQyODU3IDYwMiBMNjA5LjM4MDk1MjM4MDk1MjQgNjAyIEwtMjMzMy4wIDEyNzAgTC0zNzg5LjAgMTI3MFoiIGZpbGw9IiMzYzkxNDkiLz48cGF0aCBkPSJNNjE2LjcxNDI4NTcxNDI4NTcgNjAyIEw2MjEuNTcxNDI4NTcxNDI4NiA2MDIgTC0yODUuMCAxMjcwIEwtMTEwMS4wMDAwMDAwMDAwMDAyIDEyNzBaIiBmaWxsPSIjM2M5MTQ5Ii8+PHBhdGggZD0iTTYyNi42MTkwNDc2MTkwNDc2IDYwMiBMNjMxLjk1MjM4MDk1MjM4MSA2MDIgTDE0NTkuMCAxMjcwIEw1NjMuMCAxMjcwWiIgZmlsbD0iIzNjOTE0OSIvPjxwYXRoIGQ9Ik02MzYuODA5NTIzODA5NTIzOSA2MDIgTDY0My43NjE5MDQ3NjE5MDQ4IDYwMiBMMzQ0My4wIDEyNzAgTDIyNzUuMCAxMjcwWiIgZmlsbD0iIzNjOTE0OSIvPjxwYXRoIGQ9Ik02NTEuODU3MTQyODU3MTQyOSA2MDIgTDY2Mi41MjM4MDk1MjM4MDk1IDYwMiBMNjU5NS4wIDEyNzAgTDQ4MDMuMCAxMjcwWiIgZmlsbD0iIzNjOTE0OSIvPjxyZWN0IHg9IjAiIHk9Ijg2MCIgd2lkdGg9IjEyNTQiIGhlaWdodD0iNDEwIiBmaWxsPSIjMGExZDNhIiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iMCIgeT0iOTYwIiB3aWR0aD0iMTI1NCIgaGVpZ2h0PSIzMTAiIGZpbGw9IiMwYTFkM2EiIG9wYWNpdHk9IjAuNiIvPjxyZWN0IHg9IjAiIHk9IjEwNjAiIHdpZHRoPSIxMjU0IiBoZWlnaHQ9IjIxMCIgZmlsbD0iIzBhMWQzYSIgb3BhY2l0eT0iMC44NSIvPjxwYXRoIGQ9Ik02MDAuNDI4NTcxNDI4NTcxNCA2MDAgTDYwMi40Mjg1NzE0Mjg1NzE0IDYwMCBMLTc2MTMuMCAxMjcwIEwtODMxNy4wIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYwNy40NzYxOTA0NzYxOTA1IDYwMCBMNjA5LjQ3NjE5MDQ3NjE5MDUgNjAwIEwtNTQ2MS4wMDAwMDAwMDAwMDEgMTI3MCBMLTU3MzMuMDAwMDAwMDAwMDAxIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYxMi44NTcxNDI4NTcxNDI5IDYwMCBMNjE0Ljg1NzE0Mjg1NzE0MjkgNjAwIEwtMzY0NS4wIDEyNzAgTC0zOTMzLjAgMTI3MFoiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNNjE3LjE5MDQ3NjE5MDQ3NjEgNjAwIEw2MTkuMTkwNDc2MTkwNDc2MSA2MDAgTC0yMjA1LjAgMTI3MCBMLTI0NjEuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MjAuODU3MTQyODU3MTQyOSA2MDAgTDYyMi44NTcxNDI4NTcxNDI5IDYwMCBMLTEwNDUuMDAwMDAwMDAwMDAwMiAxMjcwIEwtMTE1Ny4wMDAwMDAwMDAwMDAyIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYyMy4yODU3MTQyODU3MTQzIDYwMCBMNjI1LjI4NTcxNDI4NTcxNDMgNjAwIEwtMjI5LjAgMTI3MCBMLTM0MS4wIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYyNS44MDk1MjM4MDk1MjM5IDYwMCBMNjI3LjgwOTUyMzgwOTUyMzkgNjAwIEw2MzUuMCAxMjcwIEw0OTEuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MjguNDc2MTkwNDc2MTkwNSA2MDAgTDYzMC40NzYxOTA0NzYxOTA1IDYwMCBMMTUxNS4wIDEyNzAgTDE0MDMuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MzAuOTA0NzYxOTA0NzYxOSA2MDAgTDYzMi45MDQ3NjE5MDQ3NjE5IDYwMCBMMjMzOS4wIDEyNzAgTDIyMTEuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MzQuMzgwOTUyMzgwOTUyNCA2MDAgTDYzNi4zODA5NTIzODA5NTI0IDYwMCBMMzU2My4wIDEyNzAgTDMzMjMuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MzguNDI4NTcxNDI4NTcxNCA2MDAgTDY0MC40Mjg1NzE0Mjg1NzE0IDYwMCBMNDk0Ny4wIDEyNzAgTDQ2NTkuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02NDMuNzYxOTA0NzYxOTA0OCA2MDAgTDY0NS43NjE5MDQ3NjE5MDQ4IDYwMCBMNjcyMy4wIDEyNzAgTDY0NjcuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02NDkuMjg1NzE0Mjg1NzE0MyA2MDAgTDY1MS4yODU3MTQyODU3MTQzIDYwMCBMODgwMy4wIDEyNzAgTDgwOTkuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0tMjAgNjA0IFE2MjcgNTkwIDEyNzQgNjA0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmN2I3MzEiIHN0cm9rZS13aWR0aD0iNSIgb3BhY2l0eT0iLjkiLz48cGF0aCBkPSJNNDAyIDc5MCBMODUyIDc5MCBMODUyIDkwMiBMODkwIDEyNzAgTDM2NCAxMjcwIEw0MDIgOTAyWiIgZmlsbD0iIzBhMWQzYSIvPjxnIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyMiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgZmlsbD0iIzBiMjA0MiI+PHBhdGggZD0iTTQ4MiA3MTIgTDc3MiA3MTIgTDg1MiA3OTAgTDQwMiA3OTAgWiIvPjxyZWN0IHg9IjQwMiIgeT0iNzkwIiB3aWR0aD0iNDUwIiBoZWlnaHQ9IjIwIi8+PGxpbmUgeDE9IjQzMCIgeTE9IjgxMCIgeDI9IjQzMCIgeTI9Ijg4MCIvPjxsaW5lIHgxPSI4MjQiIHkxPSI4MTAiIHgyPSI4MjQiIHkyPSI4ODAiLz48bGluZSB4MT0iNDcwIiB5MT0iODEwIiB4Mj0iNDcwIiB5Mj0iODgwIiBzdHJva2Utd2lkdGg9IjE0Ii8+PGxpbmUgeDE9Ijc4NCIgeTE9IjgxMCIgeDI9Ijc4NCIgeTI9Ijg4MCIgc3Ryb2tlLXdpZHRoPSIxNCIvPjxsaW5lIHgxPSI0MzAiIHkxPSI4NDAiIHgyPSI4MjQiIHkyPSI4NDAiIHN0cm9rZS13aWR0aD0iMTQiLz48cmVjdCB4PSI0MDIiIHk9Ijg4MCIgd2lkdGg9IjQ1MCIgaGVpZ2h0PSIyMiIvPjwvZz48ZyBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMTMiIHN0cm9rZS1saW5lY2FwPSJidXR0Ij48bGluZSB4MT0iNDUyIiB5MT0iOTA2IiB4Mj0iODQwIiB5Mj0iMTE4NiIvPjxsaW5lIHgxPSI4MDIiIHkxPSI5MDYiIHgyPSI0MTQiIHkyPSIxMTg2Ii8+PC9nPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik00MjAgOTAyIEw0NjIgOTAyIEw0MTAgMTI3MCBMMzY0IDEyNzBaIi8+PHBhdGggZD0iTTc5MiA5MDIgTDgzNCA5MDIgTDg5MCAxMjcwIEw4NDQgMTI3MFoiLz48L2c+PC9nPjwvc3ZnPg==" alt=""><div><b>Field Commander</b><small>Rehearsal system · version 20 · Oct 20</small></div></div>
+    <div class="about"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjU0IDEyNTQiPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2wiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjU0IiBoZWlnaHQ9IjEyNTQiIHJ4PSIyNzUiLz48L2NsaXBQYXRoPjxsaW5lYXJHcmFkaWVudCBpZD0ic2t5IiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMDcxODMzIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGMyNDQ3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PGcgY2xpcC1wYXRoPSJ1cmwoI2NsKSI+PHJlY3Qgd2lkdGg9IjEyNTQiIGhlaWdodD0iMTI1NCIgZmlsbD0idXJsKCNza3kpIi8+PGVsbGlwc2UgY3g9IjYyNyIgY3k9IjU5OCIgcng9IjI4MCIgcnk9IjEwNCIgZmlsbD0iIzJhMmM0NSIvPjxlbGxpcHNlIGN4PSI2MjciIGN5PSI1OTgiIHJ4PSIxOTAiIHJ5PSI3NCIgZmlsbD0iIzVhM2QzYyIvPjxlbGxpcHNlIGN4PSI2MjciIGN5PSI1OTgiIHJ4PSIxMjAiIHJ5PSI1MCIgZmlsbD0iI2E4NjQyZSIvPjxlbGxpcHNlIGN4PSI2MjciIGN5PSI1OTgiIHJ4PSI2NiIgcnk9IjMwIiBmaWxsPSIjZTg5NjJjIi8+PHBhdGggZD0iTTQxLjEgMzQ2LjAgTDk0LjMgMzQ2LjAgTDQ4OS40IDU5Mi4wIEw0NzcuOCA1OTIuMFoiIGZpbGw9IiNmN2I3MzEiLz48cGF0aCBkPSJNMTE1OS43IDM0Ni4wIEwxMjEyLjkgMzQ2LjAgTDc3Ni4yIDU5Mi4wIEw3NjQuNiA1OTIuMFoiIGZpbGw9IiNmN2I3MzEiLz48cGF0aCBkPSJNMjI4LjUgMjI3LjAgTDI3Mi44IDIyNy4wIEw1NTguMCA1OTIuMCBMNTUyLjQgNTkyLjBaIiBmaWxsPSIjZjdiNzMxIi8+PHBhdGggZD0iTTk4MS4yIDIyNy4wIEwxMDI1LjUgMjI3LjAgTDcwMS42IDU5Mi4wIEw2OTYuMCA1OTIuMFoiIGZpbGw9IiNmN2I3MzEiLz48cGF0aCBkPSJNNDIzLjYgMjE3LjAgTDQ2OS40IDIxNy4wIEw1OTUuMCA1OTIuMCBMNTkxLjAgNTkyLjBaIiBmaWxsPSIjZjdiNzMxIi8+PHBhdGggZD0iTTc4NC42IDIxNy4wIEw4MzAuNCAyMTcuMCBMNjYzLjAgNTkyLjAgTDY1OS4wIDU5Mi4wWiIgZmlsbD0iI2Y3YjczMSIvPjxwYXRoIGQ9Ik02MDcuNSA5Ni4wIEw2NDYuNSA5Ni4wIEw2MzEuMCA1OTIuMCBMNjIzLjAgNTkyLjBaIiBmaWxsPSIjZjdiNzMxIi8+PHBhdGggZD0iTS0yMCA2MDQgUTYyNyA1OTAgMTI3NCA2MDQgTDEyNzQgMTI3MCBMLTIwIDEyNzBaIiBmaWxsPSIjMmY3YTNjIi8+PHBhdGggZD0iTTU3NS44NTcxNDI4NTcxNDI5IDYwMiBMNTg5Ljk1MjM4MDk1MjM4MSA2MDIgTC01NTk3LjAwMDAwMDAwMDAwMSAxMjcwIEwtNzk2NS4wIDEyNzBaIiBmaWxsPSIjM2M5MTQ5Ii8+PHBhdGggZD0iTTYwMC43MTQyODU3MTQyODU3IDYwMiBMNjA5LjM4MDk1MjM4MDk1MjQgNjAyIEwtMjMzMy4wIDEyNzAgTC0zNzg5LjAgMTI3MFoiIGZpbGw9IiMzYzkxNDkiLz48cGF0aCBkPSJNNjE2LjcxNDI4NTcxNDI4NTcgNjAyIEw2MjEuNTcxNDI4NTcxNDI4NiA2MDIgTC0yODUuMCAxMjcwIEwtMTEwMS4wMDAwMDAwMDAwMDAyIDEyNzBaIiBmaWxsPSIjM2M5MTQ5Ii8+PHBhdGggZD0iTTYyNi42MTkwNDc2MTkwNDc2IDYwMiBMNjMxLjk1MjM4MDk1MjM4MSA2MDIgTDE0NTkuMCAxMjcwIEw1NjMuMCAxMjcwWiIgZmlsbD0iIzNjOTE0OSIvPjxwYXRoIGQ9Ik02MzYuODA5NTIzODA5NTIzOSA2MDIgTDY0My43NjE5MDQ3NjE5MDQ4IDYwMiBMMzQ0My4wIDEyNzAgTDIyNzUuMCAxMjcwWiIgZmlsbD0iIzNjOTE0OSIvPjxwYXRoIGQ9Ik02NTEuODU3MTQyODU3MTQyOSA2MDIgTDY2Mi41MjM4MDk1MjM4MDk1IDYwMiBMNjU5NS4wIDEyNzAgTDQ4MDMuMCAxMjcwWiIgZmlsbD0iIzNjOTE0OSIvPjxyZWN0IHg9IjAiIHk9Ijg2MCIgd2lkdGg9IjEyNTQiIGhlaWdodD0iNDEwIiBmaWxsPSIjMGExZDNhIiBvcGFjaXR5PSIwLjM1Ii8+PHJlY3QgeD0iMCIgeT0iOTYwIiB3aWR0aD0iMTI1NCIgaGVpZ2h0PSIzMTAiIGZpbGw9IiMwYTFkM2EiIG9wYWNpdHk9IjAuNiIvPjxyZWN0IHg9IjAiIHk9IjEwNjAiIHdpZHRoPSIxMjU0IiBoZWlnaHQ9IjIxMCIgZmlsbD0iIzBhMWQzYSIgb3BhY2l0eT0iMC44NSIvPjxwYXRoIGQ9Ik02MDAuNDI4NTcxNDI4NTcxNCA2MDAgTDYwMi40Mjg1NzE0Mjg1NzE0IDYwMCBMLTc2MTMuMCAxMjcwIEwtODMxNy4wIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYwNy40NzYxOTA0NzYxOTA1IDYwMCBMNjA5LjQ3NjE5MDQ3NjE5MDUgNjAwIEwtNTQ2MS4wMDAwMDAwMDAwMDEgMTI3MCBMLTU3MzMuMDAwMDAwMDAwMDAxIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYxMi44NTcxNDI4NTcxNDI5IDYwMCBMNjE0Ljg1NzE0Mjg1NzE0MjkgNjAwIEwtMzY0NS4wIDEyNzAgTC0zOTMzLjAgMTI3MFoiIGZpbGw9IiNmZmZmZmYiLz48cGF0aCBkPSJNNjE3LjE5MDQ3NjE5MDQ3NjEgNjAwIEw2MTkuMTkwNDc2MTkwNDc2MSA2MDAgTC0yMjA1LjAgMTI3MCBMLTI0NjEuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MjAuODU3MTQyODU3MTQyOSA2MDAgTDYyMi44NTcxNDI4NTcxNDI5IDYwMCBMLTEwNDUuMDAwMDAwMDAwMDAwMiAxMjcwIEwtMTE1Ny4wMDAwMDAwMDAwMDAyIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYyMy4yODU3MTQyODU3MTQzIDYwMCBMNjI1LjI4NTcxNDI4NTcxNDMgNjAwIEwtMjI5LjAgMTI3MCBMLTM0MS4wIDEyNzBaIiBmaWxsPSIjZmZmZmZmIi8+PHBhdGggZD0iTTYyNS44MDk1MjM4MDk1MjM5IDYwMCBMNjI3LjgwOTUyMzgwOTUyMzkgNjAwIEw2MzUuMCAxMjcwIEw0OTEuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MjguNDc2MTkwNDc2MTkwNSA2MDAgTDYzMC40NzYxOTA0NzYxOTA1IDYwMCBMMTUxNS4wIDEyNzAgTDE0MDMuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MzAuOTA0NzYxOTA0NzYxOSA2MDAgTDYzMi45MDQ3NjE5MDQ3NjE5IDYwMCBMMjMzOS4wIDEyNzAgTDIyMTEuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MzQuMzgwOTUyMzgwOTUyNCA2MDAgTDYzNi4zODA5NTIzODA5NTI0IDYwMCBMMzU2My4wIDEyNzAgTDMzMjMuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02MzguNDI4NTcxNDI4NTcxNCA2MDAgTDY0MC40Mjg1NzE0Mjg1NzE0IDYwMCBMNDk0Ny4wIDEyNzAgTDQ2NTkuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02NDMuNzYxOTA0NzYxOTA0OCA2MDAgTDY0NS43NjE5MDQ3NjE5MDQ4IDYwMCBMNjcyMy4wIDEyNzAgTDY0NjcuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik02NDkuMjg1NzE0Mjg1NzE0MyA2MDAgTDY1MS4yODU3MTQyODU3MTQzIDYwMCBMODgwMy4wIDEyNzAgTDgwOTkuMCAxMjcwWiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0tMjAgNjA0IFE2MjcgNTkwIDEyNzQgNjA0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmN2I3MzEiIHN0cm9rZS13aWR0aD0iNSIgb3BhY2l0eT0iLjkiLz48cGF0aCBkPSJNNDAyIDc5MCBMODUyIDc5MCBMODUyIDkwMiBMODkwIDEyNzAgTDM2NCAxMjcwIEw0MDIgOTAyWiIgZmlsbD0iIzBhMWQzYSIvPjxnIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIyMiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgZmlsbD0iIzBiMjA0MiI+PHBhdGggZD0iTTQ4MiA3MTIgTDc3MiA3MTIgTDg1MiA3OTAgTDQwMiA3OTAgWiIvPjxyZWN0IHg9IjQwMiIgeT0iNzkwIiB3aWR0aD0iNDUwIiBoZWlnaHQ9IjIwIi8+PGxpbmUgeDE9IjQzMCIgeTE9IjgxMCIgeDI9IjQzMCIgeTI9Ijg4MCIvPjxsaW5lIHgxPSI4MjQiIHkxPSI4MTAiIHgyPSI4MjQiIHkyPSI4ODAiLz48bGluZSB4MT0iNDcwIiB5MT0iODEwIiB4Mj0iNDcwIiB5Mj0iODgwIiBzdHJva2Utd2lkdGg9IjE0Ii8+PGxpbmUgeDE9Ijc4NCIgeTE9IjgxMCIgeDI9Ijc4NCIgeTI9Ijg4MCIgc3Ryb2tlLXdpZHRoPSIxNCIvPjxsaW5lIHgxPSI0MzAiIHkxPSI4NDAiIHgyPSI4MjQiIHkyPSI4NDAiIHN0cm9rZS13aWR0aD0iMTQiLz48cmVjdCB4PSI0MDIiIHk9Ijg4MCIgd2lkdGg9IjQ1MCIgaGVpZ2h0PSIyMiIvPjwvZz48ZyBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMTMiIHN0cm9rZS1saW5lY2FwPSJidXR0Ij48bGluZSB4MT0iNDUyIiB5MT0iOTA2IiB4Mj0iODQwIiB5Mj0iMTE4NiIvPjxsaW5lIHgxPSI4MDIiIHkxPSI5MDYiIHgyPSI0MTQiIHkyPSIxMTg2Ii8+PC9nPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik00MjAgOTAyIEw0NjIgOTAyIEw0MTAgMTI3MCBMMzY0IDEyNzBaIi8+PHBhdGggZD0iTTc5MiA5MDIgTDgzNCA5MDIgTDg5MCAxMjcwIEw4NDQgMTI3MFoiLz48L2c+PC9nPjwvc3ZnPg==" alt=""><div><b>Field Commander</b><small>Rehearsal system · version 21 · Oct 20</small></div></div>
     <div class="ar"><span class="al">Hub</span><b>Field Commander Hub: not connected</b></div>
     <div class="ar"><span class="al">Licensed to</span><b id="abLic"></b></div>
   </div>
@@ -1623,7 +1673,7 @@ function rangeOf(id){
 }
 function runChips(){
   const box=$('runChips'); box.innerHTML=''; $('runChips2').innerHTML='';
-  const items=[['show','Whole show'],['move','This move'],...PARTS.map(p=>['p:'+p,p]),...sections.map((s,i)=>['s:'+i,/^\d+$/.test(s.name||'')?'Run '+s.name:(s.name||'Run'),`${SETS[Math.min(s.a,s.b)].l}–${SETS[Math.max(s.a,s.b)].l}`])];
+  const items=[['show','Whole show'],['move','This move'],...PARTS.map(p=>['p:'+p,p]),...(String(prefs.run).startsWith('v:')?[[prefs.run,'🎤 '+vrLabel(prefs.run)]]:[]),...sections.map((s,i)=>['s:'+i,/^\d+$/.test(s.name||'')?'Run '+s.name:(s.name||'Run'),`${SETS[Math.min(s.a,s.b)].l}–${SETS[Math.max(s.a,s.b)].l}`])];
   if(!items.some(x=>x[0]===prefs.run)) prefs.run='show';
   for(const [id,lab,sub] of items){ const b=document.createElement('button'); b.textContent=lab; if(id.startsWith('s:')){ const k=+id.slice(2), dot=document.createElement('i'); dot.className='rc'; dot.style.background=runColor(k); b.prepend(dot); longPress(b,()=>editRun(k)); } if(sub){const s=document.createElement('small');s.textContent=sub;b.appendChild(s);}
     b.classList.toggle('sel',id===prefs.run);
@@ -2519,7 +2569,7 @@ function micStop(){ if(!recOn) return; try{ rec.stop(); }catch(e){} setTimeout((
 function micFinish(){ recOn=false; $('bMic').classList.remove('on'); const h=lastHeard;
   if(!h){ vShow('Didn\'t catch that','hold 🎤 while you talk',false); return; }
   let did=null; try{ did=runVoice(h); }catch(e){ did=null; }
-  vShow('“'+h+'”', did?'✓ '+did:'Not sure what to do · try “tempo 120”, “eighths”, “six eight”, “start”', !!did); }
+  vShow('“'+h+'”', did?'✓ '+did:'Not sure what to do · try “run part 3”, “run sets 9 to 13”, “again”, “stop”, “tempo 120”', !!did); }
 const mb=$('bMic');
 mb.addEventListener('pointerdown',e=>{ e.preventDefault(); micStart(); });
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>mb.addEventListener(ev,()=>micStop()));
@@ -2602,7 +2652,7 @@ swipe($('infoTab'),{up:()=>setUI('info',false),down:()=>setUI('info',true)});
 
 /* ---- pinch to zoom the field (drag to move, double-tap to reset) ---- */
 const VB0={x:X0,y:-Y1,w:X1-X0,h:Y1-Y0}; const Z={s:1,cx:VB0.x+VB0.w/2,cy:VB0.y+VB0.h/2};
-function applyZoom(){ Z.s=Math.max(1,Math.min(6,Z.s)); const w=VB0.w/Z.s, h=VB0.h/Z.s;
+function applyZoom(){ Z.s=Math.max(1,Math.min(6,Z.s)); const [w,h]=zDims();
   Z.cx=Math.max(VB0.x+w/2,Math.min(VB0.x+VB0.w-w/2,Z.cx)); Z.cy=Math.max(VB0.y+h/2,Math.min(VB0.y+VB0.h-h/2,Z.cy));
   svg.setAttribute('viewBox',`${Z.cx-w/2} ${Z.cy-h/2} ${w} ${h}`);
   const tg=$('zoomTag'); tg.hidden=Z.s<1.05; tg.textContent=`${Z.s.toFixed(1)}× · DOUBLE-TAP TO RESET`; }
@@ -2612,7 +2662,7 @@ svg.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,{x:e.clientX,y:e.cl
   if(ptrs.size===2){ const [a,b]=[...ptrs.values()]; pz={d:Math.hypot(a.x-b.x,a.y-b.y)||1,s:Z.s,m:svgPt((a.x+b.x)/2,(a.y+b.y)/2)}; }
   else if(ptrs.size===1) pz={pan:true,x:e.clientX,y:e.clientY,cx:Z.cx,cy:Z.cy}; });
 svg.addEventListener('pointermove',e=>{ if(!ptrs.has(e.pointerId)||!pz) return; ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); const r=svg.getBoundingClientRect();
-  if(ptrs.size>=2&&pz.d){ const [a,b]=[...ptrs.values()]; Z.s=Math.max(1,Math.min(6,pz.s*Math.hypot(a.x-b.x,a.y-b.y)/pz.d)); const w=VB0.w/Z.s, h=VB0.h/Z.s;
+  if(ptrs.size>=2&&pz.d){ const [a,b]=[...ptrs.values()]; Z.s=Math.max(1,Math.min(6,pz.s*Math.hypot(a.x-b.x,a.y-b.y)/pz.d)); const [w,h]=zDims();
     const fx=((a.x+b.x)/2-r.left)/r.width, fy=((a.y+b.y)/2-r.top)/r.height; Z.cx=pz.m[0]-(fx-.5)*w; Z.cy=pz.m[1]-(fy-.5)*h; zmoved=true; applyZoom(); }
   else if(pz.pan&&Z.s>1.01){ const vb=svg.viewBox.baseVal; if(Math.abs(e.clientX-pz.x)+Math.abs(e.clientY-pz.y)>4) zmoved=true;
     Z.cx=pz.cx-(e.clientX-pz.x)/r.width*vb.width; Z.cy=pz.cy-(e.clientY-pz.y)/r.height*vb.height; applyZoom(); } });
@@ -2662,6 +2712,107 @@ function freeLayout(){ if(!freeOn||view!=='met') return; const fr=$('free'), wh=
 const _fu=freeUI; freeUI=function(){ _fu(); buildFree(); requestAnimationFrame(freeLayout); };
 /* ---- splash ---- */
 function showSplash(){ const s=$('splash'); if(!s) return; s.classList.add('show'); setTimeout(()=>s.classList.add('out'),950); setTimeout(()=>s.remove(),1450); }
+
+
+/* ================= v21 ================= */
+/* ---- zoom fills the whole stage (no empty sides when zoomed in) ---- */
+function zDims(){ if(Z.s<=1.01) return [VB0.w,VB0.h]; const r=$('stage').getBoundingClientRect(); const A=(r.width&&r.height)?r.width/r.height:VB0.w/VB0.h;
+  let w=VB0.w/Z.s, h=w/A; if(h>VB0.h){ h=VB0.h; w=h*A; } return [w,h]; }
+function applyZoom(){ Z.s=Math.max(1,Math.min(6,Z.s)); const [w,h]=zDims();
+  Z.cx=w>=VB0.w?VB0.x+VB0.w/2:Math.max(VB0.x+w/2,Math.min(VB0.x+VB0.w-w/2,Z.cx));
+  Z.cy=h>=VB0.h?VB0.y+VB0.h/2:Math.max(VB0.y+h/2,Math.min(VB0.y+VB0.h-h/2,Z.cy));
+  svg.setAttribute('viewBox',`${Z.cx-w/2} ${Z.cy-h/2} ${w} ${h}`);
+  const zo=Z.s>1.01; if(document.body.classList.contains('zoomed')!==zo){ document.body.classList.toggle('zoomed',zo); }
+  layoutField();
+  const tg=$('zoomTag'); tg.hidden=Z.s<1.05; tg.textContent=`${Z.s.toFixed(1)}× · DOUBLE-TAP TO RESET`; if(dc.k>=0) dcPlace(); }
+window.addEventListener('resize',()=>requestAnimationFrame(()=>{ if(Z.s>1.01) applyZoom(); }));
+
+/* ---- Metronome only: the top info shows the metronome's own tempo, meter and beat ---- */
+let fHudKey='';
+(function freeHud(){ requestAnimationFrame(freeHud); if(!(freeOn&&view==='met')){ if(fHudKey){ fHudKey=''; hud(); } return; }
+  const [n,d]=freeTs(); let col=-1; if(testing&&ac){ const now=ac.currentTime; for(const x of tLog) if(x.t<=now) col=x.col; }
+  const k=`${prefs.testBpm}|${n}/${d}|${col}`; if(k===fHudKey) return; fHudKey=k;
+  $('hBpm').textContent=prefs.testBpm; setTs($('hTs'),`${n}/${d}`); $('hCount').textContent=col>=0?`${col+1} / ${n}`:'–'; })();
+
+/* ---- tap a dot: card with label, coordinates and next spot ---- */
+const dc={k:-1,i:-1};
+const dcEl=document.createElement('div'); dcEl.className='dotcard'; dcEl.hidden=true; $('stage').appendChild(dcEl);
+function coordLines(t){ if(!t) return ['–']; const m=t.match(/^(.*?\byd ln|.*?\bOn 50 yd ln|.*?:\s*On 50)\s+(.*)$/i); return m?[m[1],m[2]]:[t]; }
+function dcIdx(){ return playing?targetIdx(count):cur; }
+function dcFill(){ const p=P[dc.k], i=dcIdx(), n=Math.min(i+1,NS-1); dc.i=i; const sec=secOf(p);
+  const hold=n!==i&&p.t[n]===p.t[i];
+  dcEl.innerHTML=`<div class="dcarrow"></div><div class="dch"><span class="dcl" style="background:var(--${sec})"></span><span class="dcn"></span><button class="dcf"></button><button class="dcx" aria-label="Close">✕</button></div>
+    <div class="dcs dcs1"></div><div class="dct dct1"></div>${n!==i?'<div class="dcnext"><div class="dcs dcs2"></div><div class="dct dct2"></div></div>':''}`;
+  dcEl.querySelector('.dcl').textContent=p.l; dcEl.querySelector('.dcn').textContent=p.n;
+  dcEl.querySelector('.dcs1').textContent=`Set ${SETS[i].l}`;
+  coordLines(p.t[i]).forEach(x=>{ const s=document.createElement('span'); s.textContent=x; dcEl.querySelector('.dct1').appendChild(s); });
+  if(n!==i){ dcEl.querySelector('.dcs2').textContent=`Next · set ${SETS[n].l} · ${SETS[n].c} counts`;
+    if(hold){ const s=document.createElement('span'); s.textContent='Hold, same spot'; dcEl.querySelector('.dct2').appendChild(s); }
+    else coordLines(p.t[n]).forEach(x=>{ const s=document.createElement('span'); s.textContent=x; dcEl.querySelector('.dct2').appendChild(s); }); }
+  const f=dcEl.querySelector('.dcf'); f.textContent=me===dc.k?'✓ FOLLOWING':'◎ FOLLOW'; f.classList.toggle('on',me===dc.k);
+  f.onclick=e=>{ e.stopPropagation(); setMe(me===dc.k?'':dc.k); dcFill(); dcPlace(); };
+  dcEl.querySelector('.dcx').onclick=e=>{ e.stopPropagation(); dcClose(); };
+  dots.forEach((d,k)=>d.g.classList.toggle('picked',k===dc.k)); }
+function dcPlace(){ if(dc.k<0) return; const st=$('stage').getBoundingClientRect(), c=dots[dc.k].c.getBoundingClientRect();
+  const x=c.left+c.width/2-st.left, y=c.top+c.height/2-st.top, w=dcEl.offsetWidth, h=dcEl.offsetHeight, gap=c.height/2+10;
+  let left=Math.max(8,Math.min(st.width-w-8,x-w/2)); let below=y+gap+h<=st.height-6||y-gap-h<6; let top=below?y+gap:y-gap-h;
+  top=Math.max(6,Math.min(st.height-h-6,top));
+  dcEl.classList.toggle('below',below); dcEl.classList.toggle('above',!below);
+  dcEl.style.left=left+'px'; dcEl.style.top=top+'px'; dcEl.style.setProperty('--ax',Math.max(14,Math.min(w-14,x-left))+'px'); }
+function dcOpen(k){ dc.k=k; dcEl.hidden=false; dcFill(); dcPlace(); }
+function dcClose(){ dc.k=-1; dcEl.hidden=true; dots.forEach(d=>d.g.classList.remove('picked')); }
+dots.forEach(({g},k)=>{ const nw=g.cloneNode(true); g.replaceWith(nw); dots[k].g=nw; dots[k].c=nw.querySelector('circle'); dots[k].t=nw.querySelector('text');
+  nw.addEventListener('click',e=>{ e.stopPropagation(); if(zmoved) return; dc.k===k?dcClose():dcOpen(k); }); });
+svg.addEventListener('click',e=>{ if(zmoved) return; if(dc.k>=0&&!e.target.closest('.dot')) dcClose(); });
+(function dcTick(){ requestAnimationFrame(dcTick); if(dc.k<0) return; if(view!=='drill'){ dcClose(); return; } if(dcIdx()!==dc.i) dcFill(); dcPlace(); })();
+
+/* ---- voice commands for runs: "run part 3", "run parts 3 and 4", "run sets 9 to 13", "run set 10", "run from set 9", "again" ---- */
+const _rangeOf0=rangeOf;
+rangeOf=function(id){ if(String(id).startsWith('v:')){ const [a,b]=id.slice(2).split(':').map(Number); if(a>=0&&b<NS&&a<b) return [a,b]; } return _rangeOf0(id); };
+function vrLabel(id){ const [a,b]=id.slice(2).split(':').map(Number); if(!SETS[a]||!SETS[b]) return 'Run';
+  const ps=PARTS.map(p=>[p,_rangeOf0('p:'+p)]), pa=ps.find(x=>x[1][0]===a), pb=ps.find(x=>x[1][1]===b);
+  if(pa&&pb) return `Parts ${pa[0].replace(/^Part\s*/,'')}–${pb[0].replace(/^Part\s*/,'')}`;
+  return `Sets ${SETS[a].l}–${SETS[b].l}`; }
+function setIdx(lab){ lab=String(lab).toUpperCase(); let k=SETS.findIndex(x=>x.l===lab&&!x.added); if(k<0) k=SETS.findIndex(x=>x.l===lab); return k; }
+function runName(id){ id=id||prefs.run; return id==='show'?'Whole show':id==='move'?'This move':id.startsWith('p:')?id.slice(2):id.startsWith('v:')?vrLabel(id):id.startsWith('s:')?((sections[+id.slice(2)]||{}).name?'Run '+sections[+id.slice(2)].name:'Run'):id; }
+function setRun(id){ if(testing){ testStop(); playLabel(); } if(freeOn) setFree(false); if(view==='mset') setView('drill');
+  prefs.run=id; goSet(id==='show'?0:id==='move'?Math.max(1,cur):rangeOf(id)[0]); runChips(); drawLoopZone(); save(); }
+function vRun(raw){
+  const s=' '+wordsToNums(raw).replace(/&/g,' and ').replace(/\s+/g,' ')+' ';
+  const go=/\b(run|play|start|do|take|begin)\b|\bgo\b(?! to)/.test(s);
+  const L='(\\d{1,2}(?:[a-h](?![a-z]))?)', SEP='(?: to| through| thru| till| until| and| -)? ';
+  const fin=(id,txt)=>{ setRun(id); if(go) vStart(); return (go?'▶ ':'')+(txt||runName(id)); };
+  if(/\b(again|one more time|from the top|run it back|take it again|same thing)\b/.test(s)){ const id=prefs.run; if(playing) stop(); goSet(id==='show'?0:id==='move'?cur:rangeOf(id)[0]); vStart(); return `▶ Again · ${runName(id)}`; }
+  if(/\b(whole|entire|full) show\b|\brun (the )?show\b/.test(s)) return fin('show','Whole show');
+  let m;
+  if((m=s.match(/\bparts? (\d)\b(?:(?: to| through| thru| and| -)? (\d)\b)?/))){ const x=+m[1], y=m[2]?+m[2]:x;
+    const px=PARTS.find(p=>p.replace(/^Part\s*/,'')===String(Math.min(x,y))), py=PARTS.find(p=>p.replace(/^Part\s*/,'')===String(Math.max(x,y)));
+    if(px&&py){ if(px===py) return fin('p:'+px); return fin(`v:${_rangeOf0('p:'+px)[0]}:${_rangeOf0('p:'+py)[1]}`); } }
+  if((m=s.match(new RegExp('\\bfrom set '+L+'(?: to(?: the)? end)?\\b')))){ const k=setIdx(m[1]); if(k>=0&&k<NS-1) return fin(`v:${k}:${NS-1}`,`Set ${SETS[k].l} to the end`); }
+  if((m=s.match(new RegExp('\\bsets? '+L+SEP+L+'\\b')))){ let a=setIdx(m[1]), b=setIdx(m[2]); if(a>=0&&b>=0&&a!==b){ if(a>b) [a,b]=[b,a]; return fin(`v:${a}:${b}`); } }
+  if((m=s.match(new RegExp('\\brun '+L+'(?: to| through| thru| -)? '+L+'\\b')))){ let a=setIdx(m[1]), b=setIdx(m[2]); if(a>=0&&b>=0&&a!==b){ if(a>b) [a,b]=[b,a]; return fin(`v:${a}:${b}`); } }
+  if(go&&(m=s.match(new RegExp('\\bset '+L+'\\b')))&&!/\bset \d+\w? (tempo|bpm)\b/.test(s)){ const k=setIdx(m[1]); if(k>0) return fin(`v:${k-1}:${k}`,`Move into set ${SETS[k].l}`); }
+  return null; }
+const _runVoice0=runVoice; runVoice=function(raw){ const r=vRun(raw); return r!==null?r:_runVoice0(raw); }; window.runVoice=runVoice;
+
+/* ---- iPhone silent switch: route the clicks as media so they play with the ringer off ---- */
+let unlockAud=null;
+function silentWav(){ const sr=8000, n=sr/2, b=new ArrayBuffer(44+n*2), v=new DataView(b); const w=(o,s)=>{ for(let i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i)); };
+  w(0,'RIFF'); v.setUint32(4,36+n*2,true); w(8,'WAVE'); w(12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true); w(36,'data'); v.setUint32(40,n*2,true);
+  return URL.createObjectURL(new Blob([b],{type:'audio/wav'})); }
+function mediaUnlock(){ try{ if(navigator.audioSession&&navigator.audioSession.type!=='playback') navigator.audioSession.type='playback'; }catch(e){}
+  try{ if(!unlockAud){ unlockAud=new Audio(silentWav()); unlockAud.loop=true; unlockAud.setAttribute('playsinline',''); unlockAud.volume=0.01; }
+    if(unlockAud.paused) unlockAud.play().catch(()=>{}); }catch(e){}
+  try{ if(ac&&ac.state!=='running') ac.resume(); }catch(e){} }
+['pointerdown','touchend','keydown'].forEach(ev=>document.addEventListener(ev,mediaUnlock,{capture:true,passive:true}));
+
+/* ---- Met view: set notes pop up along the bottom of the panel, not over the big count ---- */
+(function peekPlace(){ requestAnimationFrame(peekPlace); const pk=$('notePeek'); if(!pk) return;
+  const box=view==='met'?(freeOn?$('free'):$('met')):null;
+  if(!box||pk.hidden){ if(pk.dataset.mv){ pk.dataset.mv=''; pk.style.top=pk.style.left=pk.style.right=pk.style.transform=pk.style.maxWidth=''; } return; }
+  const r=box.getBoundingClientRect(); pk.dataset.mv='1';
+  pk.style.transform='none'; pk.style.maxWidth=Math.min(520,r.width-24)+'px'; pk.style.left=(r.left+12)+'px'; pk.style.right='auto';
+  pk.style.top=(r.bottom-pk.offsetHeight-12)+'px'; })();
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
