@@ -1618,7 +1618,11 @@ function recFrame(e,now){
   if(!recEl||!musOn()||mus.src!=='rec') return;
   if(now<e.ciEnd-0.005){ recEl.muted=true; if(recEl.paused) recEl.play().catch(()=>{}); return; }   // muted through the count-in (keeps iPad audio unlocked)
   recEl.muted=false;
-  const want=e.T0+(now-e.start)*speed();
+  let want=e.T0+(now-e.start)*speed();
+  // director-added sets aren't in the recording: pause through them and skip their time
+  let skip=0, inAdd=false; SETS.forEach(s=>{ if(!s.added) return; const t0=T(s.s-s.c), t1=T(s.s); if(want>=t1) skip+=t1-t0; else if(want>t0) inAdd=true; });
+  if(inAdd){ if(!recEl.paused) recEl.pause(); return; }
+  want-=skip;
   recEl.playbackRate=speed(); recEl.preservesPitch=true; recEl.webkitPreservesPitch=true; recEl.volume=Math.min(1,mus.vol/100);
   if(recEl.paused){ recEl.currentTime=Math.max(0,want); recEl.play().catch(()=>{}); return; }
   if(Math.abs(recEl.currentTime-want)>0.06) recEl.currentTime=Math.max(0,want);
@@ -1691,7 +1695,7 @@ function play(){
   if(prefs.run==='show' && count>=LAST-1e-6) from=0;
   lastInt=-999;
   if(pv.on){ from=pv.from; A=from; B=LAST; }
-  if(recEl&&musOn()&&mus.src==='rec'){ recEl.muted=true; recEl.currentTime=Math.max(0,T(from)); recEl.play().catch(()=>{}); }  // start inside the tap (iPad rule)
+  if(recEl&&musOn()&&mus.src==='rec'){ recEl.muted=true; recEl.currentTime=Math.max(0,T(from)-SETS.filter(s=>s.added&&s.s<=from).reduce((a,s)=>a+T(s.s)-T(s.s-s.c),0)); recEl.play().catch(()=>{}); }  // start inside the tap (iPad rule)
   epochs=[]; newEpoch(from, ac.currentTime+0.12, pv.on?pv.ci:true); pv.ci=pv.lead==='ci';
   playing=true; $('bPlay').textContent='❚❚ Pause';
   startTimer(); schedule(); raf=requestAnimationFrame(frame); keepAwake(true);
