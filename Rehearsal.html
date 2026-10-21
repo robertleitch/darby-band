@@ -1033,6 +1033,16 @@ body.met.freem #controls{display:none!important}
 }
 .chlabels{display:flex;gap:4px;font:700 9.5px system-ui;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 8px}
 @media (min-width:521px){ .chlabels{display:none} }
+/* iPhone (upright or sideways): the bottom Start/Stop is always there and is the only play button */
+body.lay-phoneP .fbar, body.lay-phoneL .fbar{display:flex!important;order:99;margin-top:6px;flex:none;gap:4px}
+body.lay-phoneP #controls #bPlay, body.lay-phoneL #controls #bPlay{display:none!important}
+body.lay-phoneP #free .fgo, body.lay-phoneL #free .fgo{display:none!important}
+body.lay-phoneP .fbar:not(.show) button[data-d], body.lay-phoneL .fbar:not(.show) button[data-d]{display:none}
+body.lay-phoneL .fbar button{height:36px}
+body.lay-phoneP .fbar button{height:50px}
+#fieldWrap>.fbar{order:99}
+body.lay-phoneP .fbar button{height:46px}
+body.lay-phoneP .fbar{margin-bottom:2px}
 
 </style>
 </head>
@@ -3220,6 +3230,16 @@ $('controls').parentNode.insertBefore(fBar,$('controls'));
 $('fGo2').onclick=()=>fGo.onclick();
 fBar.querySelectorAll('button[data-d]').forEach(b=>b.onclick=()=>{ setTestBpm(prefs.testBpm+ +b.dataset.d); freeUI(); });
 fGoUI();
+
+/* ---- iPhone: one full-time Start / Stop at the very bottom; every other play button goes away ---- */
+$('fieldWrap').appendChild(fBar);
+const isPhone=()=>document.body.classList.contains('lay-phoneP')||document.body.classList.contains('lay-phoneL');
+const metOnly=()=>freeOn&&view==='met';
+$('fGo2').onclick=()=>{ if(metOnly()){ fGo.onclick(); return; } const b=$('bPlay'); if(b) b.click(); fGoUI(); };
+const _fGoUI1=fGoUI; fGoUI=function(){ _fGoUI1(); const b=$('fGo2'); if(!b) return;
+  if(!metOnly()){ b.classList.toggle('on',playing); b.textContent=playing?'■  STOP':'▶  PLAY'; }
+  fBar.classList.toggle('show',metOnly()); };
+(function(){ let last=''; (function t(){ requestAnimationFrame(t); const k=[testing,playing,freeOn,view,fPage,isPhone()].join('|'); if(k!==last){ last=k; fGoUI(); } })(); })();
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
