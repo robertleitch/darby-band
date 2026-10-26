@@ -1101,6 +1101,22 @@ body.lay-phoneL #met.steady #mSet, body.lay-phoneL #met.steady #mNext{display:no
 body.lay-wide.met:not(.freem) #met.steady{padding:56px 24px 0!important}
 #met.steady #mSub{white-space:pre-line!important;font-size:min(17px,2.6vh)!important;line-height:1.2!important}
 body.lay-phoneL #met.steady #mSub{white-space:nowrap!important}
+#syncOv{position:fixed;inset:0;z-index:300;background:rgba(10,16,24,.82);display:flex;align-items:center;justify-content:center}
+#syncOv[hidden]{display:none}
+#syncOv .syb{background:var(--panel);border-radius:16px;padding:18px;width:min(92vw,420px);display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+#syncOv .syb b{font-size:18px}#syncOv .syb small{color:var(--muted);font-size:14px}
+#syTap{width:100%;height:180px;border:0;border-radius:18px;background:var(--b-act);color:#fff;font:900 36px system-ui;letter-spacing:.2em;touch-action:manipulation}
+#syTap:active{background:var(--b-deep)}
+.syd{font-size:18px;letter-spacing:4px;color:var(--b-act);min-height:22px}
+/* Metronome only: nothing that isn't the metronome */
+body.met.freem #hud .hset,body.met.freem #hud .hc,body.met.freem #hud .hnote,body.met.freem #infoRow,body.met.freem #noteChip,body.met.freem #notePeek,body.met.freem #edge,body.met.freem #controls{display:none!important}
+body.met.freem #fieldWrap>#hud{display:flex!important;justify-content:flex-end;padding-bottom:4px;min-height:0}
+body.met.freem #hud .hudbtns{margin-left:auto}
+body.lay-phoneP.met.freem .vcbtn{width:auto;height:34px}
+/* dial: number stays inside the center, knob rides the outer ring so it never covers the number */
+.wheel .wc b{font-size:calc(var(--dz)*.17)!important;letter-spacing:-.02em}
+.wheel .wc small{font-size:max(10px,calc(var(--dz)*.05))!important}
+.wheel .knob{width:15%!important}
 
 </style>
 </head>
@@ -1994,7 +2010,7 @@ function testSchedule(){ const horizon=ac.currentTime+HORIZON, span=noteSpan(), 
     if(P.t[col]){ click(t+span/3,'trip','t'); click(t+2*span/3,'trip','t'); }
     if(P.f&&P.f[col]){ for(let k=1;k<5;k++) click(t+k*span/5,'trip','f'); }
     tLog.push({t,col}); if(tLog.length>64) tLog.shift(); tNext+=span; tIdx++; } }
-function testFrame(){ const now=ac.currentTime; let cur=null; for(const x of tLog) if(x.t<=now) cur=x;
+function testFrame(){ const now=vNow(); let cur=null; for(const x of tLog) if(x.t<=now) cur=x;
   const col=cur?cur.col:-1; $('tBeat').textContent=cur?col+1:'';
   document.querySelectorAll('#patGrid .c').forEach(b=>b.classList.toggle('now',+b.dataset.c===col));
   if(cur&&cur!==testFrame.last){ testFrame.last=cur; } tRaf=requestAnimationFrame(testFrame); }
@@ -2004,7 +2020,7 @@ function testStart(){ if(playing) stop(); ac=ac||new (window.AudioContext||windo
 function testStop(){ if(!testing) return; testing=false; stopTimer(); cancelAnimationFrame(tRaf); cancelQueued(); keepAwake(false);
   $('tGo').textContent='▶ Test'; $('tGo').classList.remove('on'); $('tBeat').textContent=''; document.querySelectorAll('#patGrid .c.now').forEach(b=>b.classList.remove('now')); }
 function setTestBpm(v){ prefs.testBpm=Math.max(30,Math.min(300,Math.round(v))); $('tBpm').textContent=prefs.testBpm; $('tUnit').textContent=unitLabel();
-  if(testing){ cancelQueued(); tLog=tLog.filter(x=>x.t<=ac.currentTime); tNext=Math.max(ac.currentTime+0.05,(tLog.length?tLog[tLog.length-1].t:ac.currentTime)+noteSpan()); testSchedule(); } save(); }
+  if(testing){ const now=ac.currentTime; const nb=tLog.find(x=>x.t>now); cancelQueued(nb?nb.t-0.002:now); const drop=tLog.filter(x=>x.t>now).length; tLog=tLog.filter(x=>x.t<=now); tIdx=Math.max(0,tIdx-drop); if(typeof CH!=='undefined'&&CH.on){ for(let i=0;i<drop;i++){ CH.beat--; if(CH.beat<0){ CH.bars--; CH.beat=Math.max(0,(chCur().blocks[CH.i]||{ts:[4]}).ts[0]-1); } } } tNext=Math.max(now+0.02,(tLog.length?tLog[tLog.length-1].t:now)+noteSpan()); testSchedule(); } save(); }
 $('tsIn').value=D.test||'120b:4@4/4 - 4@6/8 - 4@4/4 - 180b:4@4/4';
 $('tsReal').hidden=!TEST_SRC||typeof EMBED==='string';
 $('tsLoad').onclick=()=>{ const s=$('tsIn').value.trim(); try{ const sg=parseShorthand(s); localStorage.setItem('rm_testshow',s);
@@ -2376,7 +2392,7 @@ function schedule(){
   }
 }
 function frame(){
-  const now=ac.currentTime; let e=epochs[0];
+  const now=vNow(); let e=epochs[0];
   for(const x of epochs) if(x.switchAt<=now) e=x;
   preroll=Math.max(0,e.ciEnd-now); curCI=e.ci; curCIdt=e.cidt; recFrame(e,now);
   let t=e.T0+Math.max(0,now-e.start)*speed();
@@ -2647,7 +2663,7 @@ function playLabel(){ if(freeOn&&view==='met') $('bPlay').textContent=testing?'�
 const _bPlay=$('bPlay').onclick; $('bPlay').onclick=()=>{ if(freeOn&&view==='met'){ testing?testStop():testStart(); playLabel(); return; } _bPlay(); };
 // beat lights
 (function freeLights(){ requestAnimationFrame(freeLights); if(!testing||!freeOn||!ac) { if(freeLights.last!==-1){ document.querySelectorAll('#fBeats span.on').forEach(s=>s.classList.remove('on')); freeLights.last=-1; } return; }
-  const now=ac.currentTime; let c=null; for(const x of tLog) if(x.t<=now) c=x; const col=c?c.col:-1;
+  const now=vNow(); let c=null; for(const x of tLog) if(x.t<=now) c=x; const col=c?c.col:-1;
   if(col!==freeLights.last){ freeLights.last=col; [...$('fBeats').children].forEach((s,k)=>s.classList.toggle('on',k===col)); } })();
 // tap tempo: average of the last few taps; resets after a 2 s gap
 let taps=[];
@@ -2931,7 +2947,7 @@ window.addEventListener('resize',()=>requestAnimationFrame(()=>{ if(Z.s>1.01) ap
 /* ---- Metronome only: the top info shows the metronome's own tempo, meter and beat ---- */
 let fHudKey='';
 (function freeHud(){ requestAnimationFrame(freeHud); if(!(freeOn&&view==='met')){ if(fHudKey){ fHudKey=''; hud(); } return; }
-  const [n,d]=freeTs(); let col=-1; if(testing&&ac){ const now=ac.currentTime; for(const x of tLog) if(x.t<=now) col=x.col; }
+  const [n,d]=freeTs(); let col=-1; if(testing&&ac){ const now=vNow(); for(const x of tLog) if(x.t<=now) col=x.col; }
   const k=`${prefs.testBpm}|${n}/${d}|${col}`; if(k===fHudKey&&$('hBpm').textContent===String(prefs.testBpm)&&$('hTs').textContent===`${n}${d}`) return; fHudKey=k;
   $('hBpm').textContent=prefs.testBpm; setTs($('hTs'),`${n}/${d}`); $('hCount').textContent=col>=0?`${col+1} / ${n}`:'–'; })();
 
@@ -3084,7 +3100,7 @@ freeLayout=function(){ if(!freeOn||view!=='met') return; const fr=$('free'), wh=
   const padV=(roomy?44:48)+10;
   // stacked (dial on top) vs side-by-side: pick whichever gives the bigger dial
   fr.classList.add('port'); fGo.parentNode!==fr&&fr.appendChild(fGo);
-  const stacked=Math.min(avW*0.78, r.height-padV-h(tabs)-h(side)-h(fGo)-8*3-12, 360);
+  const stacked=Math.min(avW*0.92, r.height-padV-h(tabs)-h(side)-h(fGo)-8*3-12, 420);
   fr.classList.remove('port'); if(fPage==='tempo') side.appendChild(fGo);
   const sideBy=Math.min(r.height-padV-(roomy?0:h(tabs)+8)-8, avW*0.46, 360);
   const port=stacked>=sideBy||stacked>=200; fr.classList.toggle('port',port);
@@ -3169,6 +3185,10 @@ mcFit=function(){ if(view!=='met'||freeOn) return; const m=$('met'), t=m.querySe
 { const e=$('mSub'), fix=()=>{ const t=e.textContent; if(t.includes(' · ')) e.textContent=t.replace(' · ','\n'); };
   try{ new MutationObserver(fix).observe(e,{childList:true,characterData:true,subtree:true}); }catch(_){} }
 
+/* knob sits farther out on the ring */
+const _setDial1=setDial; setDial=function(b,f){ _setDial1(b,f); const w=wheel.clientWidth, k=$('knob'); if(!w||!k) return; const R=w*0.385, a=(dialAng-90)*Math.PI/180, kw=k.offsetWidth;
+  k.style.left=(w/2+R*Math.cos(a)-kw/2)+'px'; k.style.top=(w/2+R*Math.sin(a)-kw/2)+'px'; };
+
 /* ================= two-channel audio: band speaker on one side, the director's ear on the other ================= */
 const AO={split:false,band:'L',confirm:true};
 try{ Object.assign(AO,JSON.parse(localStorage.getItem('rm_audio')||'{}')); }catch(e){}
@@ -3232,6 +3252,41 @@ const _runVoice1=runVoice; runVoice=function(raw){ const s=' '+wordsToNums(raw).
   $('aoTestD').onclick=()=>{ const c=AO.confirm; AO.confirm=true; say(AO.split?`test ${AO.band==='R'?'left':'right'} channel`:'test'); AO.confirm=c; };
   aoUI(); const _rs=refreshSettings; refreshSettings=function(){ _rs(); aoUI(); }; })();
 
+/* ---- lights follow the sound you hear: audio clock minus the device's output delay, plus your nudge ---- */
+let VSYNC=null; try{ const v=localStorage.getItem('rm_vsync'); if(v!==null) VSYNC=+v; }catch(e){}
+function outLat(){ if(!ac) return 0; let l=(ac.outputLatency||0)+(ac.baseLatency||0); if(!ac.outputLatency&&/iPhone|iPad|Macintosh/.test(navigator.userAgent)&&'ontouchend' in document) l=Math.max(l,0.04); return l; }
+function vNow(){ return ac.currentTime-outLat()-((VSYNC||0)/1000); }
+(function(){ const row=document.querySelector('dialog#settings .aorow .aoctl'); if(!row) return;
+  const l=document.createElement('div'); l.className='aoline'; l.innerHTML=`<span>Light sync</span><button id="vsM" class="act">− earlier</button><b id="vsV" style="min-width:64px;text-align:center"></b><button id="vsP" class="act">+ later</button>`;
+  const h=document.createElement('small'); h.className='aohint'; h.textContent='If the dots light up before you hear the click, press + later (Bluetooth speakers usually need about +150).';
+  row.append(l,h);
+  const show=()=>{ $('vsV').textContent=`${VSYNC>0?'+':''}${VSYNC||0} ms`; };
+  const set=d=>{ VSYNC=Math.max(-200,Math.min(400,(VSYNC||0)+d)); try{ localStorage.setItem('rm_vsync',VSYNC); }catch(e){} show(); };
+  $('vsM').onclick=()=>set(-10); $('vsP').onclick=()=>set(10); show(); })();
+
+/* ---- Tap to sync: you tap along with the clicks; the app measures when you actually hear them and sets Light sync ---- */
+(function(){ const row=document.querySelector('dialog#settings .aorow .aoctl'); if(!row) return;
+  const b=document.createElement('button'); b.className='act'; b.id='vsTap'; b.textContent='🎯 Tap to sync (best)'; row.appendChild(b);
+  const ov=document.createElement('div'); ov.id='syncOv'; ov.hidden=true;
+  ov.innerHTML=`<div class="syb"><b>Tap along with the clicks</b><small id="syMsg">Listen on the speaker you'll use. Tap the big button on every click.</small>
+    <button id="syTap">TAP</button><div class="syd" id="syDots"></div><button id="syX" class="act">Cancel</button></div>`;
+  document.body.appendChild(ov);
+  let taps=[], clicks=[], on=false;
+  const N=12, SKIP=4, BPM=100;
+  function stopAll(){ on=false; if(testing) testStop(); ov.hidden=true; }
+  b.onclick=()=>{ $('settings').close(); ac=ac||new (window.AudioContext||window.webkitAudioContext)(); ac.resume(); if(!BUF) buildClicks(); gains();
+    taps=[]; clicks=[]; on=true; ov.hidden=false; $('syMsg').textContent='Listen on the speaker you\'ll use. Tap the big button on every click.'; $('syDots').innerHTML='•'.repeat(0);
+    const t0=ac.currentTime+0.6, sp=60/BPM; for(let k=0;k<N+6;k++){ const s=ac.createBufferSource(); s.buffer=BUF[k%4?'beat':'bar']; s.connect(bandOut()); s.start(t0+k*sp); clicks.push(t0+k*sp); } };
+  $('syX').onclick=stopAll;
+  $('syTap').addEventListener('pointerdown',e=>{ e.preventDefault(); if(!on) return; const t=ac.currentTime; taps.push(t);
+    $('syDots').textContent='●'.repeat(Math.min(taps.length,N));
+    if(taps.length>=N){ const sp=60/BPM; const d=taps.slice(SKIP).map(x=>{ const c=clicks.reduce((a,c)=>Math.abs(c-x)<Math.abs(a-x)?c:a); return x-c; }).sort((a,b)=>a-b);
+      const med=d[Math.floor(d.length/2)]; const spread=d[d.length-1]-d[0];
+      if(spread>sp*0.6){ $('syMsg').textContent='Taps were too uneven, try again.'; on=false; setTimeout(()=>b.onclick(),1200); return; }
+      VSYNC=Math.round((med-outLat())*1000/5)*5; VSYNC=Math.max(-200,Math.min(400,VSYNC)); try{ localStorage.setItem('rm_vsync',VSYNC); }catch(_){}
+      $('syMsg').textContent=`Done: Light sync set to ${VSYNC>0?'+':''}${VSYNC} ms.`; on=false; if($('vsV')) $('vsV').textContent=`${VSYNC>0?'+':''}${VSYNC} ms`; setTimeout(()=>{ ov.hidden=true; },1600); } });
+})();
+
 /* ================= Chains (Dr. Beat style): blocks of tempo + meter + bars, played back to back ================= */
 const CHN={list:[],sel:0};
 try{ const s=JSON.parse(localStorage.getItem('rm_chains')||'null'); if(s&&Array.isArray(s.list)) Object.assign(CHN,s); }catch(e){}
@@ -3261,7 +3316,7 @@ function chStart(){ const c=chCur(); if(!c||!c.blocks.length) return; if(testing
 function chStop(){ CH.on=false; CH.end=0; if(testing) testStop(); playLabel(); chRender(); }
 // follow along: highlight the block that's sounding, end cleanly when the chain is done
 (function chTick(){ requestAnimationFrame(chTick); if(!CH.on) return; if(!testing){ CH.on=false; chRender(); return; }
-  const now=ac.currentTime; if(CH.end&&now>=CH.end){ chStop(); return; }
+  const now=vNow(); if(CH.end&&now>=CH.end){ chStop(); return; }
   let cur=null; for(const x of tLog) if(x.t<=now) cur=x; if(!cur) return;
   const k=cur.blk+':'+cur.bar; if(k!==CH.shown){ CH.shown=k; chRender(cur); const b=chCur().blocks[cur.blk]; if(b){ $('tBpm').textContent=b.bpm; try{ setDial(b.bpm,false); }catch(e){} } } })();
 
