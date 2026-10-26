@@ -1212,6 +1212,32 @@ body.met.freem #free .fgo{display:none!important}
 #c2Sheet .opts button,#c2Sheet .acts button{flex:1 1 auto;min-width:72px;height:40px;border:0;border-radius:9px;background:var(--b-t1);color:var(--b-deep);font:800 12.5px system-ui;cursor:pointer;padding:0 10px}
 #c2Sheet .opts button.sel{background:var(--b-brand);color:var(--b-on)}#c2Sheet .acts button[data-a="play"]{background:#2e8b57;color:#fff}#c2Sheet .acts button.del{color:var(--accent)}
 .c2strip .c2div{flex:none;padding:0 4px}.c2strip .c2div:before,.c2strip .c2div:after{display:none}.c2strip .c2div span{font-size:11px;letter-spacing:.08em;writing-mode:vertical-rl;transform:rotate(180deg)}
+/* run: plain big tempo, no circle */
+.c2big{background:none!important;box-shadow:none!important;color:var(--ink)!important;width:auto!important;aspect-ratio:auto!important;border-radius:0!important}
+.c2big b{font-size:min(30vw,150px)!important;color:var(--b-deep)}.c2big small{color:var(--muted)}
+/* delete ✕ on squares, clear chain */
+.c2sq .c2x{position:absolute;top:3px;right:3px;z-index:2;width:26px;height:26px;border:0;border-radius:7px;background:rgba(255,255,255,.85);color:var(--accent);font:800 13px system-ui;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.c2div{position:relative}.c2div .c2x{position:static;flex:none;width:26px;height:26px;border:0;border-radius:7px;background:#fff;color:var(--accent);font:800 13px system-ui;cursor:pointer}
+.c2clear{display:block;margin:10px auto 0;height:34px;padding:0 16px;border:0;border-radius:8px;background:#fff;color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent);font:800 11px system-ui;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.c2strip .c2sq .b2 b.sb{font-size:11px!important;color:var(--muted)}
+.c2strip .c2sq .c2x{display:none}
+.c2sq .c2x{width:22px!important;height:22px!important;font-size:11px!important;top:2px!important;right:2px!important;background:rgba(255,255,255,.7)!important}
+#c2Grid .c2sq .t2{padding:0 20px}
+/* Run: no big tempo, more blocks, fixed-size tiles that wrap (no stretching) */
+#c2Run .c2big{display:none!important}
+#c2Run .c2now{order:-1;padding:4px 0 2px;justify-content:flex-start;gap:6px}
+#c2Run .c2info{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;text-align:left;gap:4px 14px;min-width:0;width:100%}
+#c2Run .c2info b{font-size:16px}#c2Run .c2info small{font-size:13px}
+#c2Run .c2beats{margin:0;min-height:0;gap:6px}#c2Run .c2beats i{width:16px;height:16px}
+#c2Run #c2Tap{width:100%;height:52px;margin-top:4px}
+#c2Run{display:flex;flex-direction:column;gap:6px}
+#c2Run .c2hd{order:-2}
+.c2strip{flex-wrap:wrap;overflow:visible;padding:4px 0}
+.c2strip .c2sq{width:84px!important}
+@media (min-width:700px){ .c2strip .c2sq{width:100px!important} .c2strip .c2sq .t2 b{font-size:20px} .c2strip .c2sq .b2 b{font-size:16px} .c2strip .c2sq .b2 b.sb{font-size:12px!important} }
+.c2strip .c2div{flex:0 0 100%;padding:2px 0}
+.c2strip .c2div:before,.c2strip .c2div:after{display:block!important}
+.c2strip .c2div span{writing-mode:horizontal-tb!important;transform:none!important;font-size:11px}
 
 </style>
 </head>
@@ -1956,7 +1982,7 @@ const chips=$('chips');
 /* ---------- preferences ---------- */
 const VOICES=[['acc','>','Accent'],['q','♩','Beat'],['e','♪','8ths'],['s','♬','16ths'],['t','3','Triplets'],['f','5','Fives']];
 const prefs={pats:{},tsD:4,grp:'',pulse:'note',pat:{acc:[1,0,0,0,0,0,0,0,0,0,0,0],q:Array(12).fill(1),e:Array(12).fill(0),s:Array(12).fill(0),t:Array(12).fill(0)},
-  mix:{acc:100,q:85,e:65,s:55,t:65,f:50}, testBpm:120, mute:{acc:0,q:0,e:0,s:0,t:0,f:0}, snd:'pip',ci:1,ciMode:'std',ciStd:8,ciCustom:6,bpm:0,run:'show',loop:false,unit:'counts',show:'both',tsrc:'steady'};
+  mix:{acc:100,q:85,e:65,s:55,t:65,f:50}, testBpm:120, mute:{acc:0,q:0,e:0,s:0,t:0,f:0}, snd:'pip',ci:1,ciMode:'std',ciStd:4,ciCustom:6,bpm:0,run:'show',loop:false,unit:'counts',show:'both',tsrc:'steady'};
 function save(){ try{ localStorage.setItem('rm_prefs',JSON.stringify({view,pats:prefs.pats,tsD:prefs.tsD,grp:prefs.grp,pulse:prefs.pulse,testBpm:prefs.testBpm,mix:prefs.mix,mute:prefs.mute,met:metMode,flip:flipped,spd:$('speed').value,ci:prefs.ci,ciMode:prefs.ciMode,snd:prefs.snd,ciStd:prefs.ciStd,ciCustom:prefs.ciCustom,bpm:prefs.bpm,run:prefs.run,loop:prefs.loop,freeTs:prefs.freeTs,unit:prefs.unit,show:prefs.show,tsrc:prefs.tsrc,down:$('cDown').checked,
   click:$('cClick').checked,accent:$('cAccent').checked,labels:$('cLabels').checked,paths:$('cPaths').checked,grid:$('cGrid').checked,props:$('cProps').checked}));
   localStorage.setItem('rm_sections',JSON.stringify(sections)); }catch(e){} }
@@ -2855,7 +2881,7 @@ function runVoice(raw){
   if((n=num(/\b(?:tempo|bpm|speed|set tempo to|metronome) (?:to |at )?(\d{2,3})\b/))!==null||(n=num(/\b(\d{2,3}) ?(?:bpm|beats)\b/))!==null) return vTempo(n,false);
   if(has(/\b(faster|speed up|push)\b/)){ n=num(/(?:faster|speed up|push)(?: by)? (\d+)/)||(metFree()?4:5); return vTempo(n,true); }
   if(has(/\b(slower|slow down|back off)\b/)){ n=num(/(?:slower|slow down|back off)(?: by)? (\d+)/)||(metFree()?4:5); return vTempo(-n,true); }
-  if((n=num(/\bcount ?in (\d+)\b/))!==null){ prefs.ciMode='std'; prefs.ciStd=[4,8,12].includes(n)?n:8; save(); infoLine(); return `Count-in ${prefs.ciStd}`; }
+  if((n=num(/\bcount ?in (\d+)\b/))!==null){ prefs.ciMode='std'; prefs.ciStd=[4,8,12].includes(n)?n:4; save(); infoLine(); return `Count-in ${prefs.ciStd}`; }
   if(has(/\bno count ?in\b|\bcount ?in off\b/)){ prefs.ciMode='off'; save(); return 'Count-in off'; }
   if(has(/\bmusic (on|off)\b|\b(turn )?(on|off) (the )?music\b/)){ const off=has(/\boff\b/); setMusic(off?'off':(mus.src==='rec'&&recEl?'rec':'synth')); return off?'Music off':'Music on'; }
   if(has(/\bloop (on|off)\b|\bloop\b/)){ prefs.loop=has(/\boff\b/)?false:!prefs.loop||has(/\bon\b/); $('bLoop').classList.toggle('on',prefs.loop); save(); return prefs.loop?'Loop on':'Loop off'; }
@@ -3497,7 +3523,7 @@ if(!LIB.blocks.length) LIB.blocks=[
 const CHS={list:[],sel:0};
 try{ const s=JSON.parse(localStorage.getItem('rm_chains2')||'null'); if(s&&Array.isArray(s.list)) Object.assign(CHS,s); }catch(e){}
 if(!CHS.list.length) CHS.list=[
-  {name:'Full Rehearsal',items:[{t:'div',name:'Part 1 · Warm-up'},{t:'ci',n:8},{t:'ref',id:'b1'},{t:'loop'},{t:'stop',name:'Part 2'},{t:'ci',n:4},{t:'ref',id:'b2'},{t:'follow',bars:4},{t:'div',name:'Part 3'},{t:'ref',id:'b3'},{t:'follow',bars:2},{t:'ref',id:'b4'},{t:'hold',sec:4},{t:'ci',n:4},{t:'ref',id:'b1'}]},
+  {name:'Full Rehearsal',items:[{t:'div',name:'Part 1 · Warm-up'},{t:'ci',n:4},{t:'ref',id:'b1'},{t:'loop'},{t:'stop',name:'Part 2'},{t:'ci',n:4},{t:'ref',id:'b2'},{t:'follow',bars:4},{t:'div',name:'Part 3'},{t:'ref',id:'b3'},{t:'follow',bars:2},{t:'ref',id:'b4'},{t:'hold',sec:4},{t:'ci',n:4},{t:'ref',id:'b1'}]},
   {name:'Warm-up',items:[{t:'ci',n:4},{t:'ref',id:'b1'},{t:'ref',id:'b2'},{t:'follow',bars:4}]}];
 const C2UI={sub:'build',sel:-1};
 try{ const s=localStorage.getItem('rm_c2sub'); if(s) C2UI.sub=s; }catch(e){}
@@ -3573,13 +3599,13 @@ function c2Progress(force){ const grid=$('c2Grid'), strip=$('c2Strip');
     el.classList.toggle('on',on); el.classList.toggle('done',done);
     const m=el.querySelector('.mid i'); if(m) m.style.width=(on?prog*100:done?100:0)+'%';
     const e=el.querySelector('.mid em'); if(e) e.textContent=on?lab:''; }); });
-  if(strip&&it>=0){ const el=strip.querySelector(`[data-i="${it}"]`); if(el&&el.dataset.sc!==String(it)){ strip.querySelectorAll('[data-sc]').forEach(x=>x.removeAttribute('data-sc')); el.dataset.sc=it; el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); } }
+  if(strip&&it>=0){ const el=strip.querySelector(`[data-i="${it}"]`); if(el&&el.dataset.sc!==String(it)){ strip.querySelectorAll('[data-sc]').forEach(x=>x.removeAttribute('data-sc')); el.dataset.sc=it; el.scrollIntoView({behavior:'smooth',block:'nearest'}); } }
   // run view
   const rb=$('c2RunBpm'); if(rb){ const s=C2.segs[it];
     if(cur&&cur.bpm){ const b=Math.round(cur.bpm); rb.textContent=b; if(prefs.testBpm!==b&&!cur.hold){ prefs.testBpm=b; try{ $('tBpm').textContent=b; setDial(b,false); }catch(e){} } }
     else if(cur&&cur.hold) rb.textContent='⏸';
     const c=c2Cur(); const item=c&&c.items[it];
-    $('c2RunWhat').textContent=C2.on&&item?c2Title(item,s)+(s&&s.ts?` · ${s.ts[0]}/${s.ts[1]}`:'')+(lab&&lab!=='LOOP'?` · bar ${lab.toLowerCase()}`:''):(C2.resume!=null?'Stopped · press Continue':'Press Start to run the chain');
+    $('c2RunWhat').textContent=C2.on&&item?(cur&&cur.bpm&&!cur.hold?Math.round(cur.bpm)+' bpm · ':'')+c2Title(item,s)+(s&&s.ts?` · ${s.ts[0]}/${s.ts[1]}`:'')+(lab&&lab!=='LOOP'?` · bar ${lab.toLowerCase()}`:''):(C2.resume!=null?'Stopped · press Continue':'Press Start to run the chain');
     let nx=''; if(C2.on&&c){ for(let j=it+1;j<c.items.length;j++){ const sj=C2.segs[j]; if(!sj||sj.k==='div'||sj.k==='skip') continue; nx=sj.k==='stop'?'■ stop':c2Title(c.items[j],sj)+(sj.ts?` · ${sj.ts[0]}/${sj.ts[1]}`:''); break; } }
     $('c2RunNext').textContent=nx?'next: '+nx:'';
     let left=0; if(C2.on&&it>=0){ left=(1-prog)*(C2.durs[it]||0); for(let j=it+1;j<C2.durs.length;j++){ if(C2.segs[j].k==='stop') break; left+=C2.durs[j]; } }
@@ -3604,12 +3630,12 @@ function c2Square(item,s,i,mini){ const k=c2Kind(item,s), el=document.createElem
   else if(item.t==='hold'){ top=`⏸ ${item.sec}s`; ts='—'; sub='silence'; }
   else if(item.t==='loop'){ top=c2Tempo2(s); ts=`${s.ts[0]}/${s.ts[1]}`; sub='∞ until tap'; }
   else { top=c2Tempo2(s)||'?'; ts=s&&s.ts?`${s.ts[0]}/${s.ts[1]}`:''; sub=s&&s.bars?`${s.bars} bar${s.bars>1?'s':''}`:''; }
-  el.innerHTML=`<span class="n">${c2Num(i)}</span><div class="t2"><b class="${top.length>6?'long':''}">${top}</b></div><div class="mid"><i></i><em></em></div><div class="b2"><b>${ts}</b><b>${mini?'':sub}</b></div>`;
+  el.innerHTML=`<span class="n">${c2Num(i)}</span><div class="t2"><b class="${top.length>6?'long':''}">${top}</b></div><div class="mid"><i></i><em></em></div><div class="b2"><b>${ts}</b><b class="sb">${mini?(item.t==='ci'?item.n+' clicks':item.t==='hold'?'':item.t==='loop'?'∞':(s&&s.bars?s.bars+' bar'+(s.bars>1?'s':''):'')):sub}</b></div>`;
   return el; }
 function c2RenderGrid(){ const c=c2Cur(); const g=$('c2Grid'); if(!g||!c) return; const segs=c2Resolve(c.items); g.innerHTML='';
-  c.items.forEach((it,i)=>{ const el=c2Square(it,segs[i],i); if(i===C2UI.sel) el.classList.add('sel'); el.onclick=e=>{ if(c2Drag.moved) return; c2ItemSheet(i); }; c2DragHook(el,i); g.appendChild(el); });
+  c.items.forEach((it,i)=>{ const el=c2Square(it,segs[i],i); if(i===C2UI.sel) el.classList.add('sel'); { const x=document.createElement('button'); x.className='c2x'; x.textContent='✕'; x.setAttribute('aria-label','Remove'); x.onclick=e=>{ e.stopPropagation(); c.items.splice(i,1); C2UI.sel=-1; c2Save(); c2RenderGrid(); }; el.appendChild(x); } el.onclick=e=>{ if(c2Drag.moved) return; c2ItemSheet(i); }; c2DragHook(el,i); g.appendChild(el); });
   const add=document.createElement('div'); add.className='c2sq add'; add.textContent='＋'; add.onclick=()=>c2AddSheet(c.items.length); g.appendChild(add);
-  const s=$('c2Strip'); if(s){ s.innerHTML=''; c.items.forEach((it,i)=>{ if(it.t==='div') return; const el=c2Square(it,segs[i],i,true); el.onclick=()=>{ if(C2.on&&i===C2.cur){ c2Next(); return; } c2Jump(i); }; s.appendChild(el); }); }
+  const s=$('c2Strip'); if(s){ s.innerHTML=''; c.items.forEach((it,i)=>{ const el=c2Square(it,segs[i],i,true); el.onclick=()=>{ if(C2.on&&i===C2.cur){ c2Next(); return; } c2Jump(i); }; s.appendChild(el); }); }
   c2Progress(true); }
 function c2RenderPicker(){ const p=$('c2Pick'); p.innerHTML='<span class="lab">CHAIN</span>';
   CHS.list.forEach((x,i)=>{ const b=document.createElement('button'); b.textContent=x.name; b.classList.toggle('sel',i===CHS.sel);
@@ -3720,11 +3746,12 @@ function c2RenderLib(){ const L=$('c2Lib'); if(!L) return; L.innerHTML='';
    <div class="c2pick" id="c2Pick"></div>
    <div class="c2pg" id="c2Run"><div class="c2hd"><b id="c2RunName"></b><small id="c2RunHd"></small></div><div class="c2strip" id="c2Strip"></div>
      <div class="c2now"><div class="c2big"><b id="c2RunBpm">–</b><small>BPM</small></div><div class="c2info"><b id="c2RunWhat"></b><small id="c2RunNext"></small><div class="c2beats" id="c2RunBeats"></div><button id="c2Tap" hidden>TAP · NEXT ON THE 1</button></div></div></div>
-   <div class="c2pg" id="c2Build"><div class="c2grid" id="c2Grid"></div><small class="c2hint">Tap a square for options · hold a square and drag it to move it</small></div>
+   <div class="c2pg" id="c2Build"><div class="c2grid" id="c2Grid"></div><small class="c2hint">Tap a square for options · hold a square and drag it to move it · ✕ removes it</small><button id="c2Clear" class="c2clear">Clear chain</button></div>
    <div class="c2pg" id="c2Blocks"><div class="c2h">Block creator</div><div class="c2ed" id="c2Ed"></div><div class="c2h">My blocks</div><div class="c2lib" id="c2Lib"></div></div>
    <div class="c2pg" id="c2Quick"></div>`;
   fpChain.innerHTML=''; fpChain.appendChild(w); $('c2Quick').appendChild(quick);
   w.querySelectorAll('#c2Sub [data-s]').forEach(b=>b.onclick=()=>{ C2UI.sub=b.dataset.s; c2Save(); c2Pages(); });
+  $('c2Clear').onclick=()=>{ const c=c2Cur(); if(!c||!c.items.length) return; if(!confirm(`Clear all ${c.items.length} blocks from “${c.name}”? This can't be undone.`)) return; if(C2.on) c2Stop(); c.items=[]; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); };
   $('c2Tap').onclick=()=>{ C2.tap=true; c2Progress(true); };
   $('c2Run').addEventListener('click',e=>{ if(e.target.closest('#c2Strip,#c2Tap')) return; if(C2.on&&C2.segs[C2.cur]&&C2.segs[C2.cur].k==='loop'){ C2.tap=true; c2Progress(true); } }); })();
 function c2Pages(){ ['run','build','blocks','quick'].forEach(s=>{ $('c2'+s[0].toUpperCase()+s.slice(1)).hidden=C2UI.sub!==s; });
@@ -3760,7 +3787,7 @@ try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
   if(pr.pats) prefs.pats=pr.pats; else if(pr.pat) prefs.pats={'4/4':Object.assign({grp:''},pr.pat)};  // older single pattern becomes the 4/4 one
   if(pr.testBpm) prefs.testBpm=pr.testBpm; for(const k of ['tsD','grp','pulse']) if(pr[k]!==undefined) prefs[k]=pr[k];
   for(const k of ['snd','ci','ciMode','ciStd','ciCustom','bpm','run','loop','unit','show','tsrc','freeTs']) if(pr[k]!==undefined) prefs[k]=pr[k];
-  try{ if(!localStorage.getItem('rm_ci8')){ prefs.ciMode='std'; prefs.ciStd=8; localStorage.setItem('rm_ci8','1'); } }catch(e){}  // v21: count-in now defaults to 8
+  try{ if(!localStorage.getItem('rm_ci4')){ prefs.ciMode='std'; prefs.ciStd=4; localStorage.setItem('rm_ci4','1'); } }catch(e){}  // v21: count-in now defaults to 8
   for(const [k,id] of [['click','cClick'],['accent','cAccent'],['down','cDown'],['labels','cLabels'],['paths','cPaths'],['grid','cGrid'],['props','cProps']]) if(pr[k]!==undefined) $(id).checked=pr[k];
   sections=JSON.parse(localStorage.getItem('rm_sections')||'[]').filter(s=>s&&s.a<NS&&s.b<NS);
 }catch(e){}
