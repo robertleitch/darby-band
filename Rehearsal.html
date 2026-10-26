@@ -1238,7 +1238,41 @@ body.met.freem #free .fgo{display:none!important}
 .c2strip .c2div{flex:0 0 100%;padding:2px 0}
 .c2strip .c2div:before,.c2strip .c2div:after{display:block!important}
 .c2strip .c2div span{writing-mode:horizontal-tb!important;transform:none!important;font-size:11px}
+/* Run looks like Build: same squares, a grid a bit denser than Build */
+.c2strip{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+@media (min-width:700px){ .c2strip{grid-template-columns:repeat(8,minmax(0,1fr));gap:9px} }
+.c2strip .c2sq{width:auto!important;aspect-ratio:1}
+.c2strip .c2sq .t2 b{font:900 clamp(16px,4.8vw,26px) system-ui!important}
+.c2strip .c2sq .t2 b.long{font-size:clamp(12px,3.4vw,19px)!important}
+.c2strip .c2sq .b2 b{font:900 clamp(12px,3.6vw,19px)/1.1 system-ui!important;color:#1c2120!important}
+.c2strip .c2sq .n{font-size:9px;top:3px;left:5px}
+.c2strip .c2sq .mid{height:5px}.c2strip .c2sq .mid em{display:block;font-size:8.5px;top:-14px}
+.c2strip .c2div{grid-column:1/-1}
+.c2strip .c2sq .mid em{display:none!important}
 
+.c2pick button.clr{margin-left:auto;color:#b42318;box-shadow:inset 0 0 0 1.5px #b42318;flex:none}
+.c2pick{flex-wrap:wrap;row-gap:6px;overflow:visible}
+
+.c2sq.stp{background:#fbe9e8;border-color:#b3261e;border-width:3px}.c2sq.stp .t2 b{color:#b3261e}.c2sq.stp .b2 b:first-child{color:#b3261e;letter-spacing:.06em}
+.c2sq.hold .b2 b:first-child{letter-spacing:.06em}
+#c2Sheet .opts .olab{font:800 10px system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--b-act);align-self:center;margin-right:4px}
+
+/* sheets: always scroll inside the visible screen (iOS: dvh, momentum, no page bounce) */
+#c2Sheet .sheet{max-height:85vh;max-height:calc(100dvh - 48px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
+#c2Sheet{touch-action:none}#c2Sheet .sheet *{touch-action:pan-y}
+
+/* Add a block: rows swipe side to side */
+#c2Sheet .qa,#c2Sheet .mb{display:flex!important;flex-direction:row!important;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding:2px 2px 8px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none;overscroll-behavior-x:contain}
+#c2Sheet .qa::-webkit-scrollbar,#c2Sheet .mb::-webkit-scrollbar{display:none}
+#c2Sheet .qa,#c2Sheet .qa *,#c2Sheet .mb,#c2Sheet .mb *{touch-action:pan-x pan-y}
+#c2Sheet .qa .q{flex:0 0 108px;height:78px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#c2Sheet .mb .r{flex:0 0 132px;height:132px;flex-direction:column!important;align-items:stretch!important;justify-content:space-between;gap:2px!important;padding:9px 10px!important;scroll-snap-align:start;position:relative}
+#c2Sheet .mb .r b{width:auto!important;font-size:13px!important;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:30px}
+#c2Sheet .mb .r em{font:900 26px system-ui;font-style:normal;text-align:center;color:var(--ink,#1c2120);white-space:nowrap;letter-spacing:-.02em}
+#c2Sheet .mb .r.acc em{color:#1e7a4f}#c2Sheet .mb .r.dec em{color:#c0611f}
+#c2Sheet .mb .r span{flex:none!important;text-align:center;font-size:12.5px!important}
+#c2Sheet .mb .r i{position:absolute;top:6px;right:6px;width:26px!important;height:26px!important;font:800 16px/26px system-ui!important}
+#c2Sheet .qa,#c2Sheet .mb{scroll-padding-left:16px;scroll-padding-right:16px}
 </style>
 </head>
 <body>
@@ -3523,8 +3557,13 @@ if(!LIB.blocks.length) LIB.blocks=[
 const CHS={list:[],sel:0};
 try{ const s=JSON.parse(localStorage.getItem('rm_chains2')||'null'); if(s&&Array.isArray(s.list)) Object.assign(CHS,s); }catch(e){}
 if(!CHS.list.length) CHS.list=[
-  {name:'Full Rehearsal',items:[{t:'div',name:'Part 1 · Warm-up'},{t:'ci',n:4},{t:'ref',id:'b1'},{t:'loop'},{t:'stop',name:'Part 2'},{t:'ci',n:4},{t:'ref',id:'b2'},{t:'follow',bars:4},{t:'div',name:'Part 3'},{t:'ref',id:'b3'},{t:'follow',bars:2},{t:'ref',id:'b4'},{t:'hold',sec:4},{t:'ci',n:4},{t:'ref',id:'b1'}]},
-  {name:'Warm-up',items:[{t:'ci',n:4},{t:'ref',id:'b1'},{t:'ref',id:'b2'},{t:'follow',bars:4}]}];
+  {name:'Full Rehearsal',items:[{t:'div',name:'Part 1 · Warm-up'},{t:'ref',id:'b1'},{t:'loop'},{t:'stop',n:4},{t:'div',name:'Part 2'},{t:'ref',id:'b2'},{t:'follow',bars:4},{t:'div',name:'Part 3'},{t:'ref',id:'b3'},{t:'follow',bars:2},{t:'ref',id:'b4'},{t:'hold',n:2},{t:'ref',id:'b1'}]},
+  {name:'Warm-up',items:[{t:'ref',id:'b1'},{t:'ref',id:'b2'},{t:'follow',bars:4}]}];
+// v22: count-in blocks are gone (the chain counts in by itself). Stop = a block that waits for a tap, then counts in.
+CHS.list.forEach(c=>{ if(c.v2) return; const out=[]; c.items.forEach(it=>{ const pv=out[out.length-1];
+  if(it.t==='ci'){ if(pv&&(pv.t==='hold'||pv.t==='stop')) pv.n=it.n||4; return; }
+  if(it.t==='stop'){ out.push({t:'stop',n:it.n==null?4:it.n}); if(it.name) out.push({t:'div',name:it.name}); return; }
+  if(it.t==='hold'){ out.push({t:'hold',n:it.n||0}); return; } out.push(it); }); c.items=out; c.v2=1; });
 const C2UI={sub:'build',sel:-1};
 try{ const s=localStorage.getItem('rm_c2sub'); if(s) C2UI.sub=s; }catch(e){}
 function libSave(){ try{ localStorage.setItem('rm_blocks',JSON.stringify(LIB)); }catch(e){} }
@@ -3539,10 +3578,10 @@ function c2Resolve(items){ let prev={bpm:prefs.testBpm||120,ts:[4,4]}; const seg
     if(it.t==='ref'){ const b=libGet(it.id); if(!b) return {k:'skip'}; prev={bpm:b.b,ts:[...b.ts]}; return {k:'play',ts:[...b.ts],a:b.a,b:b.b,bars:b.bars,chg:b.chg||'smooth',crv:b.crv||'lin'}; }
     if(it.t==='follow') return {k:'play',ts:[...prev.ts],a:prev.bpm,b:prev.bpm,bars:it.bars||1,chg:'smooth',crv:'lin',fol:1};
     if(it.t==='loop') return {k:'loop',ts:[...prev.ts],a:prev.bpm,b:prev.bpm};
-    if(it.t==='hold') return {k:'hold',sec:it.sec||4};
-    if(it.t==='ci') return {k:'ci',n:it.n||4};
-    if(it.t==='div') return {k:'div'}; if(it.t==='stop') return {k:'stop'}; return {k:'skip'}; });
-  segs.forEach((s,i)=>{ if(s.k!=='ci') return; let nx=null; for(let j=i+1;j<segs.length;j++){ if(segs[j].k==='play'||segs[j].k==='loop'){ nx=segs[j]; break; } if(segs[j].k==='stop') break; }
+    if(it.t==='hold') return {k:'wait',n:it.n||0,hold:1};
+    if(it.t==='stop') return {k:'wait',n:it.n==null?4:it.n,stop:1};
+    if(it.t==='div') return {k:'div'}; return {k:'skip'}; });
+  segs.forEach((s,i)=>{ if(s.k!=='wait') return; let nx=null; for(let j=i+1;j<segs.length;j++){ if(segs[j].k==='play'||segs[j].k==='loop'){ nx=segs[j]; break; } if(segs[j].k==='wait') break; }
     if(!nx){ for(let j=i-1;j>=0;j--) if(segs[j].k==='play'||segs[j].k==='loop'){ nx={ts:segs[j].ts,a:segs[j].b}; break; } }
     s.ts=nx?[...nx.ts]:[4,4]; s.a=nx?nx.a:(prefs.testBpm||120); });
   return segs; }
@@ -3550,7 +3589,7 @@ function c2Span(bpm,ts){ const [n,d]=ts, q=60/bpm; return (prefs.pulse==='dotted
 function c2Tempo(s,bar,beat){ if(s.a===s.b) return s.a; const n=s.ts[0], N=s.bars; let f;
   if(s.chg==='bar') f=N>1?bar/(N-1):1; else if(s.chg==='two'){ const g=Math.ceil(N/2); f=g>1?Math.floor(bar/2)/(g-1):1; } else { const T=N*n; f=T>1?(bar*n+beat)/(T-1):1; }
   return s.a+(s.b-s.a)*(CRV[s.crv]||CRV.lin)(Math.max(0,Math.min(1,f))); }
-function c2Dur(s){ if(s.k==='hold') return s.sec; if(s.k==='ci') return s.n*c2Span(s.a,s.ts);
+function c2Dur(s){ if(s.k==='wait') return s.n?s.n*c2Span(s.a,s.ts):0;
   if(s.k==='play'||s.k==='loop'){ const bars=s.k==='loop'?1:s.bars; let t=0; for(let b=0;b<bars;b++) for(let k=0;k<s.ts[0];k++) t+=c2Span(c2Tempo(s,b,k),s.ts); return t; } return 0; }
 
 /* ---- the engine ---- */
@@ -3559,13 +3598,17 @@ function c2Schedule(){ const segs=C2.segs, horizon=ac.currentTime+HORIZON; let g
   while(!C2.end&&tNext<horizon&&guard++<400){ const s=segs[C2.i];
     if(!s){ C2.end=tNext; C2.resume=null; break; }
     if(s.k==='div'||s.k==='skip'){ C2.i++; C2.bar=C2.beat=0; continue; }
-    if(s.k==='stop'){ C2.end=tNext; C2.resume=C2.i+1<segs.length?C2.i+1:null; break; }
-    if(s.k==='hold'){ tLog.push({t:tNext,col:-1,it:C2.i,dur:s.sec,hold:1}); if(tLog.length>64) tLog.shift(); tNext+=s.sec; C2.i++; continue; }
+    if(s.k==='wait'){ // Stop / Hold: silence until you tap, then count in (Stop: 4, Hold: its number) and go on
+      if(C2.tap){ C2.tap=false; C2.held=false; C2.i++; C2.bar=C2.beat=0; C2.ci=s.n; tNext=Math.max(tNext,ac.currentTime+0.12); continue; }
+      if(!C2.held){ C2.held=true; tLog.push({t:tNext,col:-1,it:C2.i,hold:1}); if(tLog.length>64) tLog.shift(); }
+      break; }
     if(s.k==='ci'){ const bpm=Math.max(20,s.a+C2.nudge), sp=c2Span(bpm,s.ts), per=s.ts[0]>=6&&s.ts[1]===8?s.ts[0]/3*1:4;
       for(let k=0;k<s.n;k++){ click(tNext,k===0?'start':(k%s.ts[0]===0?'bar':'off'),'ci'); tLog.push({t:tNext,col:k%s.ts[0],it:C2.i,prog:(k+1)/s.n,lab:`${k+1} OF ${s.n}`,bpm,ts:s.ts}); if(tLog.length>64) tLog.shift(); tNext+=sp; }
       C2.i++; C2.bar=C2.beat=0; continue; }
     const [n,d]=s.ts;
     if(C2.beat===0){ if(s.k==='play'&&C2.bar>=s.bars){ C2.i++; C2.bar=0; continue; } if(s.k==='loop'&&C2.tap){ C2.tap=false; C2.i++; C2.bar=0; continue; } }
+    if(C2.ci>0&&C2.bar===0&&C2.beat===0){ const cb=Math.max(20,s.a+C2.nudge), sp=c2Span(cb,s.ts), N=C2.ci; C2.ci=0;
+      for(let k=0;k<N;k++){ click(tNext,k===0?'start':(k%n===0?'bar':'off'),'ci'); tLog.push({t:tNext,col:k%n,it:C2.i,ci:1,prog:0,lab:`${k+1} of ${N}`,bpm:cb,ts:s.ts}); if(tLog.length>64) tLog.shift(); tNext+=sp; } continue; }
     const bpm=Math.max(20,Math.min(400,c2Tempo(s,C2.bar,C2.beat)+C2.nudge)), span=c2Span(bpm,s.ts), P=patFor(`${n}/${d}`), col=C2.beat%12, t=tNext;
     if(P.acc[col]) click(t,'bar','acc'); else if(P.q[col]) click(t,'beat','q');
     if(P.e[col]) click(t+span/2,'sub','e');
@@ -3576,12 +3619,12 @@ function c2Schedule(){ const segs=C2.segs, horizon=ac.currentTime+HORIZON; let g
     if(tLog.length>64) tLog.shift(); tNext+=span; tIdx++; C2.beat++; if(C2.beat>=n){ C2.beat=0; C2.bar++; } } }
 const _testSchedule1=testSchedule; testSchedule=function(){ if(C2.on) return c2Schedule(); return _testSchedule1(); };
 function c2Start(from){ const c=c2Cur(); if(!c||!c.items.length) return; if(testing) testStop(); if(CH.on) CH.on=false;
-  const segs=c2Resolve(c.items); Object.assign(C2,{on:true,i:from||0,bar:0,beat:0,end:0,tap:false,nudge:0,segs,resume:null,chain:CHS.sel,cur:-1,lastTs:''});
+  const segs=c2Resolve(c.items); Object.assign(C2,{on:true,held:false,ci:(segs[from||0]&&segs[from||0].k==='wait')?0:4,i:from||0,bar:0,beat:0,end:0,tap:false,nudge:0,segs,resume:null,chain:CHS.sel,cur:-1,lastTs:''});
   C2.durs=segs.map(c2Dur);
   if(C2UI.sub!=='quick'){ C2UI.sub='run'; c2Save(); c2Pages(); }
   testStart(); playLabel(); fGoUI(); }
 function c2Stop(keep){ const r=C2.resume; C2.on=false; C2.end=0; if(testing) testStop(); if(!keep) C2.resume=null; else C2.resume=r; playLabel(); fGoUI(); c2Progress(true); }
-function c2Next(){ if(!C2.on) return; const s=C2.segs[C2.cur]; if(s&&s.k==='loop'){ C2.tap=true; return; } c2Jump(C2.cur+1); }
+function c2Next(){ if(!C2.on) return; const s=C2.segs[C2.cur]; if(s&&(s.k==='loop'||s.k==='wait')){ C2.tap=true; if(s.k==='wait'){ try{ testSchedule(); }catch(e){} } return; } c2Jump(C2.cur+1); }
 function c2Jump(i){ const c=c2Cur(); if(!c) return; i=Math.max(0,Math.min(c.items.length-1,i)); c2Start(i); }
 // keep the clock honest: tempo changes during a chain (±1, dial, "faster") nudge the whole chain
 const _setTestBpm2=setTestBpm; setTestBpm=function(v){ if(C2.on){ C2.nudge+=Math.round(v)-prefs.testBpm; prefs.testBpm=Math.round(v); try{ $('tBpm').textContent=prefs.testBpm; }catch(e){} return; } return _setTestBpm2(v); };
@@ -3591,7 +3634,7 @@ let c2Shown='';
 function c2Progress(force){ const grid=$('c2Grid'), strip=$('c2Strip');
   const now=ac?vNow():0; let cur=null; if(C2.on) for(const x of tLog) if(x.t<=now) cur=x;
   const it=C2.on&&cur?cur.it:-1; let prog=0, lab='';
-  if(cur){ if(cur.hold){ prog=Math.min(1,(now-cur.t)/cur.dur); lab=`${Math.max(0,Math.ceil(cur.dur-(now-cur.t)))}s`; } else { prog=cur.prog; lab=cur.lab; } }
+  if(cur){ if(cur.hold){ prog=0; lab='TAP'; } else { prog=cur.prog; lab=cur.lab; } }
   C2.cur=it;
   const key=it+'|'+Math.round(prog*200)+'|'+lab+'|'+C2.on+'|'+(cur&&cur.col);
   if(key===c2Shown&&!force) return; c2Shown=key;
@@ -3605,43 +3648,43 @@ function c2Progress(force){ const grid=$('c2Grid'), strip=$('c2Strip');
     if(cur&&cur.bpm){ const b=Math.round(cur.bpm); rb.textContent=b; if(prefs.testBpm!==b&&!cur.hold){ prefs.testBpm=b; try{ $('tBpm').textContent=b; setDial(b,false); }catch(e){} } }
     else if(cur&&cur.hold) rb.textContent='⏸';
     const c=c2Cur(); const item=c&&c.items[it];
-    $('c2RunWhat').textContent=C2.on&&item?(cur&&cur.bpm&&!cur.hold?Math.round(cur.bpm)+' bpm · ':'')+c2Title(item,s)+(s&&s.ts?` · ${s.ts[0]}/${s.ts[1]}`:'')+(lab&&lab!=='LOOP'?` · bar ${lab.toLowerCase()}`:''):(C2.resume!=null?'Stopped · press Continue':'Press Start to run the chain');
-    let nx=''; if(C2.on&&c){ for(let j=it+1;j<c.items.length;j++){ const sj=C2.segs[j]; if(!sj||sj.k==='div'||sj.k==='skip') continue; nx=sj.k==='stop'?'■ stop':c2Title(c.items[j],sj)+(sj.ts?` · ${sj.ts[0]}/${sj.ts[1]}`:''); break; } }
+    $('c2RunWhat').textContent=C2.on&&item?(cur&&cur.bpm&&!cur.hold?Math.round(cur.bpm)+' bpm · ':'')+c2Title(item,s)+(s&&s.ts?` · ${s.ts[0]}/${s.ts[1]}`:'')+(cur&&cur.ci?` · count-in ${lab}`:lab&&lab!=='LOOP'&&lab!=='TAP'?` · bar ${lab.toLowerCase()}`:''):(C2.resume!=null?'Stopped · press Continue':'Press Start to run the chain');
+    let nx=''; if(C2.on&&c){ for(let j=it+1;j<c.items.length;j++){ const sj=C2.segs[j]; if(!sj||sj.k==='div'||sj.k==='skip') continue; nx=sj.k==='wait'?(sj.stop?'■ stop':'⏸ hold'):c2Title(c.items[j],sj)+(sj.ts?` · ${sj.ts[0]}/${sj.ts[1]}`:''); break; } }
     $('c2RunNext').textContent=nx?'next: '+nx:'';
-    let left=0; if(C2.on&&it>=0){ left=(1-prog)*(C2.durs[it]||0); for(let j=it+1;j<C2.durs.length;j++){ if(C2.segs[j].k==='stop') break; left+=C2.durs[j]; } }
+    let left=0; if(C2.on&&it>=0){ left=(1-prog)*(C2.durs[it]||0); for(let j=it+1;j<C2.durs.length;j++){ if(C2.segs[j].k==='wait') break; left+=C2.durs[j]; } }
     $('c2RunHd').textContent=C2.on&&it>=0?`BLOCK ${c2Num(it)} OF ${c2Num(c.items.length-1)} · ${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')} LEFT`:'';
     const dots=$('c2RunBeats'), n=s&&s.ts?s.ts[0]:0; if(dots.children.length!==n){ dots.innerHTML=''; for(let k=0;k<n;k++){ const d=document.createElement('i'); dots.appendChild(d); } }
     [...dots.children].forEach((d,k)=>d.classList.toggle('on',!!(cur&&!cur.hold&&cur.col===k)));
-    $('c2Tap').hidden=!(C2.on&&s&&s.k==='loop'); $('c2Tap').classList.toggle('armed',C2.tap); $('c2Tap').textContent=C2.tap?'✓ NEXT ON THE 1':'TAP · NEXT ON THE 1'; } }
-function c2Num(i){ const c=c2Cur(); let n=0; for(let j=0;j<=i&&j<c.items.length;j++) if(!['div','stop'].includes(c.items[j].t)) n++; return n; }
+    const hl=s&&s.k==='wait'&&!(cur&&cur.ci); $('c2Tap').hidden=!(C2.on&&s&&(s.k==='loop'||hl)); $('c2Tap').classList.toggle('armed',C2.tap); $('c2Tap').textContent=hl?(s.n?`TAP · COUNT ${s.n} & GO`:'TAP · GO'):(C2.tap?'✓ NEXT ON THE 1':'TAP · NEXT ON THE 1'); } }
+function c2Num(i){ const c=c2Cur(); let n=0; for(let j=0;j<=i&&j<c.items.length;j++) if(c.items[j].t!=='div') n++; return n; }
 (function c2Tick(){ requestAnimationFrame(c2Tick); if(!C2.on){ return; } if(!testing){ C2.on=false; c2Progress(true); fGoUI(); return; }
   if(C2.end&&vNow()>=C2.end){ c2Stop(true); return; } c2Progress(); })();
 
 /* ---- squares ---- */
-function c2Kind(item,s){ if(item.t==='ref'){ if(!s||s.k!=='play') return 'st'; return s.b>s.a?'acc':s.b<s.a?'dec':'st'; } return {follow:'fol',loop:'loop',hold:'hold',ci:'ci'}[item.t]||'st'; }
+function c2Kind(item,s){ if(item.t==='ref'){ if(!s||s.k!=='play') return 'st'; return s.b>s.a?'acc':s.b<s.a?'dec':'st'; } return {follow:'fol',loop:'loop',hold:'hold',stop:'stp'}[item.t]||'st'; }
 function c2Title(item,s){ if(item.t==='ref'){ const b=libGet(item.id); return b?b.name:'(missing)'; } if(item.t==='follow') return `Follow ${item.bars} bar${item.bars>1?'s':''}`; if(item.t==='loop') return 'Loop until tap';
-  if(item.t==='hold') return `Hold ${item.sec}s`; if(item.t==='ci') return `Count-in ${item.n}`; return item.name||''; }
+  if(item.t==='hold') return item.n?`Hold · count ${item.n}`:'Hold until tap'; if(item.t==='stop') return 'Stop'; return item.name||''; }
 function c2Tempo2(s){ if(!s||s.a==null) return ''; return s.a===s.b?String(Math.round(s.a)):`${Math.round(s.a)}${s.b>s.a?'↗':'↘'}${Math.round(s.b)}`; }
 function c2Square(item,s,i,mini){ const k=c2Kind(item,s), el=document.createElement('div');
-  if(item.t==='div'||item.t==='stop'){ el.className='c2div'+(item.t==='stop'?' stop':''); el.dataset.i=i; el.innerHTML=`<span>${item.t==='stop'?'■ STOP':''}${item.t==='stop'&&item.name?' · ':''}${(item.name||'').toUpperCase()}</span>`; return el; }
+  if(item.t==='div'){ el.className='c2div'; el.dataset.i=i; el.innerHTML=`<span>${(item.name||'').toUpperCase()}</span>`; return el; }
   el.className=`c2sq ${k}${mini?' mini':''}`; el.dataset.i=i;
   let top, ts, sub;
-  if(item.t==='ci'){ top='1 2 3 4'; ts=s&&s.ts?`${s.ts[0]}/${s.ts[1]}`:'4/4'; sub=`${item.n} clicks`; }
-  else if(item.t==='hold'){ top=`⏸ ${item.sec}s`; ts='—'; sub='silence'; }
+  if(item.t==='stop'){ top='■'; ts='STOP'; sub=s&&s.n?`count ${s.n}`:'no count'; }
+  else if(item.t==='hold'){ top='⏸'; ts='HOLD'; sub=s&&s.n?`count ${s.n}`:'until tap'; }
   else if(item.t==='loop'){ top=c2Tempo2(s); ts=`${s.ts[0]}/${s.ts[1]}`; sub='∞ until tap'; }
   else { top=c2Tempo2(s)||'?'; ts=s&&s.ts?`${s.ts[0]}/${s.ts[1]}`:''; sub=s&&s.bars?`${s.bars} bar${s.bars>1?'s':''}`:''; }
-  el.innerHTML=`<span class="n">${c2Num(i)}</span><div class="t2"><b class="${top.length>6?'long':''}">${top}</b></div><div class="mid"><i></i><em></em></div><div class="b2"><b>${ts}</b><b class="sb">${mini?(item.t==='ci'?item.n+' clicks':item.t==='hold'?'':item.t==='loop'?'∞':(s&&s.bars?s.bars+' bar'+(s.bars>1?'s':''):'')):sub}</b></div>`;
+  el.innerHTML=`<span class="n">${c2Num(i)}</span><div class="t2"><b class="${top.length>6?'long':''}">${top}</b></div><div class="mid"><i></i><em></em></div><div class="b2"><b>${ts}</b><b class="sb">${mini?(item.t==='stop'||item.t==='hold'?sub:item.t==='loop'?'∞':(s&&s.bars?s.bars+' bar'+(s.bars>1?'s':''):'')):sub}</b></div>`;
   return el; }
 function c2RenderGrid(){ const c=c2Cur(); const g=$('c2Grid'); if(!g||!c) return; const segs=c2Resolve(c.items); g.innerHTML='';
   c.items.forEach((it,i)=>{ const el=c2Square(it,segs[i],i); if(i===C2UI.sel) el.classList.add('sel'); { const x=document.createElement('button'); x.className='c2x'; x.textContent='✕'; x.setAttribute('aria-label','Remove'); x.onclick=e=>{ e.stopPropagation(); c.items.splice(i,1); C2UI.sel=-1; c2Save(); c2RenderGrid(); }; el.appendChild(x); } el.onclick=e=>{ if(c2Drag.moved) return; c2ItemSheet(i); }; c2DragHook(el,i); g.appendChild(el); });
   const add=document.createElement('div'); add.className='c2sq add'; add.textContent='＋'; add.onclick=()=>c2AddSheet(c.items.length); g.appendChild(add);
-  const s=$('c2Strip'); if(s){ s.innerHTML=''; c.items.forEach((it,i)=>{ const el=c2Square(it,segs[i],i,true); el.onclick=()=>{ if(C2.on&&i===C2.cur){ c2Next(); return; } c2Jump(i); }; s.appendChild(el); }); }
+  const s=$('c2Strip'); if(s){ s.innerHTML=''; c.items.forEach((it,i)=>{ const el=c2Square(it,segs[i],i,false); el.onclick=()=>{ if(C2.on&&i===C2.cur){ c2Next(); return; } c2Jump(i); }; s.appendChild(el); }); }
   c2Progress(true); }
 function c2RenderPicker(){ const p=$('c2Pick'); p.innerHTML='<span class="lab">CHAIN</span>';
   CHS.list.forEach((x,i)=>{ const b=document.createElement('button'); b.textContent=x.name; b.classList.toggle('sel',i===CHS.sel);
     b.onclick=()=>{ if(i===CHS.sel){ const n=prompt('Rename this chain (clear it to delete the chain)',x.name); if(n===null) return; if(!n.trim()){ if(CHS.list.length<2){ alert('Keep at least one chain.'); return; } if(confirm(`Delete “${x.name}”?`)){ if(C2.on) c2Stop(); CHS.list.splice(i,1); CHS.sel=0; } } else x.name=n.trim(); c2Save(); c2Render(); return; }
       if(C2.on) c2Stop(); CHS.sel=i; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); }; p.appendChild(b); });
-  const nb=document.createElement('button'); nb.textContent='＋ New'; nb.className='new'; nb.onclick=()=>{ const n=prompt('Name for the new chain','Chain '+(CHS.list.length+1)); if(!n||!n.trim()) return; CHS.list.push({name:n.trim(),items:[{t:'ci',n:4}]}); CHS.sel=CHS.list.length-1; C2UI.sel=-1; c2Save(); c2Render(); }; p.appendChild(nb); }
+  const nb=document.createElement('button'); nb.textContent='＋ New'; nb.className='new'; nb.onclick=()=>{ const n=prompt('Name for the new chain','Chain '+(CHS.list.length+1)); if(!n||!n.trim()) return; CHS.list.push({name:n.trim(),items:[],v2:1}); CHS.sel=CHS.list.length-1; C2UI.sel=-1; c2Save(); c2Render(); }; p.appendChild(nb); const cb=document.createElement('button'); cb.textContent='🗑 Clear'; cb.className='clr'; cb.onclick=c2ClearChain; p.appendChild(cb); }
 function c2Render(){ c2RenderPicker(); c2RenderGrid(); c2RenderLib(); fGoUI(); }
 
 /* ---- drag to rearrange (hold a square, then move it) ---- */
@@ -3666,13 +3709,13 @@ function c2Open(html){ $('c2ShBody').innerHTML=html; c2Sh.hidden=false; return $
 function c2Insert(at,item){ const c=c2Cur(); c.items.splice(at,0,item); C2UI.sel=at; c2Save(); c2Sh.hidden=true; c2RenderGrid(); }
 function c2AddSheet(at){ const b=c2Open(`<div class="shd"><b>Add a block</b><span>${at>=c2Cur().items.length?'at the end':'before #'+c2Num(at)}</span></div>
   <div class="lab2">QUICK ADD</div><div class="qa">
-   <button class="q loop" data-q="loop">∞<small>loop until tap</small></button><button class="q dv" data-q="div">— PART —<small>divider</small></button><button class="q stp" data-q="stop">■<small>stop</small></button><button class="q ci" data-q="ci">1 2 3 4<small>count-in</small></button>
-   <button class="q hold" data-q="hold">⏸<small>hold</small></button><button class="q fol" data-q="f1">↳ 1<small>follow 1 bar</small></button><button class="q fol" data-q="f2">↳ 2<small>follow 2</small></button><button class="q fol" data-q="f4">↳ 4<small>follow 4</small></button></div>
-  <div class="lab2">MY BLOCKS</div><div class="mb">${LIB.blocks.map(x=>`<button class="r ${x.b>x.a?'acc':x.b<x.a?'dec':''}" data-id="${x.id}"><b>${x.name}</b><span>${c2Tempo2(x)} · ${x.ts[0]}/${x.ts[1]} · ${x.bars} bars</span><i>＋</i></button>`).join('')}</div>
+   <button class="q loop" data-q="loop">∞<small>loop until tap</small></button><button class="q dv" data-q="div">— PART —<small>divider</small></button><button class="q stp" data-q="stop">■<small>stop</small></button>
+   <button class="q hold" data-q="hold">⏸<small>hold until tap</small></button><button class="q fol" data-q="f1">↳ 1<small>follow 1 bar</small></button><button class="q fol" data-q="f2">↳ 2<small>follow 2</small></button><button class="q fol" data-q="f4">↳ 4<small>follow 4</small></button></div>
+  <div class="lab2">MY BLOCKS</div><div class="mb">${LIB.blocks.map(x=>`<button class="r ${x.b>x.a?'acc':x.b<x.a?'dec':''}" data-id="${x.id}"><b>${x.name}</b><em>${c2Tempo2(x)}</em><span>${x.ts[0]}/${x.ts[1]} · ${x.bars} bars</span><i>＋</i></button>`).join('')}</div>
   <button class="newb" id="c2NewB">＋ CREATE A NEW BLOCK</button>`);
   b.querySelectorAll('[data-q]').forEach(x=>x.onclick=()=>{ const q=x.dataset.q;
-    if(q==='loop') c2Insert(at,{t:'loop'}); if(q==='ci') c2Insert(at,{t:'ci',n:4}); if(q==='hold') c2Insert(at,{t:'hold',sec:4});
-    if(q==='div'||q==='stop'){ const n=prompt(q==='div'?'Name for this section':'Name for the part after the stop (optional)',q==='div'?'Part':''); if(n===null) return; c2Insert(at,{t:q,name:n.trim()}); }
+    if(q==='loop') c2Insert(at,{t:'loop'}); if(q==='stop') c2Insert(at,{t:'stop',n:4}); if(q==='hold') c2Insert(at,{t:'hold',n:0});
+    if(q==='div'){ const n=prompt('Name for this section','Part'); if(n===null) return; c2Insert(at,{t:'div',name:n.trim()}); }
     if(q[0]==='f') c2Insert(at,{t:'follow',bars:+q.slice(1)}); });
   b.querySelectorAll('[data-id]').forEach(x=>x.onclick=()=>c2Insert(at,{t:'ref',id:x.dataset.id}));
   $('c2NewB').onclick=()=>{ c2Sh.hidden=true; C2UI.sub='blocks'; c2Pages(); edNew(); }; }
@@ -3681,9 +3724,9 @@ function c2ItemSheet(i){ const c=c2Cur(), it=c.items[i], segs=c2Resolve(c.items)
   if(it.t==='ref'){ const x=libGet(it.id); det=x?`${c2Tempo2(x)} bpm · ${x.ts[0]}/${x.ts[1]} · ${x.bars} bars${x.a!==x.b?` · ${CRVN[x.crv]||''} · ${{smooth:'smooth',bar:'each bar',two:'every 2 bars'}[x.chg]||''}`:''} · about ${Math.round(c2Dur(s))}s`:'This saved block was deleted.'; extra=`<button data-a="edit">✎ Edit block</button>`; }
   if(it.t==='follow'){ det=`Keeps ${c2Tempo2(s)} · ${s.ts[0]}/${s.ts[1]} from the block above`; extra=[1,2,4,8].map(n=>`<button data-b="${n}" class="${it.bars===n?'sel':''}">${n} bar${n>1?'s':''}</button>`).join(''); }
   if(it.t==='loop') det=`Repeats ${c2Tempo2(s)} · ${s.ts[0]}/${s.ts[1]} until you tap; then the next block starts on the next 1`;
-  if(it.t==='ci'){ det=`Counts in at ${Math.round(s.a)} · ${s.ts[0]}/${s.ts[1]} (the block after it)`; extra=[2,4,8,12].map(n=>`<button data-n="${n}" class="${it.n===n?'sel':''}">${n}</button>`).join(''); }
-  if(it.t==='hold'){ det='Silence, then the chain goes on'; extra=[2,4,8,15,30].map(n=>`<button data-s="${n}" class="${it.sec===n?'sel':''}">${n}s</button>`).join(''); }
-  if(it.t==='div'||it.t==='stop'){ det=it.t==='stop'?'The chain stops here. Press Start (Continue) to go on from the next block.':'A label to split the chain into parts.'; extra=`<button data-a="ren">✎ Rename</button>`; }
+  if(it.t==='stop'){ det=`The chain stops here and waits. Tap (or say “next”) and it counts in at ${Math.round(s.a)} · ${s.ts[0]}/${s.ts[1]}, then goes on.`; extra='<span class="olab">Count-in</span>'+[2,4,8].map(n=>`<button data-n="${n}" class="${(it.n==null?4:it.n)===n?'sel':''}">${n}</button>`).join(''); }
+  if(it.t==='hold'){ det=`Silence until you tap (or say “next”). Then ${it.n?`a ${it.n}-beat count-in and `:''}the next block starts.`; extra='<span class="olab">Count after tap</span>'+[0,1,2,4].map(n=>`<button data-n="${n}" class="${(it.n||0)===n?'sel':''}">${n||'none'}</button>`).join(''); }
+  if(it.t==='div'){ det='A label to split the chain into parts.'; extra=`<button data-a="ren">✎ Rename</button>`; }
   const b=c2Open(`<div class="shd"><b>${c2Title(it,s)||(it.t==='div'?'Divider':'Stop')}</b><span>#${c2Num(i)}</span></div><div class="det">${det}</div>${extra?`<div class="opts">${extra}</div>`:''}
    <div class="acts"><button data-a="play">▶ Start here</button><button data-a="l">◀ Move</button><button data-a="r">Move ▶</button><button data-a="dup">⧉ Copy</button><button data-a="add">＋ Insert before</button><button data-a="del" class="del">✕ Remove</button></div>`);
   b.querySelectorAll('[data-b]').forEach(x=>x.onclick=()=>{ it.bars=+x.dataset.b; c2Save(); c2ItemSheet(i); });
@@ -3746,14 +3789,14 @@ function c2RenderLib(){ const L=$('c2Lib'); if(!L) return; L.innerHTML='';
    <div class="c2pick" id="c2Pick"></div>
    <div class="c2pg" id="c2Run"><div class="c2hd"><b id="c2RunName"></b><small id="c2RunHd"></small></div><div class="c2strip" id="c2Strip"></div>
      <div class="c2now"><div class="c2big"><b id="c2RunBpm">–</b><small>BPM</small></div><div class="c2info"><b id="c2RunWhat"></b><small id="c2RunNext"></small><div class="c2beats" id="c2RunBeats"></div><button id="c2Tap" hidden>TAP · NEXT ON THE 1</button></div></div></div>
-   <div class="c2pg" id="c2Build"><div class="c2grid" id="c2Grid"></div><small class="c2hint">Tap a square for options · hold a square and drag it to move it · ✕ removes it</small><button id="c2Clear" class="c2clear">Clear chain</button></div>
+   <div class="c2pg" id="c2Build"><div class="c2grid" id="c2Grid"></div><small class="c2hint">Tap a square for options · hold and drag to move · ✕ removes it</small></div>
    <div class="c2pg" id="c2Blocks"><div class="c2h">Block creator</div><div class="c2ed" id="c2Ed"></div><div class="c2h">My blocks</div><div class="c2lib" id="c2Lib"></div></div>
    <div class="c2pg" id="c2Quick"></div>`;
   fpChain.innerHTML=''; fpChain.appendChild(w); $('c2Quick').appendChild(quick);
   w.querySelectorAll('#c2Sub [data-s]').forEach(b=>b.onclick=()=>{ C2UI.sub=b.dataset.s; c2Save(); c2Pages(); });
-  $('c2Clear').onclick=()=>{ const c=c2Cur(); if(!c||!c.items.length) return; if(!confirm(`Clear all ${c.items.length} blocks from “${c.name}”? This can't be undone.`)) return; if(C2.on) c2Stop(); c.items=[]; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); };
-  $('c2Tap').onclick=()=>{ C2.tap=true; c2Progress(true); };
-  $('c2Run').addEventListener('click',e=>{ if(e.target.closest('#c2Strip,#c2Tap')) return; if(C2.on&&C2.segs[C2.cur]&&C2.segs[C2.cur].k==='loop'){ C2.tap=true; c2Progress(true); } }); })();
+  window.c2ClearChain=()=>{ const c=c2Cur(); if(!c||!c.items.length) return; if(!confirm(`Clear all ${c.items.length} blocks from “${c.name}”? This can't be undone.`)) return; if(C2.on) c2Stop(); c.items=[]; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); };
+  $('c2Tap').onclick=()=>{ c2Next(); c2Progress(true); };
+  $('c2Run').addEventListener('click',e=>{ if(e.target.closest('#c2Strip,#c2Tap')) return; if(C2.on&&C2.segs[C2.cur]&&['loop','hold'].includes(C2.segs[C2.cur].k)){ c2Next(); c2Progress(true); } }); })();
 function c2Pages(){ ['run','build','blocks','quick'].forEach(s=>{ $('c2'+s[0].toUpperCase()+s.slice(1)).hidden=C2UI.sub!==s; });
   document.querySelectorAll('#c2Sub [data-s]').forEach(b=>b.classList.toggle('sel',b.dataset.s===C2UI.sub));
   $('c2Pick').hidden=C2UI.sub==='blocks'||C2UI.sub==='quick'; const c=c2Cur(); $('c2RunName').textContent=c?'⛓ '+c.name:'';
@@ -3772,7 +3815,8 @@ const _runVoice3=runVoice; runVoice=function(raw){ const s=' '+String(raw).toLow
   let m=s.match(/\b(?:start|run|play|go) (?:the )?chain(?: (.+?))? $/);
   if(m){ let k=CHS.sel; if(m[1]){ const q=m[1].trim(); const f=CHS.list.findIndex(c=>c.name.toLowerCase().replace(/[^a-z0-9 ]/g,'').includes(q.replace(/[^a-z0-9 ]/g,''))); if(f<0) return `No chain ${q}`; k=f; }
     if(!freeOn||view!=='met'){ setView('met'); setFree(true); } fPage='chain'; if(C2UI.sub==='quick'||C2UI.sub==='blocks') C2UI.sub='run'; CHS.sel=k; c2Save(); freePages(); c2Start(0); return `Chain ${CHS.list[k].name}`; }
-  if(C2.on){ if(/\b(next|next block|go on|move on)\b/.test(s)&&!/\bnext set\b/.test(s)){ c2Next(); return 'Next'; }
+  if(C2.on){ const w=C2.segs[C2.cur]; if(w&&w.k==='wait'&&/\b(go|continue|count (?:me |us |it )?(?:in|off)|ready|start)\b/.test(s)&&!/\bchain\b/.test(s)){ c2Next(); return 'Go'; }
+    if(/\b(next|next block|go on|move on)\b/.test(s)&&!/\bnext set\b/.test(s)){ c2Next(); return 'Next'; }
     if(/\b(back a block|previous block|last block|block back)\b/.test(s)){ c2Jump(C2.cur-1); return 'Back a block'; }
     if(/\b(repeat block|again|same block|repeat)\b/.test(s)){ c2Jump(C2.cur); return 'Repeat block'; } }
   if(!C2.on&&C2.resume!=null&&/\b(continue|go on|keep going)\b/.test(s)){ c2Start(C2.resume); return 'Continue'; }
