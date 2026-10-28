@@ -1398,6 +1398,34 @@ body.met.freem #moBtn,body.met.freem #stage>.viewseg{z-index:60!important}
 .fbar .fgo2.tap{background:#0f8b8d!important;box-shadow:0 0 0 3px #9be3e4}
 .fbar .fgo2.on:not(.tap){background:#b42318!important}
 @media (max-width:699px){ .c2pull .pr .cs{width:64px} }
+
+.c2pull .ptabs{grid-template-columns:repeat(3,1fr)!important}
+
+.c2pull .pbar i{display:inline-block!important;position:static!important;font-size:11px!important;line-height:1!important;vertical-align:middle!important;margin:0 4px 0 0!important;transform:none!important;top:auto!important}
+
+body #c2TopBtn>i,body #c2BotBtn>i{display:flex!important;align-items:center!important;justify-content:center!important;height:100%!important;width:auto!important;background:none!important;border:0!important;margin:0 3px 0 0!important}
+body #c2TopBtn>i svg,body #c2BotBtn>i svg{display:block}
+
+/* ================= v24: FIELD | PROGRAM ================= */
+.fcmode{display:flex;border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 2px #253d56;flex:none;align-self:center}
+.fcmode button{border:0;background:#fff;color:#253d56;font:900 10.5px system-ui;letter-spacing:.1em;padding:0 10px;height:32px;cursor:pointer;touch-action:manipulation}
+.fcmode button.sel[data-m="field"]{background:#2e8b57;color:#fff}
+.fcmode button.sel[data-m="prog"]{background:#3d658f;color:#fff}
+.fcnav{display:flex;gap:5px;margin:6px 0 4px;flex:none}
+.fcnav button{flex:1;height:34px;border:0;border-radius:9px;background:#fff;box-shadow:inset 0 0 0 2px #253d56;color:#253d56;font:900 11.5px system-ui;letter-spacing:.14em;cursor:pointer;touch-action:manipulation}
+body.fc-field .fcnav button.sel{background:#2e8b57;color:#fff;box-shadow:none}
+body.fc-prog .fcnav button.sel{background:#3d658f;color:#fff;box-shadow:none}
+body.fc-prog .fcnav button[data-k="settings"]{box-shadow:inset 0 0 0 2px #3d658f;color:#3d658f}
+/* the nav replaces Met Only, Drill/Met and the tab row */
+body.fc-field #moBtn,body.fc-prog #moBtn,body.fc-field #stage>.viewseg,body.fc-prog #stage>.viewseg{display:none!important}
+body.fc-field #free .ftabs{display:none!important}
+body.fc-prog #free .ftabs #ftTempo,body.fc-prog #free .ftabs #ftChain{display:none!important}
+body.fc-prog #free:not(:has(#fpPat:not([hidden]))) .ftabs{display:none!important}
+body.fc-field.met.freem #free,body.fc-prog.met.freem #free{padding-top:10px!important}
+body.fc-field.met.freem #free::before,body.fc-prog.met.freem #free::before{display:none!important}
+/* field: no subsets, no page switcher for chains */
+body.fc-field #sbWrap,body.fc-field #sbWrap+.upcard+.htabrow,body.fc-field #c2BotBar{display:none!important}
+@media (max-width:699px){ .fcmode button{padding:0 7px;font-size:9.5px;height:30px} }
 </style>
 </head>
 <body>
@@ -1579,7 +1607,7 @@ body.met.freem #moBtn,body.met.freem #stage>.viewseg{z-index:60!important}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 23</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 24</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -3759,7 +3787,7 @@ const _testSchedule1=testSchedule; testSchedule=function(){ if(C2.on) return c2S
 function c2Start(from){ const c=c2Cur(); if(!c||!c.items.length) return; C2UI.unl=false; if(testing) testStop(); if(CH.on) CH.on=false;
   const flat=c2Flat(c.items); if(!flat.length) return; from=Math.max(0,Math.min(flat.length-1,from||0)); const items=flat.map(x=>x.it); const segs=c2Resolve(items); Object.assign(C2,{flat,items,waitEnd:0,on:true,held:false,ci:(segs[from||0]&&segs[from||0].k==='wait')?0:4,i:from||0,bar:0,beat:0,end:0,tap:false,nudge:0,segs,resume:null,chain:CHS.sel,cur:-1,lastTs:''});
   C2.durs=segs.map(c2Dur);
-  if(C2UI.sub!=='quick'){ C2UI.sub='run'; c2Save(); c2Pages(); }
+  if(C2UI.sub!=='quick'&&!(typeof FC!=='undefined'&&FC.mode==='prog')){ C2UI.sub='run'; c2Save(); c2Pages(); }
   testStart(); playLabel(); fGoUI(); }
 function c2Stop(keep){ const r=C2.resume; C2.on=false; C2.end=0; if(testing) testStop(); if(!keep) C2.resume=null; else C2.resume=r; playLabel(); fGoUI(); c2Progress(true); }
 function c2Next(){ if(!C2.on||C2.inCi) return; const s=C2.segs[C2.cur]; if(!s) return; C2.tap=true; if(s.k==='wait'){ try{ testSchedule(); }catch(e){} } c2Progress(true); fGoUI(); }
@@ -4075,16 +4103,18 @@ const PB={top:false,bot:false};
   $('c2BotBtn').onclick=()=>{ PB.bot=!PB.bot; PB.top=false; c2Bars(); }; })();
 function c2Bars(){ const tb=$('c2TopBar'), bb=$('c2BotBar'), bt=$('c2Beats'); if(!tb) return; const c=c2Cur(), sub=C2UI.sub;
   const on=typeof metOnly==='function'&&metOnly()&&fPage==='chain';
-  bb.hidden=!on; bt.hidden=!(on&&sub==='run'); tb.hidden=sub==='blocks'||sub==='quick';
-  $('c2TopBtn').innerHTML=`<i>${PB.top?'▴':'▾'}</i> CHAIN · <b>${C2UI.unl||!c?'none loaded':c2Esc(c.name)}</b>`;
-  $('c2BotBtn').innerHTML=`<i>${PB.bot?'▾':'▴'}</i> `+['run','build','blocks','quick'].map(x=>x===sub?`<b>${x.toUpperCase()}</b>`:x).join(' · ');
+  const FM=typeof FC!=='undefined'?FC.mode:''; const PG=FM==='prog'?['build','blocks']:['run','build','blocks'];
+  bb.hidden=!on||FM==='field'; bt.hidden=!(on&&sub==='run'); tb.hidden=sub==='blocks'||sub==='quick';
+  $('c2TopBtn').innerHTML=`<i>${PB.top?'<svg width="10" height="7" viewBox="0 0 10 7"><path d="M1 6 L5 2 L9 6" fill="none" stroke="currentColor" stroke-width="2"/></svg>':'<svg width="10" height="7" viewBox="0 0 10 7"><path d="M1 1 L5 5 L9 1" fill="none" stroke="currentColor" stroke-width="2"/></svg>'}</i> CHAIN · <b>${C2UI.unl||!c?'none loaded':c2Esc(c.name)}</b>`;
+  $('c2BotBtn').innerHTML=`<i>${PB.bot?'<svg width="10" height="7" viewBox="0 0 10 7"><path d="M1 1 L5 5 L9 1" fill="none" stroke="currentColor" stroke-width="2"/></svg>':'<svg width="10" height="7" viewBox="0 0 10 7"><path d="M1 6 L5 2 L9 6" fill="none" stroke="currentColor" stroke-width="2"/></svg>'}</i> `+PG.map(x=>x===sub?`<b>${x.toUpperCase()}</b>`:x).join(' · ');
   const tp=$('c2TopPan'); tp.hidden=!PB.top||tb.hidden;
   if(!tp.hidden){ tp.innerHTML=CHS.list.map((ch,i)=>{ const inf=c2Info(ch); let k=0; const strip=inf.f.map((x,j)=>x.it.t==='div'||k++>=12?'':`<i style="background:${KC[c2Kind(x.it,inf.segs[j])]||KC.st}"></i>`).join('');
-      const cur=i===CHS.sel&&!C2UI.unl; return `<div class="pr${cur?' sel':''}" data-i="${i}"><b>⛓ ${c2Esc(ch.name)}</b><div class="cs">${strip||'<i></i>'}</div><span>${inf.n} · ${c2Tm(inf.t)}</span>${cur?'<em>✎</em>':''}</div>`; }).join('')+`<button class="pnew" id="c2PNew">＋ New chain</button>`;
-    tp.querySelectorAll('.pr').forEach(r=>r.onclick=()=>{ const i=+r.dataset.i; const was=i===CHS.sel&&!C2UI.unl; if(!was) PB.top=false; c2PickChain(i); c2Bars(); });
-    $('c2PNew').onclick=()=>{ PB.top=false; c2NewChain(); }; }
+      const cur=i===CHS.sel&&!C2UI.unl; return `<div class="pr${cur?' sel':''}" data-i="${i}"><b>⛓ ${c2Esc(ch.name)}</b><div class="cs">${strip||'<i></i>'}</div><span>${inf.n} · ${c2Tm(inf.t)}</span>${cur&&FM!=='field'?'<em>✎</em>':''}</div>`; }).join('')+(FM==='field'?`<button class="pnew red" id="c2PUnl" ${C2UI.unl?'disabled':''}>⏏ Unload</button>`:`<button class="pnew" id="c2PNew">＋ New chain</button>`);
+    tp.querySelectorAll('.pr').forEach(r=>r.onclick=()=>{ const i=+r.dataset.i; const was=i===CHS.sel&&!C2UI.unl; if(was&&FM==='field'){ PB.top=false; c2Bars(); return; } if(!was) PB.top=false; c2PickChain(i); c2Bars(); });
+    if($('c2PNew')) $('c2PNew').onclick=()=>{ PB.top=false; c2NewChain(); };
+    if($('c2PUnl')) $('c2PUnl').onclick=()=>{ PB.top=false; c2Unload(); }; }
   const bp=$('c2BotPan'); bp.hidden=!PB.bot||bb.hidden;
-  if(!bp.hidden){ bp.innerHTML=`<div class="ptabs">${['run','build','blocks','quick'].map(x=>`<button data-s="${x}" class="${x===sub?'sel':''}">${x.toUpperCase()}</button>`).join('')}</div>
+  if(!bp.hidden){ bp.innerHTML=`<div class="ptabs">${PG.map(x=>`<button data-s="${x}" class="${x===sub?'sel':''}">${x.toUpperCase()}</button>`).join('')}</div>
       <div class="prow"><button id="c2BNew">＋ New chain</button>${sub==='build'?`<button class="red" id="c2BClr" ${C2UI.unl?'disabled':''}>🗑 Clear chain</button>`:`<button class="red" id="c2BUnl" ${C2UI.unl?'disabled':''}>⏏ Unload</button>`}</div>`;
     bp.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ C2UI.sub=b.dataset.s; PB.bot=false; c2Save(); c2Pages(); });
     $('c2BNew').onclick=()=>{ PB.bot=false; c2NewChain(); };
@@ -4099,6 +4129,48 @@ function c2BeatUI(n,col){ const bt=$('c2Beats'); if(!bt) return; if(!n){ const c
   [...bt.children].forEach((d,k)=>d.classList.toggle('on',k===col)); }
 const _c2Render3=c2Render; c2Render=function(){ _c2Render3(); c2Bars(); };
 c2Bars();
+
+// Quick (the old speed chain) is retired; anyone left on it lands on Run
+if(C2UI.sub==='quick'){ C2UI.sub='run'; try{ c2Save(); }catch(e){} }
+
+// open where you left off: Met Only on/off and drill/met are already remembered; also remember the Tempo/Pattern/Mixer/Chains tab
+try{ const fp=localStorage.getItem('rm_fpage'); if(['tempo','pat','mix','chain'].includes(fp)) fPage=fp; if(localStorage.getItem('rm_fmix')==='1') fMix=true; }catch(e){}
+const _freePages4=freePages; freePages=function(){ _freePages4(); try{ localStorage.setItem('rm_fpage',fPage); localStorage.setItem('rm_fmix',fMix?'1':'0'); }catch(e){} };
+
+/* ================= v24: FIELD | PROGRAM ================= */
+// Field = rehearsal: Drill · Met · Chain, nothing else.  Program = set up ahead: Chains (build/blocks) · Sounds (pattern/mixer) · Settings.
+var FC={mode:'field'};
+try{ const m=localStorage.getItem('rm_fcmode'); if(m==='prog'||m==='field') FC.mode=m; }catch(e){}
+const FCSCR={field:[['drill','Drill'],['met','Met'],['chain','Chain']],prog:[['chains','Chains'],['sounds','Sounds'],['settings','Settings']]};
+function fcScreen(){ if(FC.mode==='field') return !freeOn?'drill':fPage==='chain'?'chain':'met'; return !freeOn?'':fPage==='chain'?'chains':(fPage==='pat'||fPage==='mix'||fMix)?'sounds':''; }
+function fcGo(k){ const met=()=>{ if(view!=='met') setView('met'); if(!freeOn) setFree(true); };
+  if(k==='settings'){ $('bGear').click(); return; }
+  if(testing&&!(k==='chain'&&fPage==='chain')){ if(C2.on) c2Stop(); else if(CH.on) chStop(); else testStop(); }
+  if(k==='drill'){ if(freeOn) setFree(false); if(view!=='drill') setView('drill'); }
+  else if(k==='met'){ met(); fPage='tempo'; fMix=false; freePages(); }
+  else if(k==='chain'){ met(); fPage='chain'; fMix=false; C2UI.sub='run'; c2Save(); freePages(); }
+  else if(k==='chains'){ met(); fPage='chain'; fMix=false; if(C2UI.sub!=='blocks') C2UI.sub='build'; c2Save(); freePages(); }
+  else if(k==='sounds'){ met(); fPage='pat'; fMix=false; freePages(); }
+  fcUI(); }
+function fcMode(m){ if(m===FC.mode) return; FC.mode=m; try{ localStorage.setItem('rm_fcmode',m); }catch(e){} PB.top=PB.bot=false;
+  if(m==='prog') fcGo('chains'); else fcGo(freeOn?(fPage==='chain'?'chain':'met'):'drill'); }
+// keep each mode on its own screens (e.g. reopening the app in Field never lands on Build)
+function fcFit(){ const sc=fcScreen();
+  if(FC.mode==='field'){ if(freeOn&&(fPage==='pat'||fPage==='mix')){ fPage='tempo'; fMix=false; freePages(); } if(freeOn&&fPage==='chain'&&C2UI.sub!=='run'){ C2UI.sub='run'; c2Save(); c2Pages(); } }
+  else { if(!sc) fcGo('chains'); else if(sc==='chains'&&C2UI.sub==='run'){ C2UI.sub='build'; c2Save(); c2Pages(); } } }
+(function(){ const hb=document.querySelector('#hud .hudbtns'); const sw=document.createElement('div'); sw.id='fcMode'; sw.className='fcmode';
+  sw.innerHTML='<button data-m="field">FIELD</button><button data-m="prog">PROGRAM</button>'; hb.insertBefore(sw,hb.firstChild);
+  sw.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>fcMode(b.dataset.m));
+  const nav=document.createElement('div'); nav.id='fcNav'; nav.className='fcnav'; $('hud').after(nav); })();
+let fcKey='';
+function fcUI(){ document.body.classList.toggle('fc-field',FC.mode==='field'); document.body.classList.toggle('fc-prog',FC.mode==='prog');
+  document.querySelectorAll('#fcMode [data-m]').forEach(b=>b.classList.toggle('sel',b.dataset.m===FC.mode));
+  const sc=fcScreen(), key=FC.mode+'|'+sc; const nav=$('fcNav');
+  if(key!==fcKey||!nav.children.length){ fcKey=key; nav.innerHTML=FCSCR[FC.mode].map(([k,l])=>`<button data-k="${k}" class="${k===sc?'sel':''}">${l.toUpperCase()}</button>`).join('');
+    nav.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>fcGo(b.dataset.k)); }
+  try{ c2Bars(); }catch(e){} }
+(function tick(){ requestAnimationFrame(tick); const k=FC.mode+'|'+fcScreen(); if(k!==fcKey) fcUI(); })();
+setTimeout(()=>{ fcFit(); fcUI(); },0);
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
@@ -4115,7 +4187,7 @@ try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
 }catch(e){}
 $('bLoop').classList.toggle('on',prefs.loop);
 S=(prefs.tsrc==='steady'&&D.steady)?steadyS():syncS(); setListTempos(); tempoMap();
-applyBrand(); applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); if(!freeOn){ prefs.bpm=0; prefs.tsD=4; } else { const f=freeTs(); prefs.bpm=f[0]; prefs.tsD=f[1]; } freeUI(); playLabel();
+applyBrand(); applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); if(!freeOn){ prefs.bpm=0; prefs.tsD=4; } else { const f=freeTs(); prefs.bpm=f[0]; prefs.tsD=f[1]; } freeUI(); try{ freePages(); }catch(e){} playLabel();
 runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
