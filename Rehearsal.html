@@ -1365,6 +1365,39 @@ body.met.freem #moBtn,body.met.freem #stage>.viewseg{z-index:60!important}
 .c2grid .c2sq.chain .t2 b.cname{display:block!important;width:100%;min-width:0;white-space:normal!important;overflow:hidden;max-height:2.3em;line-height:1.12;font-size:clamp(10px,1.15vw,13px)!important;word-break:break-word;-webkit-line-clamp:unset;text-align:center}
 @media (max-width:699px){ .c2grid .c2sq.chain .t2 b.cname{font-size:10px!important} }
 @media (min-width:700px){ .c2grid .c2sq.chain .t2{padding:14px 6px 0!important} }
+
+/* ================= v23 ================= */
+#c2Sub,#c2Pick,#c2Run .c2hd,#c2RunWhat,#c2RunNext,#c2RunBeats,#c2Run .c2now,#fStop2{display:none!important}
+.c2pull .pbar{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:24px;border:0;border-radius:7px;background:#253d56;color:#dfe9f5;font:700 10.5px system-ui;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;touch-action:manipulation;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 10px}
+.c2pull .pbar b{color:#fff;font-weight:900}.c2pull .pbar i{font-style:normal;font-size:10px;opacity:.8}
+#c2TopBar .pbar b{text-transform:none;letter-spacing:.02em;font-size:12px}
+.c2pull[hidden]{display:none!important}
+.c2pull .ppan{background:#fff;border:2px solid #cce0f5;border-radius:12px;padding:7px;display:flex;flex-direction:column;gap:6px;max-height:42vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.c2pull .ppan[hidden]{display:none!important}
+#c2TopBar .ppan{margin-top:5px}
+#c2BotBar{flex:none;order:97;margin-top:6px}
+#c2BotBar .ppan{margin-bottom:5px}
+#c2Beats{flex:none;order:98;display:flex;gap:6px;margin-top:6px}
+#c2Beats[hidden]{display:none!important}
+#c2Beats i{flex:1;height:54px;border-radius:12px;background:#dbe6f2;display:flex;align-items:center;justify-content:center;font:900 24px system-ui;font-style:normal;color:#7d93ab;transition:background .05s}
+#c2Beats.many i{font-size:17px;height:46px;border-radius:9px}
+#c2Beats i.on{background:#3d658f;color:#fff}
+#c2Beats i:first-child.on{background:#1f3a57}
+.c2pull .pr{display:flex;align-items:center;gap:10px;border:2px solid #cce0f5;border-radius:10px;padding:8px 10px;cursor:pointer}
+.c2pull .pr.sel{border-color:#3d658f;background:#e8f1fb}
+.c2pull .pr b{flex:1;min-width:0;font:800 15px system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c2pull .pr span{font:700 12px system-ui;color:#6b7380;white-space:nowrap}
+.c2pull .pr em{font-style:normal;color:#3d658f;font-size:14px}
+.c2pull .pr .cs{display:flex;gap:2px;width:96px;height:12px;flex:none}.c2pull .pr .cs i{flex:1;border-radius:2px;background:#dfe6ee}
+.c2pull .pnew,.c2pull .prow button{height:40px;border:0;border-radius:9px;background:#e1ecf8;color:#253d56;font:800 11.5px system-ui;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.c2pull .prow{display:flex;gap:6px}.c2pull .prow button{flex:1}
+.c2pull .prow .red{background:#fff;color:#b42318;box-shadow:inset 0 0 0 1.5px #b42318}.c2pull .prow .red:disabled{opacity:.4}
+.c2pull .ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.c2pull .ptabs button{height:48px;border:0;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 2px #253d56;color:#253d56;font:800 12.5px system-ui;letter-spacing:.12em;cursor:pointer}
+.c2pull .ptabs button.sel{background:#8ab8e8;box-shadow:none}
+.fbar .fgo2.tap{background:#0f8b8d!important;box-shadow:0 0 0 3px #9be3e4}
+.fbar .fgo2.on:not(.tap){background:#b42318!important}
+@media (max-width:699px){ .c2pull .pr .cs{width:64px} }
 </style>
 </head>
 <body>
@@ -1546,7 +1579,7 @@ body.met.freem #moBtn,body.met.freem #stage>.viewseg{z-index:60!important}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 22</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 23</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -3761,7 +3794,9 @@ function c2Progress(force){ const grid=$('c2Grid'), strip=$('c2Strip');
     $('c2RunHd').textContent=C2.on&&it>=0?`BLOCK ${c2Num(it,L)} OF ${c2Num(L.length-1,L)} · ${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')} LEFT`:'';
     const dots=$('c2RunBeats'), n=s&&s.ts?s.ts[0]:0; if(dots.children.length!==n){ dots.innerHTML=''; for(let k=0;k<n;k++){ const d=document.createElement('i'); dots.appendChild(d); } }
     [...dots.children].forEach((d,k)=>d.classList.toggle('on',!!(cur&&!cur.hold&&cur.col===k)));
-    const tb=$('fGo2'); if(tb&&C2.on) tb.classList.toggle('armed',!!C2.tap); } }
+    const tb=$('fGo2'); if(tb&&C2.on) tb.classList.toggle('armed',!!C2.tap);
+    if(C2.on&&c2Waiting()!==!!C2.waitUI) fGoUI();
+    c2BeatUI(s&&s.ts?s.ts[0]:0, cur&&!cur.hold&&C2.on?cur.col:-1); } }
 function c2Num(i,L){ L=L||(c2Cur()||{items:[]}).items; let n=0; for(let j=0;j<=i&&j<L.length;j++) if(L[j].t!=='div') n++; return n; }
 (function c2Tick(){ requestAnimationFrame(c2Tick); if(!C2.on){ return; } if(!testing){ C2.on=false; c2Progress(true); fGoUI(); return; }
   if(C2.end&&vNow()>=C2.end){ c2Stop(true); return; } c2Progress(); })();
@@ -3799,10 +3834,14 @@ function c2RenderGrid(){ const c=c2Cur(); const g=$('c2Grid'); if(!g||!c) return
 function c2RenderPicker(){ const p=$('c2Pick'); p.innerHTML='<span class="lab">CHAIN</span>';
   CHS.list.forEach((x,i)=>{ const b=document.createElement('button'); b.textContent=x.name; b.classList.toggle('sel',i===CHS.sel);
     if(C2UI.unl) b.classList.remove('sel');
-    b.onclick=()=>{ if(C2UI.unl){ if(C2.on) c2Stop(); C2UI.unl=false; CHS.sel=i; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); return; }
+    b.onclick=()=>c2PickChain(i); p.appendChild(b); });
+  const nb=document.createElement('button'); nb.textContent='＋ New'; nb.className='new'; nb.onclick=c2NewChain; p.appendChild(nb); const cb=document.createElement('button'); const run=C2UI.sub==='run'; cb.textContent=run?'⏏ Unload':'🗑 Clear'; cb.className='clr'; cb.disabled=C2UI.unl; cb.onclick=run?c2Unload:c2ClearChain; p.appendChild(cb); }
+// tap a chain to load it; tap the loaded chain again to rename it (clear the name to delete it)
+function c2PickChain(i){ const x=CHS.list[i]; if(!x) return;
+    if(C2UI.unl){ if(C2.on) c2Stop(); C2UI.unl=false; CHS.sel=i; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); return; }
       if(i===CHS.sel){ const n=prompt('Rename this chain (clear it to delete the chain)',x.name); if(n===null) return; if(!n.trim()){ if(CHS.list.length<2){ alert('Keep at least one chain.'); return; } if(confirm(`Delete “${x.name}”?`)){ if(C2.on) c2Stop(); const gone=CHS.list.splice(i,1)[0]; CHS.list.forEach(c=>c.items=c.items.filter(it=>!(it.t==='chain'&&it.id===gone.id))); CHS.sel=0; } } else x.name=n.trim(); c2Save(); c2Render(); return; }
-      if(C2.on) c2Stop(); CHS.sel=i; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); }; p.appendChild(b); });
-  const nb=document.createElement('button'); nb.textContent='＋ New'; nb.className='new'; nb.onclick=()=>{ const n=prompt('Name for the new chain','Chain '+(CHS.list.length+1)); if(!n||!n.trim()) return; CHS.list.push({id:'c'+Date.now().toString(36),name:n.trim(),items:[],v2:1}); CHS.sel=CHS.list.length-1; C2UI.sel=-1; C2UI.unl=false; c2Save(); c2Render(); }; p.appendChild(nb); const cb=document.createElement('button'); const run=C2UI.sub==='run'; cb.textContent=run?'⏏ Unload':'🗑 Clear'; cb.className='clr'; cb.disabled=C2UI.unl; cb.onclick=run?c2Unload:c2ClearChain; p.appendChild(cb); }
+      if(C2.on) c2Stop(); CHS.sel=i; C2.resume=null; C2UI.sel=-1; c2Save(); c2Render(); }
+function c2NewChain(){ const n=prompt('Name for the new chain','Chain '+(CHS.list.length+1)); if(!n||!n.trim()) return; CHS.list.push({id:'c'+Date.now().toString(36),name:n.trim(),items:[],v2:1}); CHS.sel=CHS.list.length-1; C2UI.sel=-1; C2UI.unl=false; if(C2UI.sub==='run') C2UI.sub='build'; c2Save(); c2Pages(); }
 function c2Unload(){ if(C2.on) c2Stop(); C2UI.unl=true; C2.resume=null; C2UI.sel=-1; c2Render(); }
 function c2Render(){ c2RenderPicker(); c2RenderGrid(); c2RenderLib(); if(typeof c2RenderTray==='function') c2RenderTray(); fGoUI(); }
 
@@ -3932,16 +3971,20 @@ fGo.onclick=()=>{ if(testing){ if(C2.on) c2Stop(); else if(CH.on) chStop(); else
   else if(fPage==='chain'&&C2UI.unl){ testStart(); }
   else if(fPage==='chain'){ c2Start(C2.resume!=null&&C2.chain===CHS.sel?C2.resume:0); }
   else testStart(); playLabel(); fGoUI(); };
-const _fGoUI2=fGoUI; fGoUI=function(){ _fGoUI2(); const g2=$('fGo2'), st=$('fStop2'); const tap=metOnly()&&testing&&C2.on;
-  if(g2){ g2.classList.toggle('tap',tap); g2.classList.remove('back'); if(!tap) g2.classList.remove('armed'); } if(st) st.hidden=!tap;
+const c2Waiting=()=>{ if(!C2.on||C2.inCi) return false; const s=C2.segs[C2.cur]; return !!s&&(s.k==='wait'||s.k==='loop'); };
+const _fGoUI2=fGoUI; fGoUI=function(){ _fGoUI2(); const g2=$('fGo2'), st=$('fStop2'); const tap=metOnly()&&testing&&C2.on&&c2Waiting(); C2.waitUI=tap; if(st) st.hidden=true; try{ c2Bars(); }catch(e){}
+  if(g2){ g2.classList.toggle('tap',tap); g2.classList.remove('back'); if(!tap) g2.classList.remove('armed'); }
   if(tap){ g2.textContent='TAP'; return; }
   if(!metOnly()||testing||fPage!=='chain') return;
-  const back=C2UI.sub==='blocks'; const lab=back?'◀  BACK TO CHAIN':C2UI.sub==='quick'?'▶  START QUICK CHAIN':C2UI.unl?'▶  START METRONOME':(C2.resume!=null&&C2.chain===CHS.sel?'▶  CONTINUE':'▶  START CHAIN');
+  const back=C2UI.sub==='blocks'; const lab=back?'◀  BACK TO CHAIN':C2UI.sub==='quick'?'▶  PLAY QUICK CHAIN':(C2.resume!=null&&C2.chain===CHS.sel&&!C2UI.unl?'▶  CONTINUE':'▶  PLAY');
   [fGo,g2].forEach(b=>{ if(b){ b.textContent=lab; b.classList.toggle('back',back); } }); };
 // bottom bar while a chain plays:  −1 · ■ STOP · TAP · +1   (nothing moves, TAP always says TAP)
 (function(){ const g2=$('fGo2'); if(!g2) return; const st=document.createElement('button'); st.id='fStop2'; st.className='fstop2'; st.textContent='■  STOP'; st.hidden=true; g2.parentNode.insertBefore(st,g2);
   st.onclick=()=>{ if(C2.on) c2Stop(); else if(testing) testStop(); playLabel(); fGoUI(); };
-  const orig=g2.onclick; g2.onclick=e=>{ if(metOnly()&&testing&&C2.on){ c2Next(); return; } return orig&&orig.call(g2,e); }; })();
+  // TAP when the chain waits for you · hold TAP for a moment to stop
+  let hold=0, held=false; g2.addEventListener('pointerdown',()=>{ held=false; clearTimeout(hold); if(C2.waitUI) hold=setTimeout(()=>{ held=true; c2Stop(); playLabel(); fGoUI(); try{ navigator.vibrate&&navigator.vibrate(30); }catch(e){} },800); });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>g2.addEventListener(ev,()=>clearTimeout(hold)));
+  const orig=g2.onclick; g2.onclick=e=>{ if(held){ held=false; return; } if(metOnly()&&C2.on&&C2.waitUI){ c2Next(); return; } return orig&&orig.call(g2,e); }; })();
 
 /* ---- voice: "start chain warm-up", "next", "next block", "back a block", "repeat block" ---- */
 const _runVoice3=runVoice; runVoice=function(raw){ const s=' '+String(raw).toLowerCase().replace(/[.,!?]/g,' ').replace(/\s+/g,' ')+' ';
@@ -4019,6 +4062,43 @@ document.addEventListener('pointerup',e=>{ if(!TD.el) return; if(!TD.on&&TD.move
 document.addEventListener('pointercancel',()=>{ if(TD.el&&!TD.on){ clearTimeout(TD.t); TD.el=null; } else if(TD.on) tdEnd(false); });
 document.addEventListener('touchmove',e=>{ if(TD.on) e.preventDefault(); },{passive:false});
 c2RenderTray();
+
+/* ================= v23: two pull bars (chains on top, pages at the bottom) + big beat sections ================= */
+const PB={top:false,bot:false};
+(function(){ const w=document.querySelector('#fpChain .c2'); if(!w) return;
+  const tb=document.createElement('div'); tb.id='c2TopBar'; tb.className='c2pull'; tb.innerHTML='<button class="pbar" id="c2TopBtn"></button><div class="ppan" id="c2TopPan" hidden></div>'; w.insertBefore(tb,$('c2Sub'));
+  const fb=$('fGo2').parentElement;
+  const bb=document.createElement('div'); bb.id='c2BotBar'; bb.className='c2pull bot'; bb.innerHTML='<div class="ppan" id="c2BotPan" hidden></div><button class="pbar" id="c2BotBtn"></button>';
+  const bt=document.createElement('div'); bt.id='c2Beats';
+  fb.parentNode.insertBefore(bb,fb); fb.parentNode.insertBefore(bt,fb);
+  $('c2TopBtn').onclick=()=>{ PB.top=!PB.top; PB.bot=false; c2Bars(); };
+  $('c2BotBtn').onclick=()=>{ PB.bot=!PB.bot; PB.top=false; c2Bars(); }; })();
+function c2Bars(){ const tb=$('c2TopBar'), bb=$('c2BotBar'), bt=$('c2Beats'); if(!tb) return; const c=c2Cur(), sub=C2UI.sub;
+  const on=typeof metOnly==='function'&&metOnly()&&fPage==='chain';
+  bb.hidden=!on; bt.hidden=!(on&&sub==='run'); tb.hidden=sub==='blocks'||sub==='quick';
+  $('c2TopBtn').innerHTML=`<i>${PB.top?'▴':'▾'}</i> CHAIN · <b>${C2UI.unl||!c?'none loaded':c2Esc(c.name)}</b>`;
+  $('c2BotBtn').innerHTML=`<i>${PB.bot?'▾':'▴'}</i> `+['run','build','blocks','quick'].map(x=>x===sub?`<b>${x.toUpperCase()}</b>`:x).join(' · ');
+  const tp=$('c2TopPan'); tp.hidden=!PB.top||tb.hidden;
+  if(!tp.hidden){ tp.innerHTML=CHS.list.map((ch,i)=>{ const inf=c2Info(ch); let k=0; const strip=inf.f.map((x,j)=>x.it.t==='div'||k++>=12?'':`<i style="background:${KC[c2Kind(x.it,inf.segs[j])]||KC.st}"></i>`).join('');
+      const cur=i===CHS.sel&&!C2UI.unl; return `<div class="pr${cur?' sel':''}" data-i="${i}"><b>⛓ ${c2Esc(ch.name)}</b><div class="cs">${strip||'<i></i>'}</div><span>${inf.n} · ${c2Tm(inf.t)}</span>${cur?'<em>✎</em>':''}</div>`; }).join('')+`<button class="pnew" id="c2PNew">＋ New chain</button>`;
+    tp.querySelectorAll('.pr').forEach(r=>r.onclick=()=>{ const i=+r.dataset.i; const was=i===CHS.sel&&!C2UI.unl; if(!was) PB.top=false; c2PickChain(i); c2Bars(); });
+    $('c2PNew').onclick=()=>{ PB.top=false; c2NewChain(); }; }
+  const bp=$('c2BotPan'); bp.hidden=!PB.bot||bb.hidden;
+  if(!bp.hidden){ bp.innerHTML=`<div class="ptabs">${['run','build','blocks','quick'].map(x=>`<button data-s="${x}" class="${x===sub?'sel':''}">${x.toUpperCase()}</button>`).join('')}</div>
+      <div class="prow"><button id="c2BNew">＋ New chain</button>${sub==='build'?`<button class="red" id="c2BClr" ${C2UI.unl?'disabled':''}>🗑 Clear chain</button>`:`<button class="red" id="c2BUnl" ${C2UI.unl?'disabled':''}>⏏ Unload</button>`}</div>`;
+    bp.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ C2UI.sub=b.dataset.s; PB.bot=false; c2Save(); c2Pages(); });
+    $('c2BNew').onclick=()=>{ PB.bot=false; c2NewChain(); };
+    if($('c2BClr')) $('c2BClr').onclick=()=>{ PB.bot=false; c2ClearChain(); c2Bars(); };
+    if($('c2BUnl')) $('c2BUnl').onclick=()=>{ PB.bot=false; c2Unload(); }; }
+  if(!C2.on) c2BeatUI(); }
+// big beat sections above the bottom bar
+let c2BeatKey='';
+function c2BeatUI(n,col){ const bt=$('c2Beats'); if(!bt) return; if(!n){ const c=c2Cur(); let ts=[4,4]; if(c&&!C2UI.unl){ const f=c2Flat(c.items), s=c2Resolve(f.map(x=>x.it)); const p=s.find(x=>x.ts); if(p) ts=p.ts; } n=ts[0]; }
+  if(col==null) col=-1; const key=n+'|'+col; if(key===c2BeatKey&&bt.children.length===n) return; c2BeatKey=key;
+  if(bt.children.length!==n){ bt.innerHTML=''; for(let k=0;k<n;k++){ const i=document.createElement('i'); i.textContent=k+1; bt.appendChild(i); } bt.classList.toggle('many',n>6); }
+  [...bt.children].forEach((d,k)=>d.classList.toggle('on',k===col)); }
+const _c2Render3=c2Render; c2Render=function(){ _c2Render3(); c2Bars(); };
+c2Bars();
 
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
