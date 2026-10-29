@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script>try{if(!(navigator.standalone||matchMedia("(display-mode: standalone)").matches))document.documentElement.classList.add("fc-tab")}catch(e){}</script>
+<script>(function(){const f=()=>{const h=(window.visualViewport&&visualViewport.height)||innerHeight;document.documentElement.style.setProperty("--fcvh",Math.round(h)+"px")};f();addEventListener("resize",f);addEventListener("orientationchange",()=>setTimeout(f,300));if(window.visualViewport)visualViewport.addEventListener("resize",f);addEventListener("pageshow",f)})();try{if(!(navigator.standalone||matchMedia("(display-mode: standalone)").matches))document.documentElement.classList.add("fc-tab")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -31,6 +31,7 @@
 *{box-sizing:border-box}
 :root{--sat:env(safe-area-inset-top,0px)}html.fc-tab{--sat:0px}
 html,body{margin:0;background:var(--bg);}
+html body main:not(#zz){height:calc(var(--fcvh,100dvh) - var(--sat) - env(safe-area-inset-bottom,0px))!important}
 body{padding:var(--sat) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);}
 html,body{color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 16px 6px}
@@ -1504,9 +1505,11 @@ html body.fc-field #fpTempo .fbpmrow:not(#zz#yy){display:flex!important;gap:6px!
 html body.fc-field #fpTempo .fbpmrow>button:not(#zz#yy){display:block!important;flex:1 1 0!important;min-width:0!important;width:auto!important;height:44px!important;font:800 16px system-ui!important;padding:0!important;margin:0!important}
 html body.fc-field #fpTempo .fbpmrow>button.tap:not(#zz#yy){background:#3d658f!important;color:#fff!important;letter-spacing:.08em}
 .tswrap{display:flex;align-items:stretch;gap:6px;width:100%;max-width:420px;margin:0 auto}
-html body #fTs.frow:not(#zz#yy#xx){display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;justify-content:flex-start!important;gap:6px!important;flex:1 1 0!important;min-width:0!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+html body #fTs.frow:not(#zz#yy#xx){display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;height:42px!important;align-items:stretch!important;touch-action:pan-x;overscroll-behavior:contain;justify-content:flex-start!important;gap:6px!important;flex:1 1 0!important;min-width:0!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 #fTs::-webkit-scrollbar{display:none}
+html body #fTs.frow>button:not(#zz#yy#xx)::after{inset:0!important}
 html body #fTs.frow>button:not(#zz#yy#xx){flex:none!important;min-width:62px!important;height:42px!important;font:800 16px system-ui!important;padding:0 10px!important;margin:0!important}
+html body button.tsarr.off:not(#zz#yy#xx){visibility:hidden}
 html body button.tsarr:not(#zz#yy#xx){flex:none;width:30px;height:42px;padding:0!important;margin:0!important;font:900 26px/1 system-ui!important;background:#fff!important;color:#253d56!important}
 /* Run screens: PLAY all the way across (±1 moved up next to TAP on the Met) */
 html body.fc-field .fbar>button[data-d]:not(#zz#yy){display:none!important}
@@ -4323,12 +4326,14 @@ edgeLetters(); setTimeout(()=>{ c2Bars(); edgeLetters(); },0);
 // Met: −10 −1 TAP +1 +10 in one row; time signatures in one row that scrolls, with arrows
 (function(){ const ts=$('fTs'), w=document.createElement('div'); w.className='tswrap'; ts.parentNode.insertBefore(w,ts);
   const mk=(t,d)=>{ const b=document.createElement('button'); b.className='tsarr'; b.textContent=t; b.setAttribute('aria-label',d<0?'Earlier meters':'More meters'); b.onclick=()=>ts.scrollBy({left:d*ts.clientWidth*0.7,behavior:'smooth'}); return b; };
-  w.append(mk('‹',-1),ts,mk('›',1)); })();
+  const L=mk('‹',-1), R=mk('›',1); w.append(L,ts,R);
+  const upd=()=>{ const m=ts.scrollWidth-ts.clientWidth; L.classList.toggle('off',ts.scrollLeft<=2); R.classList.toggle('off',m<=2||ts.scrollLeft>=m-2); };
+  ts.addEventListener('scroll',upd,{passive:true}); window.addEventListener('resize',upd); window.tsArrows=upd; setTimeout(upd,0); })();
 const _freeUI28=freeUI; freeUI=function(){ const ts=$('fTs'), sl=ts?ts.scrollLeft:0; _freeUI28();
   const row=document.querySelector('#fpTempo .fbpmrow'), tp=ts&&ts.querySelector('.tap');
   if(row&&tp){ const p1=row.querySelector('[data-d="1"]'); row.insertBefore(tp,p1); }
   if(row){ const old=row.querySelectorAll('.tap'); if(old.length>1) [...old].slice(0,-1).forEach(x=>x.remove()); }
-  if(ts) ts.scrollLeft=sl; };
+  if(ts) ts.scrollLeft=sl; if(window.tsArrows) tsArrows(); };
 // the dial: wheel fills the room between MET | DRILL and the TAP row, centered
 const _freeLayout28=freeLayout; freeLayout=function(){ _freeLayout28(); if(FC.mode!=='field'||!freeOn||view!=='met'||fPage!=='tempo') return;
   const box=$('fDialBox'), wh=$('wheel'); if(!box||!wh) return; const W=box.clientWidth, H=box.clientHeight; if(!W||!H) return;
