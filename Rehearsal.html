@@ -1424,7 +1424,8 @@ body.fc-prog #free:not(:has(#fpPat:not([hidden]))) .ftabs{display:none!important
 body.fc-field.met.freem #free,body.fc-prog.met.freem #free{padding-top:10px!important}
 body.fc-field.met.freem #free::before,body.fc-prog.met.freem #free::before{display:none!important}
 /* field: no subsets, no page switcher for chains */
-body.fc-field #sbWrap,body.fc-field #sbWrap+.upcard+.htabrow,body.fc-field #c2BotBar{display:none!important}
+body.fc-field #sbWrap,body.fc-field #c2BotBar{display:none!important}
+#verRow .sl{font-size:17px}#verRow small{font-weight:400;color:var(--muted);font-size:13px;margin-left:6px}#verBtn{font:700 15px system-ui;padding:8px 16px;border-radius:999px;border:2px solid var(--ink);background:var(--panel);color:var(--ink)}
 @media (max-width:699px){ .fcmode button{padding:0 7px;font-size:9.5px;height:30px} }
 
 /* ================= v25 ================= */
@@ -1651,7 +1652,8 @@ button.htab.dar[data-dir="down"] .chev{transform:rotate(180deg)}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 26</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 27</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">27</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4284,6 +4286,23 @@ applyBrand(); applyFlip(); applyGrid(); setMusicUI(); setView(view); applyUI(); 
 runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
+/* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
+const APP_V=27;
+try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
+async function fcCheck(manual){
+  const m=$('verMsg'); if(manual) m.textContent='Checking…';
+  try{
+    const r=await fetch(location.pathname+'?fcc='+Date.now(),{cache:'no-store'}); const t=await r.text();
+    const v=+((t.match(/const APP_V=(\d+)/)||[])[1]||0);
+    if(v>APP_V){
+      if(!manual&&(playing||document.querySelector('dialog[open]'))){ m.textContent='Version '+v+' ready. Tap Update.'; return; }
+      m.textContent='Updating to '+v+'…'; location.replace(location.pathname+'?fcu='+v+location.hash);
+    } else if(manual) m.textContent='Up to date';
+  }catch(e){ if(manual) m.textContent='No signal. Try again.'; }
+}
+$('verBtn').onclick=()=>fcCheck(true);
+setTimeout(()=>fcCheck(false),2500);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') fcCheck(false); });
 </script>
 </body>
 </html>
