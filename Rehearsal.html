@@ -1497,9 +1497,11 @@ html body .fbar .fgo2.tap:not(#zz#yy#xx){box-shadow:inset 0 0 0 2px #253d56,0 0 
 html body #wheel #knob:not(#zz){width:13%!important;height:auto!important;aspect-ratio:1;background:radial-gradient(circle at 50% 62%,#fff 0%,#f1f4f8 55%,#d9e1ea 100%)!important;box-shadow:inset 0 5px 9px rgba(0,0,0,.45),inset 0 -3px 4px rgba(255,255,255,.95),0 1px 1px rgba(255,255,255,.35)!important}
 /* Met (Run): dial centered above, controls pinned to the bottom of the panel */
 body.fc-field.met.freem #free:not([hidden]){display:flex!important;flex-direction:column!important}
-body.fc-field.met.freem #fpTempo:not([hidden]){display:flex!important;flex-direction:column!important;flex:1 1 0!important;min-height:0!important;gap:12px!important;width:100%!important;max-width:100%!important;align-self:stretch!important;box-sizing:border-box;min-width:0!important}
-body.fc-field.met.freem #fDialBox{flex:1 1 0!important;min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
-body.fc-field.met.freem #fpTempo .fside{flex:none!important;width:100%!important;max-width:100%!important;min-width:0!important;gap:10px!important;padding:0 12px 12px!important;box-sizing:border-box;align-items:stretch!important}
+body.fc-field.met.freem #fpTempo:not([hidden]){display:flex!important;flex-direction:column!important;flex:1 1 0!important;min-height:0!important;gap:0!important;width:100%!important;max-width:100%!important;align-self:stretch!important;box-sizing:border-box;min-width:0!important}
+body.fc-field.met.freem #fDialBox{flex:none!important;min-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
+body.fc-field.met.freem #fpTempo>.mgap{display:block;min-height:0}
+#fpTempo>.mgap{display:none}
+body.fc-field.met.freem #fpTempo .fside{flex:none!important;width:100%!important;max-width:100%!important;min-width:0!important;gap:10px!important;padding:0 12px!important;box-sizing:border-box;align-items:stretch!important}
 body.fc-field #fGo{display:none!important}
 html body.fc-field #fpTempo .fbpmrow:not(#zz#yy){display:flex!important;gap:6px!important;width:100%;max-width:420px;margin:0 auto!important}
 html body.fc-field #fpTempo .fbpmrow>button:not(#zz#yy){display:block!important;flex:1 1 0!important;min-width:0!important;width:auto!important;height:44px!important;font:800 16px system-ui!important;padding:0!important;margin:0!important}
@@ -1520,6 +1522,19 @@ html body.fc-field .fbar>#fGo2:not(#zz#yy){flex:1 1 auto!important;width:100%!im
 #metDrawer.ov>#metDrBtn{position:absolute;left:0;right:0;margin:0!important}
 html body #metDrawer.ov>#metDrPan:not(#zz){position:absolute;left:0;right:0;margin:0!important;max-height:none!important;overflow:auto!important}
 #metDrawer>.ovbg{display:none}#metDrawer.ov>.ovbg{display:block}
+html body #metDrPan.split:not([hidden]):not(#zz){display:flex!important;flex-direction:row;gap:6px;padding:6px!important;overflow:hidden!important}
+#metDrPan .dsec{display:flex;flex-direction:column;min-height:0;min-width:0;gap:4px}
+#metDrPan .dsec.ch{flex:2 1 0}#metDrPan .dsec.rn{flex:1 1 0;border-left:2px solid #253d56;padding-left:6px}
+#metDrPan .dh{font:900 11px system-ui;letter-spacing:.14em;color:#253d56;flex:none}
+#metDrPan .dl{overflow-y:auto;overflow-x:hidden;min-height:0;flex:1;display:flex;flex-direction:column;gap:6px}
+#metDrPan .dl .pr{flex-wrap:wrap;row-gap:2px;flex:none}#metDrPan .dl .pr .cs{order:3;flex-basis:100%}
+#metDrPan .sgh{font:900 10px system-ui;letter-spacing:.14em;color:#6b7380;margin:4px 0 0;flex:none}
+html body #metDrPan .shc:not(#a#b){display:flex;flex-direction:column;align-items:center;justify-content:center;height:40px;flex:none;background:#fff!important;color:#253d56;padding:0!important}
+html body #metDrPan .shc.full:not(#a#b){background:#253d56!important;color:#fff}
+html body #metDrPan .shc.run:not(#a#b){box-shadow:inset 0 0 0 2px #253d56,inset 5px 0 0 #e8a317!important}
+html body #metDrPan .shc.sel:not(#a#b){background:#2e8b57!important;color:#fff}
+#metDrPan .shc b{font:800 13px system-ui}#metDrPan .shc small{font:600 10.5px system-ui;opacity:.75}
+#metDrPan .dempty{font:600 12px system-ui;color:#6b7380;padding:6px 2px}
 </style>
 </head>
 <body>
@@ -1701,8 +1716,8 @@ html body #metDrawer.ov>#metDrPan:not(#zz){position:absolute;left:0;right:0;marg
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 28</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">28</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 29</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">29</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4335,9 +4350,10 @@ const _freeUI28=freeUI; freeUI=function(){ const ts=$('fTs'), sl=ts?ts.scrollLef
   if(row){ const old=row.querySelectorAll('.tap'); if(old.length>1) [...old].slice(0,-1).forEach(x=>x.remove()); }
   if(ts) ts.scrollLeft=sl; if(window.tsArrows) tsArrows(); };
 // the dial: wheel fills the room between MET | DRILL and the TAP row, centered
+(function(){ const pg=$('fpTempo'), side=pg.querySelector('.fside'); [[2,pg.firstChild],[3,side],[3,null]].forEach(([g,before])=>{ const d=document.createElement('div'); d.className='mgap'; d.style.flex=g+' 1 0'; pg.insertBefore(d,before); }); })();
 const _freeLayout28=freeLayout; freeLayout=function(){ _freeLayout28(); if(FC.mode!=='field'||!freeOn||view!=='met'||fPage!=='tempo') return;
-  const box=$('fDialBox'), wh=$('wheel'); if(!box||!wh) return; const W=box.clientWidth, H=box.clientHeight; if(!W||!H) return;
-  const sz=Math.max(90,Math.floor(Math.min(W*0.92,H-16,420))); if(wh.offsetWidth!==sz){ wh.style.width=wh.style.height=sz+'px'; wh.style.setProperty('--dz',sz+'px'); tickPos(); setDial(prefs.testBpm,false); } };
+  const pg=$('fpTempo'), side=pg.querySelector('.fside'), wh=$('wheel'); if(!pg||!wh) return; const W=pg.clientWidth, H=pg.clientHeight-(side?side.offsetHeight:0); if(!W||!H) return;
+  const sz=Math.max(90,Math.floor(Math.min(W*0.92,H-40,420))); if(wh.offsetWidth!==sz){ wh.style.width=wh.style.height=sz+'px'; wh.style.setProperty('--dz',sz+'px'); tickPos(); setDial(prefs.testBpm,false); } };
 // the dot sits halfway between the inner ends of the ticks and the dark center
 const _setDial28=setDial; setDial=function(b,f){ _setDial28(b,f); const w=wheel.clientWidth, k=$('knob'); if(!w||!k) return; const R=w*0.325, a=(dialAng-90)*Math.PI/180, kw=k.offsetWidth;
   k.style.left=(w/2+R*Math.cos(a)-kw/2)+'px'; k.style.top=(w/2+R*Math.sin(a)-kw/2)+'px'; };
@@ -4346,14 +4362,26 @@ const _setDial28=setDial; setDial=function(b,f){ _setDial28(b,f); const w=wheel.
 function metDrawerPlace(){ const d=$('metDrawer'), b=$('metDrBtn'), p=$('metDrPan'); if(!d||!b||!p) return;
   const clear=()=>{ d.classList.remove('ov'); d.style.height=''; b.style.top=''; p.style.top=p.style.height=''; const g=d.querySelector('.ovbg'); if(g) g.style.top=''; };
   if(d.hidden||!FC.drawer){ clear(); return; }
-  clear(); const bh=b.offsetHeight||36, dr=d.getBoundingClientRect(); if(!dr.height) return;
+  clear(); p.style.setProperty('display','none','important'); const bh=b.offsetHeight||36, dr=d.getBoundingClientRect(); if(!dr.height){ p.style.removeProperty('display'); return; }
   const side=document.querySelector('#fpTempo .fside'), sr=side&&side.offsetParent?side.getBoundingClientRect():null, fr=$('free').getBoundingClientRect();
   let top=sr&&sr.height?sr.top:Math.max(fr.top+fr.height*0.45,dr.top-320); top=Math.min(top,dr.top);
   const off=top-dr.top;  // negative: how far up the drawer reaches
-  d.classList.add('ov'); d.style.height=bh+'px'; b.style.top=off+'px';
+  d.style.height=dr.height+'px'; d.classList.add('ov'); p.style.removeProperty('display'); b.style.top=off+'px';
   const g=d.querySelector('.ovbg'); if(g) g.style.top=off+'px';
-  p.style.top=(off+bh+6)+'px'; p.style.height=Math.max(60,bh-(off+bh+6))+'px'; }
-const _metDrawer28=metDrawer; metDrawer=function(){ _metDrawer28(); metDrawerPlace(); };
+  p.style.top=(off+bh+6)+'px'; p.style.height=Math.max(60,dr.height-(off+bh+6))+'px'; }
+function drawerRuns(){ const p=$('metDrPan'); if(!p||p.hidden) return; p.classList.add('split');
+  const kids=[...p.childNodes]; const left=document.createElement('div'); left.className='dsec ch'; left.innerHTML='<div class="dh">⛓ CHAINS</div><div class="dl"></div>';
+  const dl=left.querySelector('.dl'); kids.forEach(k=>dl.appendChild(k)); if(!dl.children.length) dl.innerHTML='<div class="dempty">No chains yet. Make one in BUILD.</div>';
+  const right=document.createElement('div'); right.className='dsec rn'; right.innerHTML='<div class="dh">🏈 RUNS</div><div class="dl"></div>'; const rl=right.querySelector('.dl');
+  const btn=(id,cls,name,sub)=>{ const b=document.createElement('button'); b.className='shc '+cls+(prefs.run===id?' sel':''); b.innerHTML=`<b>${c2Esc(name)}</b><small>${sub}</small>`;
+    b.onclick=()=>{ FC.drawer=false; metDrawer(); setRun(id); fcGo('drill'); }; rl.appendChild(b); };
+  const bpmAt=i=>{ try{ return Math.round(bpmInto(i))+' bpm'; }catch(e){ return ''; } };
+  btn('show','full','Full show',NS+' sets');
+  PARTS.forEach(pt=>{ const r=rangeOf('p:'+pt); btn('p:'+pt,'',pt,bpmAt(r[0])); });
+  if(sections.length){ const h=document.createElement('div'); h.className='sgh'; h.textContent='CHAINS'; rl.appendChild(h);
+    sections.forEach((sc,i)=>{ const a=Math.min(sc.a,sc.b), z=Math.max(sc.a,sc.b); btn('s:'+i,'run',sc.name||'Run',`${SETS[a].l}–${SETS[z].l} · ${bpmAt(a).replace(' bpm','')}`); }); }
+  p.innerHTML=''; p.append(left,right); }
+const _metDrawer28=metDrawer; metDrawer=function(){ _metDrawer28(); drawerRuns(); metDrawerPlace(); };
 window.addEventListener('resize',()=>requestAnimationFrame(metDrawerPlace));
 // Drill gets the same 1 2 3 4 beat boxes as the Met
 const _c2Bars28=c2Bars; c2Bars=function(){ _c2Bars28(); const bt=$('c2Beats'); if(bt&&FC.mode==='field'&&!freeOn) bt.hidden=false; };
@@ -4399,7 +4427,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=28;
+const APP_V=29;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
