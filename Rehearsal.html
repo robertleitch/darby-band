@@ -1651,6 +1651,35 @@ html body #splash .sppw small:not(#zz){font:700 10.5px system-ui;letter-spacing:
 html body #runScroll:not(#zz){overflow-y:hidden!important;touch-action:pan-x;overscroll-behavior:contain}
 .ax1x{overflow-y:hidden!important;touch-action:pan-x;overscroll-behavior-x:contain}
 .ax1y{overflow-x:hidden!important;touch-action:pan-y}
+
+/* ================= v42: Show setup ================= */
+#ssu{position:fixed;inset:0;z-index:110;background:#f4f5f2;overflow:auto;-webkit-overflow-scrolling:touch}
+#ssu[hidden]{display:none!important}
+#ssu .top{display:flex;align-items:center;gap:10px;padding:calc(12px + var(--sat,0px)) 16px 12px;border-bottom:1px solid #dfe3df;background:#fff;position:sticky;top:0;z-index:3}
+html body #ssu .top button:not(#a#b){box-shadow:none!important;background:none!important;color:#2f5f8f!important;font:800 14px system-ui;padding:6px 2px!important}
+#ssu .top b{flex:1;text-align:center;font:900 16px system-ui;color:#253d56;letter-spacing:.06em}
+#ssu .stat{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#fff;border-bottom:1px solid #dfe3df}
+#ssu .stat .pill{font:900 11px system-ui;letter-spacing:.08em;padding:4px 8px;border-radius:3px;background:#e6f4ec;color:#2e8b57}#ssu .stat .pill.w{background:#fff6dd;color:#9a6b00}
+#ssu .stat small{flex:1;font:600 13px system-ui;color:#6b7380}
+html body #ssu .stat button:not(#a#b){height:36px;padding:0 12px!important;font:900 12px system-ui;letter-spacing:.06em;background:#fff!important;color:#253d56!important}
+html body #ssu .stat button.g:not(#a#b){background:#2e8b57!important;color:#fff!important}
+#ssu .flt{display:flex;gap:6px;padding:10px 12px;background:#fff;border-bottom:1px solid #dfe3df;position:sticky;z-index:2;overflow-x:auto}
+html body #ssu .flt button:not(#a#b){flex:none;padding:6px 10px!important;font:800 12.5px system-ui;background:#fff!important;color:#253d56!important;height:auto!important}
+html body #ssu .flt button.on:not(#a#b){background:#253d56!important;color:#fff!important}
+html body #ssu .flt button.w:not(#a#b){color:#b45309!important;box-shadow:inset 0 0 0 2px #b45309!important}
+#ssu .pt{margin:14px 14px 6px;font:900 12px system-ui;letter-spacing:.16em;color:#3d658f;display:flex;justify-content:space-between}#ssu .pt small{font:700 11px system-ui;color:#6b7380;letter-spacing:.04em}
+#ssu .bl{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #cbd8e8;border-radius:6px;padding:8px 10px;margin:0 12px 6px;cursor:pointer}
+#ssu .bl .n{width:22px;font:800 12px system-ui;color:#8a94a0}#ssu .bl .bp{width:96px;font:900 19px system-ui}#ssu .bl .bp.d{color:#b45309;font-size:16px}#ssu .bl .bp.a{color:#2e8b57;font-size:16px}
+#ssu .bl .mt{flex:1;min-width:0}#ssu .bl .mt b{display:block;font:800 14px system-ui}#ssu .bl .mt small{font:600 12px system-ui;color:#6b7380}#ssu .bl .mt small.wn{color:#b45309}
+html body #ssu .bl .pl:not(#a#b){flex:none;width:34px;height:34px;padding:0!important;font-size:13px;background:#fff!important;color:#253d56!important}
+#ssu .bl.hold{border-style:dashed;background:#f7f8fa}#ssu .bl.chg{border-color:#3d658f;box-shadow:inset 4px 0 0 #3d658f}
+#ssu .q{margin:0 12px 6px;background:#fff8ec;border:2px solid #e8a317;border-radius:6px;padding:8px 10px}
+#ssu .q>b{font:800 14px system-ui;color:#7a4f00}#ssu .q>small{display:block;font:600 12.5px system-ui;color:#6b5a3a;margin:2px 0 6px}
+#ssu .hs{margin:0 12px 8px;background:#fff;border:2px solid #cbd8e8;border-radius:6px;padding:4px 12px}
+#ssu .hs .hr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eef2f6}#ssu .hs .hr:last-child{border:0}
+#ssu .hs .hr div{flex:1;min-width:0}#ssu .hs .hr b{display:block;font:800 14px system-ui}#ssu .hs .hr small{font:600 12px system-ui;color:#6b7380}
+html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!important;font:800 12px system-ui;background:#fff!important;color:#253d56!important}
+#ssu .empty{margin:6px 14px;font:600 13px system-ui;color:#6b7380}
 </style>
 </head>
 <body>
@@ -1832,8 +1861,8 @@ html body #runScroll:not(#zz){overflow-y:hidden!important;touch-action:pan-x;ove
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 41</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">41</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 42</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">42</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4567,12 +4596,14 @@ function runBuild(id){
     else { const dir=Math.sign(m.last-m.first);
       if(same&&cur.kind==='rp'&&cur.dir===dir&&Math.abs(cur.b-m.first)<4){ cur.b=m.last; cur.bars++; cur.ms.push(mi); }
       else { cur={kind:'rp',dir,ts:m.ts,a:m.first,b:m.last,bars:1,ms:[mi]}; blocks.push(cur); items.push({t:'ref',blk:cur}); } }
-    if(m.ferm>0.05){ items.push({t:'hold',n:0,sec:Math.round(m.ferm*100)/100}); cur=null; } });
+    if(m.ferm>0.05){ items.push({t:'hold',n:0,sec:Math.round(m.ferm*100)/100,key:'h'+m.js[0]}); cur=null; } });
   while(items.length&&items[items.length-1].t==='hold') items.pop();   // the run ends at its last set; no pause after it
-  { const p0=BT[idx[0]].p, lead=T(p0)-T(A)-dur(idx[0]); if(lead>0.3) items.unshift({t:'hold',n:0,sec:Math.round(lead*100)/100}); }
+  { const p0=BT[idx[0]].p, lead=T(p0)-T(A)-dur(idx[0]); if(lead>0.3) items.unshift({t:'hold',n:0,sec:Math.round(lead*100)/100,key:'hL'+idx[0]}); }
   const name=id==='show'?'Full show':id.startsWith('p:')?id.slice(2):runName(id), out={blocks:{},btMap:{},meas:{}};
   let k=0; const its=items.map(it=>{ if(it.t!=='ref') return it; const b=it.blk, bid='run.'+(++k);
-    out.blocks[bid]={id:bid,name:`${name} · ${k}`,ts:[...b.ts],a:r1(b.a),b:r1(b.b),bars:b.bars,chg:'smooth',crv:'lin',run:1}; return {t:'ref',id:bid,_b:b}; });
+    const key='k'+ms[b.ms[0]].js[0], orig={ts:[...b.ts],a:r1(b.a),b:r1(b.b),bars:b.bars,chg:'smooth',crv:'lin'}, ov=(typeof SHOWED!=='undefined'&&SHOWED.ov[key])||null;
+    out.blocks[bid]=Object.assign({id:bid,name:`${name} · ${k}`,run:1,key,orig},orig,ov?JSON.parse(JSON.stringify(ov)):{}); return {t:'ref',id:bid,_b:b}; });
+  its.forEach(it=>{ if(it.t==='hold'&&it.key&&typeof SHOWED!=='undefined'&&SHOWED.ov[it.key]){ it.orig=it.sec; it.sec=SHOWED.ov[it.key].sec; } else if(it.t==='hold') it.orig=it.sec; });
   its.forEach((it,fi)=>{ if(it.t!=='ref') return; const b=it._b; delete it._b; out.meas[fi]=b.ms.map(mi=>ms[mi]);
     b.ms.forEach((mi,bar)=>{ const m=ms[mi]; m.js.forEach((j,q)=>{ out.btMap[j]={it:fi,bar,beat:Math.min(m.ts[0]-1,Math.round(q*m.ts[0]/m.len))}; }); }); });
   out.chain={name,items:its,v2:1,id:'run:'+id,run:1}; out.a=a; out.z=z; return out; }
@@ -4818,6 +4849,89 @@ function oneAxis(){ document.querySelectorAll('body *').forEach(e=>{ if(e.classL
   const dx=e.scrollWidth-e.clientWidth, dy=e.scrollHeight-e.clientHeight; if(dx<=2&&dy<=2) return;
   e.classList.add(dx>dy?'ax1x':'ax1y'); }); }
 setInterval(oneAxis,1500); window.addEventListener('resize',()=>setTimeout(oneAxis,100)); setTimeout(oneAxis,500);
+
+/* ================= v42: Show setup: the whole show as blocks; edit, history, versions, revert ================= */
+var SHOWED={ov:{},hist:[],vers:[],pub:0}; try{ const v=JSON.parse(localStorage.getItem('rm_showed')||'null'); if(v&&v.ov) SHOWED=Object.assign(SHOWED,v); }catch(e){}
+function sedSave(){ try{ localStorage.setItem('rm_showed',JSON.stringify(SHOWED)); }catch(e){} for(const k in RUNBPM) delete RUNBPM[k];
+  if(RUN.id){ const c=CHF; const was=FC.side; metLoadRun(RUN.id,true); setCHF(c); FC.side=was; if(was==='met'){ fPage='tempo'; freePages(); } mcUI(); } }
+const bTxt=x=>x.a===x.b?String(Math.round(x.a)):Math.round(x.a)+(x.b<x.a?'↘':'↗')+Math.round(x.b);
+function sedDesc(n,o,x){ const d=[]; if(!x) return `Block ${n} reset to score`; if(o.a!==x.a||o.b!==x.b) d.push(`${bTxt(o)} → ${bTxt(x)}`); if(o.ts.join()!==x.ts.join()) d.push(`${o.ts.join('/')} → ${x.ts.join('/')}`); if(o.bars!==x.bars) d.push(`${o.bars} → ${x.bars} bars`); if(o.crv!==x.crv||o.chg!==x.chg) d.push('curve'); return `Block ${n} · `+(d.join(', ')||'changed'); }
+function sedSet(key,val,desc){ const before=SHOWED.ov[key]?JSON.parse(JSON.stringify(SHOWED.ov[key])):null; if(val) SHOWED.ov[key]=val; else delete SHOWED.ov[key];
+  SHOWED.hist.push({t:Date.now(),key,desc,before,after:val?JSON.parse(JSON.stringify(val)):null}); sedSave(); }
+let ssuF='all', ssuView='list', ssuBuilt=null;
+(function(){ const d=document.createElement('div'); d.id='ssu'; d.hidden=true; document.body.appendChild(d);
+  const row=document.createElement('button'); row.className='sslink'; row.id='ssuOpen'; row.innerHTML='<span class="ic">'+FIELDI+'</span><span class="tx"><b>Show setup</b><small>The whole show as blocks: answer questions, edit tempos and holds, publish, go back to an earlier version</small></span><span class="go">›</span>';
+  const so=$('ssOpen'); if(so){ so.before(row); so.style.setProperty('display','none','important'); } row.onclick=()=>ssuOpen(); })();
+function ssuOpen(){ try{ dlg.close(); }catch(e){} if(playing) stop(); if(testing){ if(C2.on) c2Stop(); else testStop(); } ssuView='list'; $('ssu').hidden=false; ssuRender(); }
+function ssuClose(){ $('ssu').hidden=true; openSettings(); }
+function ssuPending(){ return SHOWED.hist.length-SHOWED.pub; }
+function ssuRender(){ const d=$('ssu'), r=runBuild('show'); ssuBuilt=r; const pend=ssuPending();
+  const need=SC.filter(x=>isNeed(x)), nChg=Object.keys(SHOWED.ov).length;
+  let h=`<div class="top"><button data-a="back">‹ Settings</button><b>SHOW SETUP</b><button data-a="${ssuView==='list'?'hist':'list'}">${ssuView==='list'?'History':'Blocks'}</button></div>
+   <div class="stat"><span class="pill${pend?' w':''}">${pend?'DRAFT':'PUBLISHED'}</span><small>${pend?`${pend} change${pend>1?'s':''} not published`:(SHOWED.vers.length?'Up to date':'No changes yet')}</small><button data-a="score">Score details</button><button class="g" data-a="pub"${pend?'':' disabled'}>PUBLISH</button></div>`;
+  if(ssuView==='hist') h+=ssuHistHtml(); else {
+    let nB=0,nH=0; r.chain.items.forEach(it=>{ if(it.t==='ref') nB++; if(it.t==='hold') nH++; });
+    h+=`<div class="flt">${[['all',`All ${nB+nH}`],['need',`⚠ Needs answer ${need.length}`,'w'],['chg',`Changed ${nChg}`],['hold',`Holds ${nH}`]].map(([f,l,c])=>`<button data-f="${f}" class="${(c||'')+(ssuF===f?' on':'')}">${l}</button>`).join('')}</div><div id="ssuList"></div>`; }
+  d.innerHTML=h; const fl=d.querySelector('.flt'); if(fl) fl.style.top=d.querySelector('.top').offsetHeight+'px';
+  d.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{ const a=b.dataset.a;
+    if(a==='back') ssuClose(); else if(a==='hist'||a==='list'){ ssuView=a; ssuRender(); } else if(a==='score'){ $('ssu').hidden=true; svOpenFn(); } else if(a==='pub') ssuPublish(); });
+  d.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ ssuF=b.dataset.f; ssuRender(); });
+  if(ssuView==='hist'){ ssuHistWire(); return; }
+  const L=$('ssuList'); let n=0, setOf=j=>targetIdx(BT[j].p), qs=need.slice(), part=null;
+  const qEl=x=>{ const q=document.createElement('div'); q.className='q'; q.innerHTML=`<b>⚠ ${c2Esc(x.mlabel||'m. '+x.m)} · set ${c2Esc(x.set)}</b><small>${c2Esc((x.says||[]).filter(s=>s[0]==='plain'||s[0]==='w').map(s=>s[1]).join(' · ')||'Needs a decision')}</small>`;
+    const c=ctlEl(x); q.appendChild(c); q.addEventListener('click',()=>setTimeout(()=>{ sedSave(); ssuRender(); },60)); return q; };
+  const flushQ=upto=>{ while(qs.length&&SETS.findIndex(s=>s.l===qs[0].set)<=upto){ const x=qs.shift(); if(ssuF==='all'||ssuF==='need') L.appendChild(qEl(x)); } };
+  r.chain.items.forEach((it,fi)=>{
+    if(it.t==='div'){ part=it.name; const rr=rangeOf('p:'+part); const h=document.createElement('div'); h.className='pt'; h.innerHTML=`<span>${c2Esc(part).toUpperCase()}</span><small>sets ${c2Esc(SETS[rr[0]].l)}–${c2Esc(SETS[rr[1]].l)}</small>`; if(ssuF!=='need') L.appendChild(h); return; }
+    if(it.t==='hold'){ n++; const chg=!!SHOWED.ov[it.key]; if(ssuF==='need'||(ssuF==='chg'&&!chg)) return;
+      const e=document.createElement('div'); e.className='bl hold'+(chg?' chg':''); e.innerHTML=`<span class="n">${n}</span><span class="bp">⏸ ${it.sec}s</span><div class="mt"><b>Hold</b><small>${chg?`changed (score ${it.orig}s)`:'fermata / silence, then go'}</small></div><button class="pl" aria-label="Play from here">▶</button>`;
+      const nn=n; e.onclick=()=>ssuEditHold(it,nn); e.querySelector('.pl').onclick=ev=>{ ev.stopPropagation(); ssuPlay(fi); }; L.appendChild(e); return; }
+    if(it.t!=='ref') return; n++; const x=r.blocks[it.id], ms=r.meas[fi]||[]; const j0=ms[0]&&ms[0].js[0], j1=ms.length&&ms[ms.length-1].js[0];
+    const s0=j0!=null?setOf(j0):0, s1=j1!=null?setOf(j1):s0;
+    const chg=!!SHOWED.ov[x.key]; if(ssuF==='need'||ssuF==='hold'||(ssuF==='chg'&&!chg)){ flushQ(s1); return; }
+    const m0=BT[j0], m1=BT[j1]; const lenW=chg&&x.bars!==x.orig.bars;
+    const e=document.createElement('div'); e.className='bl'+(chg?' chg':'');
+    e.innerHTML=`<span class="n">${n}</span><span class="bp${x.a!==x.b?(x.b<x.a?' d':' a'):''}">${bTxt(x)}</span><div class="mt"><b>${x.ts[0]}/${x.ts[1]} · ${x.bars} bar${x.bars>1?'s':''}</b><small class="${lenW?'wn':''}">m. ${c2Esc(m0?m0.m:'')}${m1&&m0&&m1.m!==m0.m?'–'+c2Esc(m1.m):''} · set ${c2Esc(SETS[s0].l)}${s1!==s0?'–'+c2Esc(SETS[s1].l):''}${lenW?` · ${x.bars>x.orig.bars?x.bars-x.orig.bars+' bars longer':x.orig.bars-x.bars+' bars shorter'} than the drill`:chg?' · changed':''}</small></div><button class="pl" aria-label="Play from here">▶</button>`;
+    const nn=n; e.onclick=()=>ssuEdit(x,nn); e.querySelector('.pl').onclick=ev=>{ ev.stopPropagation(); ssuPlay(fi); }; L.appendChild(e); flushQ(s1); });
+  flushQ(1e9); if(!L.children.length) L.innerHTML='<div class="empty">Nothing here.</div>'; }
+let ssuEd=null;
+function ssuEdit(x,n){ ssuEd={key:x.key,n,orig:Object.assign({},x.orig,{a:Math.round(x.orig.a),b:Math.round(x.orig.b)})}; Object.assign(ED,{id:'show:'+x.key,name:'Show block '+n,ts:[...x.ts],a:Math.round(x.a),b:Math.round(x.b),bars:x.bars,chg:x.chg||'smooth',crv:x.crv||'lin'}); ED.lnk=ED.a===ED.b; edOrig=null;
+  $('edTitle').textContent='Edit show block '+n; $('edScrim').hidden=false; $('edPop').hidden=false; edRender(); }
+function ssuEditHold(it,n){ const v=prompt(`Hold ${n}: how many seconds? (score: ${it.orig}s)`,it.sec); if(v==null) return; const sec=Math.max(0,Math.round((+v||0)*100)/100);
+  if(sec===it.orig) sedSet(it.key,null,`Hold ${n} reset to score`); else sedSet(it.key,{sec},`Hold ${n} · ${it.sec}s → ${sec}s`); ssuRender(); }
+const _edRender42=edRender; edRender=function(){ _edRender42(); if(!ssuEd||!String(ED.id||'').startsWith('show:')) return; const p=$('c2Ed'), bt=p&&p.querySelector('.ebtns'); if(!bt) return;
+  const nm=$('edName'); if(nm){ nm.readOnly=true; }
+  const has=!!SHOWED.ov[ssuEd.key];
+  bt.innerHTML=(has?'<button class="dl">Reset to score</button>':'')+'<button class="cn">Cancel</button><button class="sv">Save</button>';
+  bt.querySelector('.cn').onclick=()=>{ ssuEd=null; edClose(); };
+  bt.querySelector('.sv').onclick=()=>{ const o=ssuEd.orig, val={ts:[...ED.ts],a:ED.a,b:ED.b,bars:ED.bars,chg:ED.chg,crv:ED.crv};
+    const same=o.a===val.a&&o.b===val.b&&o.bars===val.bars&&o.ts.join()===val.ts.join()&&(o.a===o.b||(o.crv===val.crv&&o.chg===val.chg));
+    if(same&&!SHOWED.ov[ssuEd.key]){ ssuEd=null; edClose(); return; }
+    const prev=SHOWED.ov[ssuEd.key]||o; sedSet(ssuEd.key,same?null:val,same?`Block ${ssuEd.n} reset to score`:sedDesc(ssuEd.n,prev,val)); ssuEd=null; edClose(); ssuRender(); };
+  if(has) bt.querySelector('.dl').onclick=()=>{ sedSet(ssuEd.key,null,`Block ${ssuEd.n} reset to score`); ssuEd=null; edClose(); ssuRender(); }; };
+const _edClose42=edClose; edClose=function(){ _edClose42(); if(String(ED.id||'').startsWith('show:')){ ED.id=null; } };
+function ssuPlay(fi){ $('ssu').hidden=true; if(FC.mode!=='field') fcMode('field'); fcGo('met'); metLoadRun('show'); FC.side='chain'; fPage='chain'; freePages(); mcUI();
+  ac=ac||new (window.AudioContext||window.webkitAudioContext)(); ac.resume(); const c=c2Cur(); if(!c) return; _c2Scale=true; const flat=c2Flat(c.items), items=flat.map(x=>x.it), segs=c2Resolve(items); _c2Scale=false;
+  Object.assign(C2,{flat,items,waitEnd:0,on:true,held:false,ci:segs[fi]&&segs[fi].k==='wait'?0:4,i:fi,bar:0,beat:0,end:0,tap:false,nudge:0,segs,resume:null,chain:CHS.sel,cur:-1,lastTs:''}); C2.durs=segs.map(c2Dur);
+  testing=true; tIdx=0; tLog=[]; tNext=ac.currentTime+0.1; startTimer(); testSchedule(); tRaf=requestAnimationFrame(testFrame); keepAwake(true); playLabel(); fGoUI(); }
+function ssuPublish(){ const since=SHOWED.hist.slice(SHOWED.pub); if(!since.length) return;
+  const label=since.length===1?since[0].desc:`${since.length} changes: `+since.slice(-2).map(h=>h.desc).join('; ')+(since.length>2?'…':'');
+  SHOWED.vers.push({t:Date.now(),label,ov:JSON.parse(JSON.stringify(SHOWED.ov)),n:SHOWED.hist.length}); SHOWED.pub=SHOWED.hist.length; sedSave(); ssuRender(); }
+const fmtD=t=>{ const d=new Date(t); return d.toLocaleDateString([], {month:'short',day:'numeric'})+' · '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}); };
+function ssuHistHtml(){ let h='<div class="pt"><span>VERSIONS</span><small>published</small></div><div class="hs">';
+  if(!SHOWED.vers.length) h+='<div class="hr"><div><b>The score</b><small>No published changes yet</small></div></div>';
+  [...SHOWED.vers].map((v,i)=>[v,i]).reverse().forEach(([v,i],k)=>{ h+=`<div class="hr"><div><b>${k===0&&!ssuPending()?'Current · ':''}${fmtD(v.t)}</b><small>${c2Esc(v.label)}</small></div>${k===0&&!ssuPending()?'':`<button data-rv="${i}">Revert</button>`}</div>`; });
+  if(SHOWED.vers.length) h+=`<div class="hr"><div><b>The score</b><small>Everything as the score and drill say</small></div><button data-rv="-1">Revert</button></div>`;
+  h+='</div><div class="pt"><span>CHANGES</span><small>newest first</small></div><div class="hs">';
+  if(!SHOWED.hist.length) h+='<div class="hr"><div><small>No changes yet</small></div></div>';
+  [...SHOWED.hist].map((x,i)=>[x,i]).reverse().forEach(([x,i])=>{ h+=`<div class="hr"><div><b>${c2Esc(x.desc)}</b><small>${fmtD(x.t)}${i<SHOWED.pub?' · published':' · not published'}</small></div>${x.key?`<button data-un="${i}">Undo</button>`:''}</div>`; });
+  return h+'</div>'; }
+function ssuHistWire(){ const d=$('ssu');
+  d.querySelectorAll('[data-rv]').forEach(b=>b.onclick=()=>{ const i=+b.dataset.rv, v=SHOWED.vers[i]; if(!confirm(i<0?'Go back to the score as written? Your changes stay in the history.':`Go back to the version from ${fmtD(v.t)}?`)) return;
+    const before=JSON.parse(JSON.stringify(SHOWED.ov)); SHOWED.ov=i<0?{}:JSON.parse(JSON.stringify(v.ov)); SHOWED.hist.push({t:Date.now(),key:null,desc:i<0?'Reverted to the score':`Reverted to ${fmtD(v.t)}`,before,after:null}); sedSave(); ssuRender(); });
+  d.querySelectorAll('[data-un]').forEach(b=>b.onclick=()=>{ const x=SHOWED.hist[+b.dataset.un]; if(!x||!x.key) return; const cur=SHOWED.ov[x.key];
+    sedSet(x.key,x.before?JSON.parse(JSON.stringify(x.before)):null,'Undid: '+x.desc); ssuRender(); }); }
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4838,7 +4952,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=41;
+const APP_V=42;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
