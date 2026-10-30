@@ -1599,6 +1599,25 @@ html body #fcNav>button:not(#zz){display:flex!important;align-items:center;justi
 html body #fcMode.fcmode>button:not(#a#b#c){gap:5px}
 html body #bMic:not(#zz){display:inline-flex!important;align-items:center;gap:8px}
 #ftPat,#ftMix{display:inline-flex!important;align-items:center;gap:6px}
+
+/* ================= v37: block library list + editor pop-up ================= */
+#c2Blocks>.c2h:first-child{display:none!important}
+#c2Blocks .lbhd{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 10px}
+#c2Blocks .lbhd b{font:900 13px system-ui;letter-spacing:.14em;color:#3d658f}
+html body #c2Blocks .lbnew:not(#a#b){height:40px;padding:0 16px!important;background:#2e8b57!important;color:#fff!important;font:900 13px system-ui!important;letter-spacing:.1em}
+#c2Blocks>.c2h{display:none!important}
+html body #c2Lib .lr:not(#a){cursor:pointer}
+html body #c2Lib .lr>button:not(#a#b){display:none!important}
+#c2Lib .lr .chv{font:900 22px system-ui;color:#8a94a0;margin-left:6px}
+#c2Lib .lbtip{font:600 13px system-ui;color:#6b7380;text-align:center;margin-top:6px}
+#edScrim{position:fixed;inset:0;background:rgba(15,25,40,.45);z-index:120}
+#edPop{position:fixed;left:12px;right:12px;top:calc(var(--sat,0px) + 70px);max-height:calc(100dvh - var(--sat,0px) - 90px);overflow:auto;background:#fff;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.35);z-index:121;padding:14px 14px 12px;box-sizing:border-box;max-width:560px;margin:0 auto}
+#edScrim[hidden],#edPop[hidden]{display:none!important}
+#edPop h3{margin:0 0 8px;font:900 18px system-ui;color:#253d56}
+#edPop .ebtns{display:flex!important;gap:8px;margin-top:12px}
+html body #edPop .ebtns>button:not(#a#b){flex:1;height:46px;padding:0 4px!important;font:900 14px system-ui!important;letter-spacing:.04em;line-height:1.1;background:#fff!important;color:#253d56!important}
+html body #edPop .ebtns>button.sv:not(#a#b){background:#2e8b57!important;color:#fff!important}
+html body #edPop .ebtns>button.dl:not(#a#b){color:#b42318!important;box-shadow:inset 0 0 0 2px #b42318!important}
 </style>
 </head>
 <body>
@@ -1780,8 +1799,8 @@ html body #bMic:not(#zz){display:inline-flex!important;align-items:center;gap:8p
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 36</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">36</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 37</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">37</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -1874,7 +1893,7 @@ const SNDI='<svg class="nvi" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 
 const PATI='<svg class="nvi s" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="5" height="5" rx="1" fill="currentColor"/><rect x="9.5" y="4" width="5" height="5" rx="1" stroke-width="1.6"/><rect x="17" y="4" width="5" height="5" rx="1" fill="currentColor"/><rect x="2" y="14" width="5" height="5" rx="1" stroke-width="1.6"/><rect x="9.5" y="14" width="5" height="5" rx="1" fill="currentColor"/><rect x="17" y="14" width="5" height="5" rx="1" stroke-width="1.6"/></svg>';
 const MIXI='<svg class="nvi s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v18M12 3v18M19 3v18"/><rect x="2.5" y="13" width="5" height="3.4" rx="1" fill="currentColor"/><rect x="9.5" y="6" width="5" height="3.4" rx="1" fill="currentColor"/><rect x="16.5" y="10" width="5" height="3.4" rx="1" fill="currentColor"/></svg>';
 const PLAYI='<svg class="nvi p" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l14 8-14 8z" fill="currentColor" stroke="none"/></svg>';
-const WRENI='<svg class="nvi w" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0 5 5l-9 9a2.1 2.1 0 0 1-3-3l9-9a4 4 0 0 0-2-2z"/></svg>';
+const WRENI='<svg class="nvi w" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4.5L16 4.5l3.5 3.5L8.5 19z"/><path d="M14 6.5l3.5 3.5"/></svg>';
 const MICI='<svg class="nvi m" viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5"/><path d="M5 11.5a7 7 0 0 0 14 0M12 18.5v3M8.5 21.5h7"/></svg>';
 const FIELDI='<svg class="fdi" viewBox="0 0 32 18" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="15" rx="1.5"/><path d="M8 1.5v15M16 1.5v15M24 1.5v15"/></svg>';
 const FEET='<svg class="feet" viewBox="-3 -14 62 36" aria-hidden="true"><g transform="rotate(16 24 16)"><path d="M3.6 8 L3.3 -8.5 L9.7 -8.5 L9.4 8 Z"/><path d="M2 15 L2 9.5 Q2 7 4.5 7 L9.5 7 L13 9.6 Q20.5 10.2 23.6 12.6 Q25.2 14 24 15.4 Q23.4 16 22 16 L3 16 Q2 16 2 15 Z"/></g><g transform="translate(30 0) rotate(-12 2 16)"><path d="M3.6 8 L3.3 -8.5 L9.7 -8.5 L9.4 8 Z"/><path d="M2 15 L2 9.5 Q2 7 4.5 7 L9.5 7 L13 9.6 Q20.5 10.2 23.6 12.6 Q25.2 14 24 15.4 Q23.4 16 22 16 L3 16 Q2 16 2 15 Z"/></g></svg>';
@@ -4695,6 +4714,37 @@ const _fcUI36=fcUI; fcUI=function(){ _fcUI36(); navIcons(); };
   const tp=$('ftPat'), tm=$('ftMix'); if(tp) tp.innerHTML=PATI+'<span>'+tp.textContent.trim()+'</span>'; if(tm) tm.innerHTML=MIXI+'<span>'+tm.textContent.replace(/^\S*🎚\S*\s*/,'').trim()+'</span>'; })();
 setTimeout(()=>{ fcUI(); },0);
 
+
+/* ================= v37: blocks list; tap a block to edit it in a pop-up (Save, Save as new, Cancel, Delete) ================= */
+(function(){ const pg=$('c2Blocks'), ed=$('c2Ed'), lib=$('c2Lib'); if(!pg||!ed||!lib) return;
+  const hd=document.createElement('div'); hd.className='lbhd'; hd.innerHTML='<b>MY BLOCKS</b><button class="lbnew">＋ NEW BLOCK</button>'; pg.insertBefore(hd,lib);
+  hd.querySelector('.lbnew').onclick=()=>edOpen(null);
+  const sc=document.createElement('div'); sc.id='edScrim'; sc.hidden=true; sc.onclick=()=>edClose();
+  const pop=document.createElement('div'); pop.id='edPop'; pop.hidden=true; pop.innerHTML='<h3 id="edTitle">Edit block</h3>'; pop.appendChild(ed);
+  document.body.append(sc,pop); edRender(); })();
+let edOrig=null;
+function edOpen(id){ if(id){ const x=libGet(id); if(!x) return; Object.assign(ED,JSON.parse(JSON.stringify(x))); edOrig=x.name; } else { _edNew37(); edOrig=null; }
+  $('edTitle').textContent=id?'Edit block':'New block'; $('edScrim').hidden=false; $('edPop').hidden=false; edRender(); }
+function edClose(){ $('edScrim').hidden=true; $('edPop').hidden=true; c2RenderLib(); }
+const _edNew37=edNew; edNew=function(){ edOpen(null); };
+edLoad=function(id){ edOpen(id); };
+const _edRender37=edRender; edRender=function(){ _edRender37(); const p=$('c2Ed'); if(!p) return; const bt=p.querySelector('.ebtns'); if(!bt) return;
+  const has=!!(ED.id&&libGet(ED.id));
+  bt.innerHTML=(has?'<button class="dl">Delete</button>':'')+'<button class="cn">Cancel</button>'+(has?'<button class="an">Save as new</button>':'')+'<button class="sv">Save</button>';
+  const put=asNew=>{ let name=(ED.name||'Block').trim(); if(asNew&&name===edOrig) name+=' (copy)';
+    const x={id:(!asNew&&ED.id)||('b'+Date.now().toString(36)),name,ts:[...ED.ts],a:ED.a,b:ED.b,bars:ED.bars,chg:ED.chg,crv:ED.crv};
+    const k=LIB.blocks.findIndex(y=>y.id===x.id); if(k>=0) LIB.blocks[k]=x; else if(asNew&&ED.id){ const o=LIB.blocks.findIndex(y=>y.id===ED.id); LIB.blocks.splice(o+1,0,x); } else LIB.blocks.push(x);
+    ED.id=x.id; libSave(); try{ c2RenderGrid(); }catch(e){} edClose(); };
+  bt.querySelector('.sv').onclick=()=>put(false); bt.querySelector('.cn').onclick=()=>edClose();
+  if(has){ bt.querySelector('.an').onclick=()=>put(true);
+    bt.querySelector('.dl').onclick=()=>{ const x=libGet(ED.id); const used=CHS.list.reduce((a,c)=>a+c.items.filter(i=>i.t==='ref'&&i.id===x.id).length,0);
+      if(!confirm(`Delete “${x.name}”?`+(used?` It's used ${used} time${used>1?'s':''} in your chains and will be removed from them.`:''))) return;
+      LIB.blocks=LIB.blocks.filter(y=>y.id!==x.id); CHS.list.forEach(c=>c.items=c.items.filter(i=>!(i.t==='ref'&&i.id===x.id))); libSave(); c2Save(); edClose(); c2Render(); }; } };
+const _c2RenderLib37=c2RenderLib; c2RenderLib=function(){ _c2RenderLib37(); const L=$('c2Lib'); if(!L) return;
+  [...L.querySelectorAll('.lr')].forEach((r,k)=>{ const x=LIB.blocks[k]; if(!x) return; r.classList.remove('sel'); if(!r.querySelector('.chv')) r.insertAdjacentHTML('beforeend','<span class="chv">›</span>'); r.onclick=()=>edOpen(x.id); });
+  if(!L.querySelector('.lbtip')) L.insertAdjacentHTML('beforeend','<div class="lbtip">Tap a block to edit it</div>'); };
+setTimeout(()=>{ try{ c2RenderLib(); }catch(e){} },0);
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4715,7 +4765,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=36;
+const APP_V=37;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
