@@ -1628,6 +1628,14 @@ html body #edLink:not(#a#b#c#d){box-shadow:none!important;background:none!import
 html body #edLink:not(#a#b#c#d)::after{inset:-6px -10px!important;background:none!important;border:0!important;box-shadow:none!important}
 #edLink svg{display:block;overflow:visible}
 html body #edName:not(#zz){font-size:16px!important}
+
+/* ================= v39: tap a block: Edit or Duplicate ================= */
+#bkMenu{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);width:min(320px,86vw);background:#fff;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.35);z-index:121;padding:14px;box-sizing:border-box}
+#bkMenu[hidden]{display:none!important}
+#bkMenu h3{margin:0 0 4px;font:900 18px system-ui;color:#253d56}#bkMenu small{display:block;font:600 13px system-ui;color:#6b7380;margin-bottom:12px}
+#bkMenu .bm{display:flex;flex-direction:column;gap:8px}
+html body #bkMenu .bm>button:not(#a#b){height:48px;font:900 15px system-ui!important;letter-spacing:.06em;background:#fff!important;color:#253d56!important}
+html body #bkMenu .bm>button.ed:not(#a#b){background:#2e8b57!important;color:#fff!important}
 </style>
 </head>
 <body>
@@ -1809,8 +1817,8 @@ html body #edName:not(#zz){font-size:16px!important}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 38</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">38</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 39</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">39</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4734,14 +4742,14 @@ setTimeout(()=>{ fcUI(); },0);
   document.body.append(sc,pop); edRender(); })();
 let edOrig=null;
 function edOpen(id){ if(id){ const x=libGet(id); if(!x) return; Object.assign(ED,JSON.parse(JSON.stringify(x))); edOrig=x.name; } else { _edNew37(); edOrig=null; } ED.lnk=ED.a===ED.b;
-  $('edTitle').textContent=id?'Modify or save variation':'New block'; $('edScrim').hidden=false; $('edPop').hidden=false; edRender(); }
+  $('edTitle').textContent=id?'Edit block':'New block'; $('edScrim').hidden=false; $('edPop').hidden=false; edRender(); }
 function edWarn(t){ const w=document.querySelector('#c2Ed .edwarn'); if(!w) return; w.textContent=t; w.hidden=false; clearTimeout(edWarn.t); edWarn.t=setTimeout(()=>{ w.hidden=true; },3500); }
 function edClose(){ $('edScrim').hidden=true; $('edPop').hidden=true; c2RenderLib(); }
 const _edNew37=edNew; edNew=function(){ edOpen(null); };
 edLoad=function(id){ edOpen(id); };
 const _edRender37=edRender; edRender=function(){ _edRender37(); const p=$('c2Ed'); if(!p) return; const bt=p.querySelector('.ebtns'); if(!bt) return;
   const has=!!(ED.id&&libGet(ED.id));
-  bt.innerHTML=(has?'<button class="dl">Delete</button>':'')+'<button class="cn">Cancel</button>'+(has?'<button class="an">Save variation</button>':'')+'<button class="sv">Save</button>';
+  bt.innerHTML=(has?'<button class="dl">Delete</button>':'')+'<button class="cn">Cancel</button><button class="sv">Save</button>';
   const put=asNew=>{ let name=(ED.name||'Block').trim();
     if(asNew&&(name===edOrig||LIB.blocks.some(y=>y.name===name))){ const f=$('edName'); edWarn('Give the variation a different name'); if(f){ f.focus(); f.select(); } return; }
     const x={id:(!asNew&&ED.id)||('b'+Date.now().toString(36)),name,ts:[...ED.ts],a:ED.a,b:ED.b,bars:ED.bars,chg:ED.chg,crv:ED.crv};
@@ -4749,7 +4757,7 @@ const _edRender37=edRender; edRender=function(){ _edRender37(); const p=$('c2Ed'
     ED.id=x.id; libSave(); try{ c2RenderGrid(); }catch(e){} edClose(); };
   let w=p.querySelector('.edwarn'); if(!w){ w=document.createElement('div'); w.className='edwarn'; w.hidden=true; bt.before(w); }
   bt.querySelector('.sv').onclick=()=>put(false); bt.querySelector('.cn').onclick=()=>edClose();
-  if(has){ bt.querySelector('.an').onclick=()=>put(true);
+  if(has){
     bt.querySelector('.dl').onclick=()=>{ const x=libGet(ED.id); const used=CHS.list.reduce((a,c)=>a+c.items.filter(i=>i.t==='ref'&&i.id===x.id).length,0);
       if(!confirm(`Delete “${x.name}”?`+(used?` It's used ${used} time${used>1?'s':''} in your chains and will be removed from them.`:''))) return;
       LIB.blocks=LIB.blocks.filter(y=>y.id!==x.id); CHS.list.forEach(c=>c.items=c.items.filter(i=>!(i.t==='ref'&&i.id===x.id))); libSave(); c2Save(); edClose(); c2Render(); }; } };
@@ -4774,6 +4782,21 @@ const _edRender38=edRender; edRender=function(){ if(ED.lnk==null) ED.lnk=ED.a===
     l.innerHTML=`<svg width="30" height="${H}" viewBox="0 0 30 ${H}"><path d="M2 .6H${cx}V${mid-13}M2 ${H-.6}H${cx}V${mid+13}" fill="none" stroke="#9aa3ad" stroke-width="1.2"/>${ch}</svg>`;
     l.setAttribute('aria-pressed',ED.lnk); }); };
 
+
+/* ================= v39: tap a block -> Edit or Duplicate; the editor has only Delete, Cancel, Save ================= */
+(function(){ const m=document.createElement('div'); m.id='bkMenu'; m.hidden=true; m.innerHTML='<h3 id="bkmName"></h3><small id="bkmSub"></small><div class="bm"><button class="ed">Edit</button><button class="du">Duplicate</button><button class="cn">Cancel</button></div>'; document.body.appendChild(m);
+  m.querySelector('.cn').onclick=bkMenuClose; })();
+let bkmId=null;
+function bkMenuClose(){ $('bkMenu').hidden=true; $('edScrim').hidden=true; $('edScrim').onclick=()=>edClose(); }
+function bkMenuOpen(id){ const x=libGet(id); if(!x) return; bkmId=id; $('bkmName').textContent=x.name; $('bkmSub').textContent=`${x.ts[0]}/${x.ts[1]} · ${x.bars} bars · ${c2Tempo2(x)}`;
+  $('edScrim').hidden=false; $('edScrim').onclick=bkMenuClose; $('bkMenu').hidden=false;
+  const m=$('bkMenu'); m.querySelector('.ed').onclick=()=>{ bkMenuClose(); edOpen(bkmId); };
+  m.querySelector('.du').onclick=()=>{ const o=libGet(bkmId); if(!o) return; const base=o.name.replace(/-\d+$/,''); let n=1; while(LIB.blocks.some(y=>y.name===base+'-'+n)) n++;
+    const y=JSON.parse(JSON.stringify(o)); y.id='b'+Date.now().toString(36); y.name=base+'-'+n; let at=LIB.blocks.indexOf(o); LIB.blocks.forEach((z,i)=>{ if(z.name===base||new RegExp('^'+base.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'-\\d+$').test(z.name)) at=Math.max(at,i); }); LIB.blocks.splice(at+1,0,y); libSave(); bkMenuClose(); c2RenderLib(); }; }
+const _c2RenderLib39=c2RenderLib; c2RenderLib=function(){ _c2RenderLib39(); const L=$('c2Lib'); if(!L) return; [...L.querySelectorAll('.lr')].forEach((r,k)=>{ const x=LIB.blocks[k]; if(x) r.onclick=()=>bkMenuOpen(x.id); });
+  const t=L.querySelector('.lbtip'); if(t) t.textContent='Tap a block to edit or duplicate it'; };
+setTimeout(()=>{ try{ c2RenderLib(); }catch(e){} },0);
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4794,7 +4817,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=38;
+const APP_V=39;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
