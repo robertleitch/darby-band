@@ -1539,6 +1539,13 @@ html body #metDrPan .shc.run:not(#a#b){box-shadow:inset 0 0 0 2px #253d56,inset 
 html body #metDrPan .shc.sel:not(#a#b){background:#2e8b57!important;color:#fff}
 #metDrPan .shc b{font:800 13px system-ui}#metDrPan .shc small{font:600 10.5px system-ui;opacity:.75}
 #metDrPan .dempty{font:600 12px system-ui;color:#6b7380;padding:6px 2px}
+
+/* ================= v31 ================= */
+#nudgeBar{display:flex;gap:6px;flex:none;order:96;margin-top:6px}
+#nudgeBar[hidden]{display:none!important}
+html body #nudgeBar>button:not(#zz#yy){flex:1 1 0;min-width:0;height:44px;font:800 16px system-ui!important;padding:0!important;margin:0!important;background:#2c3e50!important;color:#fff!important}
+html body #nudgeBar>button.tap:not(#zz#yy){background:#3d658f!important;letter-spacing:.08em}
+#metTitle .rpct{font:800 12.5px system-ui;color:#2e8b57}
 </style>
 </head>
 <body>
@@ -1720,8 +1727,8 @@ html body #metDrPan .shc.sel:not(#a#b){background:#2e8b57!important;color:#fff}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 30</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">30</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 31</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">31</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -3836,8 +3843,8 @@ const C2UI={sub:'build',sel:-1,unl:false};
 try{ const s=localStorage.getItem('rm_c2sub'); if(s) C2UI.sub=s; }catch(e){}
 function libSave(){ try{ localStorage.setItem('rm_blocks',JSON.stringify(LIB)); }catch(e){} }
 function c2Save(){ try{ localStorage.setItem('rm_chains2',JSON.stringify(CHS)); localStorage.setItem('rm_c2sub',C2UI.sub); }catch(e){} }
-const c2Cur=()=>CHS.list[Math.min(CHS.sel,CHS.list.length-1)];
-const libGet=id=>LIB.blocks.find(b=>b.id===id);
+const c2Cur=()=>(typeof RUN!=='undefined'&&RUN.id&&RUN.chain&&FC.mode==='field'&&FC.metChain)?RUN.chain:CHS.list[Math.min(CHS.sel,CHS.list.length-1)];
+const libGet=id=>(typeof RUN!=='undefined'&&RUN.blocks&&RUN.blocks[id])||LIB.blocks.find(b=>b.id===id);
 const chGet=id=>CHS.list.find(c=>c.id===id);
 /* chains inside chains: open every chain down to its blocks (top = index in the outer chain, tag = chain name on its first block) */
 function c2Flat(items,seen){ seen=seen||new Set(); const out=[];
@@ -4411,6 +4418,115 @@ wheel.addEventListener('pointermove',()=>{ if(!drag) return; const v=Math.round(
 setTimeout(()=>{ if(FC.mode!=='field') fcMode('field'); fcGo('met'); },0);
 setTimeout(()=>{ freeUI(); fcUI(); requestAnimationFrame(freeLayout); },0);
 
+
+/* ================= v31: runs from the show play on the Met as blocks; Nudge bar; hand off to the Drill mid-run ================= */
+var RUN={id:null,chain:null,blocks:{},btMap:{},meas:{},a:0,z:0};
+let CHF=1;  // Nudge bar: the whole loaded chain or run, in proportion
+try{ CHF=+localStorage.getItem('rm_chf')||1; }catch(e){}
+function runBuild(id){
+  const [a,z]=rangeOf(id), A=SETS[a].s, B=SETS[z].s, idx=[];
+  BT.forEach((bt,j)=>{ if(bt.p>A+1e-6&&bt.p<=B+1e-6) idx.push(j); });
+  if(!idx.length) return null;
+  // a beat lasts until the next beat (beats don't always land one per count)
+  const dur=j=>{ const p=BT[j].p, nx=BT[j+1]; let d=nx?T(nx.p)-T(p):T(p+1)-T(p); if(!(d>0)) d=beatAt(p); return d; };
+  // measures: a new one starts on every beat 1
+  const ms=[]; idx.forEach(j=>{ const bt=BT[j]; const last=ms[ms.length-1]; if(!last||bt.b===1||bt.ts!==last.tsS) ms.push({js:[j],tsS:bt.ts,full:bt.bar||4,part:SETS[Math.min(NS-1,targetIdx(bt.p))].p}); else last.js.push(j); });
+  ms.forEach(m=>{ let [n,d]=(m.tsS||'4/4').split('/').map(Number); if(!n||!d){ n=4; d=4; }
+    const len=m.js.length; if(len<m.full){ const k=len*n/m.full; if(Number.isInteger(k)&&k>0) n=k; }
+    m.ts=[n,d]; m.len=len; const K=c2Span(1,m.ts);
+    // equal time: the drill counts in this bar span n chain clicks
+    const bp=m.js.map(j=>K*n/(len*dur(j)));
+    const srt=[...bp].sort((x,y)=>x-y), med=srt[Math.floor(srt.length/2)]; m.ferm=0;
+    bp.forEach((v,k)=>{ if(v<0.6*med){ m.ferm+=dur(m.js[k])-K*n/(len*med); bp[k]=med; } });
+    m.first=bp[0]; m.last=bp[bp.length-1]; m.avg=bp.reduce((x,y)=>x+y,0)/bp.length; m.steady=Math.abs(m.first-m.last)<1; });
+  const r1=v=>Math.round(v*10)/10, blocks=[], items=[]; let cur=null, part=null;
+  ms.forEach((m,mi)=>{
+    if(id==='show'&&m.part!==part){ part=m.part; cur=null; items.push({t:'div',name:part}); }
+    const same=cur&&cur.ts[0]===m.ts[0]&&cur.ts[1]===m.ts[1];
+    if(m.steady){ if(same&&cur.kind==='st'&&Math.abs(cur.b-m.avg)<1){ cur.bars++; cur.ms.push(mi); }
+      else { cur={kind:'st',ts:m.ts,a:m.avg,b:m.avg,bars:1,ms:[mi]}; blocks.push(cur); items.push({t:'ref',blk:cur}); } }
+    else { const dir=Math.sign(m.last-m.first);
+      if(same&&cur.kind==='rp'&&cur.dir===dir&&Math.abs(cur.b-m.first)<4){ cur.b=m.last; cur.bars++; cur.ms.push(mi); }
+      else { cur={kind:'rp',dir,ts:m.ts,a:m.first,b:m.last,bars:1,ms:[mi]}; blocks.push(cur); items.push({t:'ref',blk:cur}); } }
+    if(m.ferm>0.05){ items.push({t:'hold',n:0,sec:Math.round(m.ferm*100)/100}); cur=null; } });
+  while(items.length&&items[items.length-1].t==='hold') items.pop();   // the run ends at its last set; no pause after it
+  { const p0=BT[idx[0]].p, lead=T(p0)-T(A)-dur(idx[0]); if(lead>0.3) items.unshift({t:'hold',n:0,sec:Math.round(lead*100)/100}); }
+  const name=id==='show'?'Full show':id.startsWith('p:')?id.slice(2):runName(id), out={blocks:{},btMap:{},meas:{}};
+  let k=0; const its=items.map(it=>{ if(it.t!=='ref') return it; const b=it.blk, bid='run.'+(++k);
+    out.blocks[bid]={id:bid,name:`${name} · ${k}`,ts:[...b.ts],a:r1(b.a),b:r1(b.b),bars:b.bars,chg:'smooth',crv:'lin',run:1}; return {t:'ref',id:bid,_b:b}; });
+  its.forEach((it,fi)=>{ if(it.t!=='ref') return; const b=it._b; delete it._b; out.meas[fi]=b.ms.map(mi=>ms[mi]);
+    b.ms.forEach((mi,bar)=>{ const m=ms[mi]; m.js.forEach((j,q)=>{ out.btMap[j]={it:fi,bar,beat:Math.min(m.ts[0]-1,Math.round(q*m.ts[0]/m.len))}; }); }); });
+  out.chain={name,items:its,v2:1,id:'run:'+id,run:1}; out.a=a; out.z=z; return out; }
+function metLoadRun(id,quiet){ const r=runBuild(id); if(!r) return; if(testing){ if(C2.on) c2Stop(); else testStop(); } if(playing) stop();
+  Object.assign(RUN,r,{id}); CHF=1; try{ localStorage.setItem('rm_run',id); localStorage.setItem('rm_chf','1'); }catch(e){}
+  prefs.run=id; try{ goSet(r.a); runChips(); drawLoopZone(); save(); }catch(e){}
+  C2UI.unl=false; C2.resume=null; C2UI.sel=-1; C2UI.sub='run'; FC.metChain=true; FC.drawer=false; fcSaveMC(); c2Save();
+  if(FC.mode==='field'&&freeOn){ fPage='chain'; fMix=false; freePages(); } c2Render(); metDrawer(); fGoUI(); }
+const _metLoadChain31=metLoadChain; metLoadChain=function(i){ RUN.id=null; CHF=1; try{ localStorage.removeItem('rm_run'); localStorage.setItem('rm_chf','1'); }catch(e){} _metLoadChain31(i); };
+const _metUnload31=metUnload; metUnload=function(){ RUN.id=null; CHF=1; try{ localStorage.removeItem('rm_run'); localStorage.setItem('rm_chf','1'); }catch(e){} _metUnload31(); nudgeUI(); };
+// Nudge bar scales the loaded chain's tempos (display and playback)
+let _c2Scale=false;
+const _c2Resolve31=c2Resolve; c2Resolve=function(items){ const segs=_c2Resolve31(items); if(_c2Scale&&CHF!==1) segs.forEach(x=>{ if(x.a!=null) x.a*=CHF; if(x.b!=null) x.b*=CHF; }); return segs; };
+const metScaled=()=>FC.mode==='field'&&FC.metChain;
+const _c2RenderGrid31=c2RenderGrid; c2RenderGrid=function(){ _c2Scale=metScaled(); try{ _c2RenderGrid31(); } finally{ _c2Scale=false; } };
+const _c2Start31=c2Start; c2Start=function(from){ _c2Scale=metScaled(); try{ _c2Start31(from); } finally{ _c2Scale=false; } };
+function chainBase(){ const c=c2Cur(); if(!c) return 120; const segs=_c2Resolve31(c2Flat(c.items).map(x=>x.it)); const s=segs.find(x=>x.k==='play'||x.k==='loop'); return s?s.a:120; }
+function setCHF(f){ f=Math.max(0.4,Math.min(2.5,f)); const r=f/CHF; if(Math.abs(r-1)<1e-6) return; CHF=f; try{ localStorage.setItem('rm_chf',String(f)); }catch(e){}
+  if(C2.on&&C2.segs){ C2.segs.forEach(x=>{ if(x.a!=null) x.a*=r; if(x.b!=null) x.b*=r; }); C2.durs=C2.segs.map(c2Dur); }
+  c2RenderGrid(); try{ c2Progress(true); }catch(e){} metTitle(); }
+function nudge(d){ const b=chainBase(); setCHF((Math.round(b*CHF)+d)/b); }
+let nTaps=[]; function nudgeTap(){ const t=performance.now(); if(nTaps.length&&t-nTaps[nTaps.length-1]>2000) nTaps=[]; nTaps.push(t); if(nTaps.length>6) nTaps.shift();
+  if(nTaps.length>=2){ const g=(nTaps[nTaps.length-1]-nTaps[0])/(nTaps.length-1); setCHF((60000/g)/chainBase()); } }
+(function(){ const d=$('metDrawer'); if(!d) return; const nb=document.createElement('div'); nb.id='nudgeBar'; nb.hidden=true;
+  nb.innerHTML='<button data-n="-10">−10</button><button data-n="-1">−1</button><button class="tap">TAP</button><button data-n="1">+1</button><button data-n="10">+10</button>';
+  d.parentNode.insertBefore(nb,d); nb.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>nudge(+b.dataset.n)); nb.querySelector('.tap').onclick=nudgeTap; })();
+function nudgeUI(){ const nb=$('nudgeBar'); if(!nb) return; nb.hidden=!(FC.mode==='field'&&freeOn&&view==='met'&&fPage==='chain'&&FC.metChain&&!C2UI.unl); }
+// drawer opens to the same height as on the plain Met (where the TAP row sits)
+let drOff=null; try{ drOff=+localStorage.getItem('rm_droff')||null; }catch(e){}
+const _metDrawerPlace31=metDrawerPlace; metDrawerPlace=function(){ const d=$('metDrawer'), side=document.querySelector('#fpTempo .fside');
+  if(d&&!d.hidden&&side&&side.offsetParent){ const st=d.getBoundingClientRect().top, t=side.getBoundingClientRect().top; if(st&&t&&st>t){ drOff=st-t; try{ localStorage.setItem('rm_droff',String(drOff)); }catch(e){} } }
+  _metDrawerPlace31(); if(!d||d.hidden||!FC.drawer||(side&&side.offsetParent)) return;
+  const b=$('metDrBtn'), p=$('metDrPan'), dr=d.getBoundingClientRect(), nb=$('nudgeBar'); const bh=b.offsetHeight||36;
+  const want=drOff||(nb&&!nb.hidden?(dr.top-nb.getBoundingClientRect().top):dr.height-bh); const off=-Math.max(0,want-(dr.height-bh));
+  b.style.top=off+'px'; const g=d.querySelector('.ovbg'); if(g) g.style.top=off+'px'; p.style.top=(off+bh+6)+'px'; p.style.height=Math.max(60,dr.height-(off+bh+6))+'px'; };
+const _metDrawer31=metDrawer; metDrawer=function(){ nudgeUI(); _metDrawer31(); const p=$('metDrPan');
+  if(p&&!p.hidden){ if(RUN.id) p.querySelectorAll('.dsec.ch .pr.sel').forEach(r=>r.classList.remove('sel'));
+ } nudgeUI(); };
+// RUNS side: tapping a run loads it on the Met (it no longer jumps to the Drill)
+const _drawerRuns31=drawerRuns; drawerRuns=function(){ _drawerRuns31(); const p=$('metDrPan'); if(!p) return;
+  const ids=['show',...PARTS.map(pt=>'p:'+pt),...sections.map((s,i)=>'s:'+i)];
+  p.querySelectorAll('.dsec.rn .shc').forEach((b,k)=>{ const id=ids[k]; if(!id) return; b.classList.toggle('sel',RUN.id===id&&FC.metChain);
+    b.onclick=()=>{ metLoadRun(id); }; }); };
+const _metTitle31=metTitle; metTitle=function(){ _metTitle31(); const t=$('metTitle'); if(!t||t.hidden) return; const pct=Math.round(CHF*100);
+  const k=(RUN.id||'')+'|'+pct; if(t.dataset.k31===k&&t.dataset.k===t.dataset.k31b) return;
+  if(RUN.id){ t.innerHTML=`🏈 ${c2Esc(RUN.chain.name)} <small>· sets ${c2Esc(SETS[RUN.a].l)}–${c2Esc(SETS[RUN.z].l)}</small>`; }
+  if(pct!==100){ const sp=document.createElement('span'); sp.className='rpct'; sp.textContent=` · ${pct}%`; t.appendChild(sp); }
+  t.dataset.k31=k; t.dataset.k31b=t.dataset.k; };
+// hand off between Met and Drill without stopping
+function chainNextBeat(){ if(!C2.on||!ac) return null; const now=ac.currentTime+0.04;
+  for(const e of tLog){ if(e.t<=now||e.ci||e.hold||e.col<0||e.it==null) continue; const s=C2.segs&&C2.segs[e.it]; if(!s||s.k!=='play') continue;
+    const ms=RUN.meas[e.it]; if(!ms) continue; const n=s.ts[0], k=Math.max(0,Math.round(e.prog*s.bars*n)-1), bar=Math.floor(k/n), beat=k%n, m=ms[Math.min(bar,ms.length-1)];
+    const q=Math.min(m.len-1,Math.floor(beat*m.len/n)); return {j:m.js[q],t:e.t}; }
+  return null; }
+function drillAt(j,t){ const r=rangeOf(RUN.id); ac=ac||new (window.AudioContext||window.webkitAudioContext)(); ac.resume();
+  const sp=$('speed'); sp.max=250; sp.step=1; sp.value=Math.round(CHF*100); try{ $('tVal').textContent=sp.value+'%'; }catch(e){}
+  prefs.run=RUN.id; A=SETS[r[0]].s; B=SETS[r[1]].s; playCur=cur; lastInt=-999; const from=BT[j].p-1e-4; count=from;
+  epochs=[]; newEpoch(from,Math.max(t,ac.currentTime+0.03),false); playing=true; $('bPlay').textContent='❚❚ Pause';
+  startTimer(); schedule(); raf=requestAnimationFrame(frame); keepAwake(true); try{ fGoUI(); }catch(e){} }
+function drillNextBeat(){ if(!playing||!epochs.length) return null; const e=epochs[epochs.length-1];
+  const j=BT.findIndex(b=>b.p>count+0.05); if(j<0||RUN.btMap[j]==null) return null; return {j,t:e.start+(T(BT[j].p)-e.T0)/speed()}; }
+function chainAt(pos){ const m=RUN.btMap[pos.j]; if(!m) return false; const c=c2Cur(); if(!c) return false;
+  _c2Scale=true; const flat=c2Flat(c.items), items=flat.map(x=>x.it), segs=c2Resolve(items); _c2Scale=false;
+  Object.assign(C2,{flat,items,waitEnd:0,on:true,held:false,ci:0,i:m.it,bar:m.bar,beat:m.beat,end:0,tap:false,nudge:0,segs,resume:null,chain:CHS.sel,cur:-1,lastTs:''}); C2.durs=segs.map(c2Dur);
+  C2UI.unl=false; C2UI.sub='run'; ac.resume(); testing=true; tIdx=0; tLog=[]; tNext=Math.max(pos.t,ac.currentTime+0.03);
+  startTimer(); testSchedule(); tRaf=requestAnimationFrame(testFrame); keepAwake(true); playLabel(); fGoUI(); return true; }
+const _fcGo31=fcGo; fcGo=function(k){
+  if(k==='drill'&&RUN.id&&C2.on&&FC.mode==='field'){ const pos=chainNextBeat(); _fcGo31(k); if(pos) drillAt(pos.j,pos.t); return; }
+  if(k==='met'&&RUN.id&&playing&&prefs.run===RUN.id&&FC.mode==='field'){ const pos=drillNextBeat(); stop(); FC.metChain=true; fcSaveMC(); _fcGo31(k); if(pos) chainAt(pos); return; }
+  _fcGo31(k); nudgeUI(); };
+const _fcUI31=fcUI; fcUI=function(){ _fcUI31(); nudgeUI(); };
+setTimeout(()=>{ try{ const id=localStorage.getItem('rm_run'); if(id&&FC.metChain){ const c=CHF; metLoadRun(id,true); setCHF(c||1); } }catch(e){} nudgeUI(); },0);
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4431,7 +4547,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=30;
+const APP_V=31;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
