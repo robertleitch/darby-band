@@ -1619,6 +1619,15 @@ html body #c2Lib .lr>button:not(#a#b){display:none!important}
 html body #edPop .ebtns>button:not(#a#b){flex:1;height:46px;padding:0 4px!important;font:900 14px system-ui!important;letter-spacing:.04em;line-height:1.1;background:#fff!important;color:#253d56!important}
 html body #edPop .ebtns>button.sv:not(#a#b){background:#2e8b57!important;color:#fff!important}
 html body #edPop .ebtns>button.dl:not(#a#b){color:#b42318!important;box-shadow:inset 0 0 0 2px #b42318!important}
+
+/* ================= v38: Start/End link (Adobe style) ================= */
+#c2Ed{position:relative}
+#edLink{position:absolute;z-index:3;width:30px;padding:0;margin:0;border:0;background:none;cursor:pointer;touch-action:manipulation}
+#edLink::after{content:'';position:absolute;inset:-6px -10px}
+html body #edLink:not(#a#b#c#d){box-shadow:none!important;background:none!important;border:0!important;border-radius:0!important;padding:0!important;min-height:0!important}
+html body #edLink:not(#a#b#c#d)::after{inset:-6px -10px!important;background:none!important;border:0!important;box-shadow:none!important}
+#edLink svg{display:block;overflow:visible}
+html body #edName:not(#zz){font-size:16px!important}
 </style>
 </head>
 <body>
@@ -1800,8 +1809,8 @@ html body #edPop .ebtns>button.dl:not(#a#b){color:#b42318!important;box-shadow:i
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 37</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">37</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 38</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">38</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4724,7 +4733,7 @@ setTimeout(()=>{ fcUI(); },0);
   const pop=document.createElement('div'); pop.id='edPop'; pop.hidden=true; pop.innerHTML='<h3 id="edTitle">Edit block</h3>'; pop.appendChild(ed);
   document.body.append(sc,pop); edRender(); })();
 let edOrig=null;
-function edOpen(id){ if(id){ const x=libGet(id); if(!x) return; Object.assign(ED,JSON.parse(JSON.stringify(x))); edOrig=x.name; } else { _edNew37(); edOrig=null; }
+function edOpen(id){ if(id){ const x=libGet(id); if(!x) return; Object.assign(ED,JSON.parse(JSON.stringify(x))); edOrig=x.name; } else { _edNew37(); edOrig=null; } ED.lnk=ED.a===ED.b;
   $('edTitle').textContent=id?'Modify or save variation':'New block'; $('edScrim').hidden=false; $('edPop').hidden=false; edRender(); }
 function edWarn(t){ const w=document.querySelector('#c2Ed .edwarn'); if(!w) return; w.textContent=t; w.hidden=false; clearTimeout(edWarn.t); edWarn.t=setTimeout(()=>{ w.hidden=true; },3500); }
 function edClose(){ $('edScrim').hidden=true; $('edPop').hidden=true; c2RenderLib(); }
@@ -4749,6 +4758,22 @@ const _c2RenderLib37=c2RenderLib; c2RenderLib=function(){ _c2RenderLib37(); cons
   if(!L.querySelector('.lbtip')) L.insertAdjacentHTML('beforeend','<div class="lbtip">Tap a block to edit it</div>'); };
 setTimeout(()=>{ try{ c2RenderLib(); }catch(e){} },0);
 
+
+/* ================= v38: link Start and End (default) or unlink them for an accel / rit ================= */
+const _edRender38=edRender; edRender=function(){ if(ED.lnk==null) ED.lnk=ED.a===ED.b; if(ED.lnk) ED.b=ED.a; _edRender38(); const p=$('c2Ed'); if(!p) return;
+  const set=(k,v)=>{ v=Math.max(30,Math.min(300,Math.round(v))); if(ED.lnk){ ED.a=ED.b=v; } else ED[k]=v; edRender(); };
+  p.querySelectorAll('[data-v]').forEach(x=>{ const v=x.dataset.v; if(v[0]!=='a'&&v[0]!=='b') return; const d=v[1]==='+'?1:-1; x.onclick=()=>set(v[0],ED[v[0]]+d); });
+  const bs=p.querySelectorAll('.est b'); [0,1].forEach(k=>{ const key=k?'b':'a'; if(bs[k]) bs[k].onclick=()=>{ const v=prompt('Tempo (bpm)',ED[key]); if(v&&+v>0) set(key,+v); }; });
+  const ests=p.querySelectorAll('.est'); if(ests.length<2) return; let l=$('edLink'); if(!l){ l=document.createElement('button'); l.id='edLink'; l.setAttribute('aria-label','Link start and end tempo'); }
+  p.appendChild(l); l.onclick=()=>{ ED.lnk=!ED.lnk; if(ED.lnk) ED.b=ED.a; edRender(); };
+  requestAnimationFrame(()=>{ const pr=p.getBoundingClientRect(), r1=ests[0].getBoundingClientRect(), r2=ests[1].getBoundingClientRect(); if(!r1.height) return;
+    const top=r1.top+r1.height/2-pr.top, H=r2.top+r2.height/2-pr.top-top, mid=H/2, cx=16;
+    const lk=y=>`<rect x="${cx-3.5}" y="${y}" width="7" height="10" rx="3.5" fill="none" stroke="#253d56" stroke-width="1.6"/>`;
+    const ch=ED.lnk?lk(mid-13)+lk(mid-5)+lk(mid+3):lk(mid-13)+lk(mid+3);
+    l.style.left=(r1.right-pr.left+8)+'px'; l.style.top=top+'px'; l.style.height=H+'px';
+    l.innerHTML=`<svg width="30" height="${H}" viewBox="0 0 30 ${H}"><path d="M2 .6H${cx}V${mid-13}M2 ${H-.6}H${cx}V${mid+13}" fill="none" stroke="#9aa3ad" stroke-width="1.2"/>${ch}</svg>`;
+    l.setAttribute('aria-pressed',ED.lnk); }); };
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4769,7 +4794,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=37;
+const APP_V=38;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
