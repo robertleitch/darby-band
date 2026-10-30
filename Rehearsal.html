@@ -1646,6 +1646,11 @@ html body #splash .sppw:not(#zz){left:0;right:0;bottom:calc(46px + env(safe-area
 html body #splash .sppw img.fci:not(#zz){width:64px;height:64px;border-radius:14px}
 html body #splash .sppw .spbar:not(#zz){width:200px;margin:0}
 html body #splash .sppw small:not(#zz){font:700 10.5px system-ui;letter-spacing:.2em}
+
+/* ================= v41: every scroller moves on one axis only ================= */
+html body #runScroll:not(#zz){overflow-y:hidden!important;touch-action:pan-x;overscroll-behavior:contain}
+.ax1x{overflow-y:hidden!important;touch-action:pan-x;overscroll-behavior-x:contain}
+.ax1y{overflow-x:hidden!important;touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -1827,8 +1832,8 @@ html body #splash .sppw small:not(#zz){font:700 10.5px system-ui;letter-spacing:
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 40</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">40</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 41</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">41</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4807,6 +4812,12 @@ const _c2RenderLib39=c2RenderLib; c2RenderLib=function(){ _c2RenderLib39(); cons
   const t=L.querySelector('.lbtip'); if(t) t.textContent='Tap a block to edit or duplicate it'; };
 setTimeout(()=>{ try{ c2RenderLib(); }catch(e){} },0);
 
+/* ================= v41: one-axis scrolling everywhere: a row that scrolls sideways never scrolls up and down ================= */
+function oneAxis(){ document.querySelectorAll('body *').forEach(e=>{ if(e.classList.contains('ax1x')||e.classList.contains('ax1y')) return; const c=getComputedStyle(e);
+  const sx=/auto|scroll/.test(c.overflowX), sy=/auto|scroll/.test(c.overflowY); if(!(sx&&sy)) return;
+  const dx=e.scrollWidth-e.clientWidth, dy=e.scrollHeight-e.clientHeight; if(dx<=2&&dy<=2) return;
+  e.classList.add(dx>dy?'ax1x':'ax1y'); }); }
+setInterval(oneAxis,1500); window.addEventListener('resize',()=>setTimeout(oneAxis,100)); setTimeout(oneAxis,500);
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4827,7 +4838,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=40;
+const APP_V=41;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
