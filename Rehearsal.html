@@ -1861,8 +1861,8 @@ html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!imp
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 43</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">43</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 44</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">44</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4961,6 +4961,15 @@ let mvLast=null;
 (function(){ const g=$('fGo2'); if(!g) return; const prev=g.onclick; g.onclick=e=>{ if(metLive()&&view==='drill'){ c2Stop(); try{ fGoUI(); }catch(x){} return; } return prev&&prev.call(g,e); }; })();
 const _fGoUI43=fGoUI; fGoUI=function(){ _fGoUI43(); if(metLive()&&view==='drill'){ const g=$('fGo2'); if(g){ g.textContent='■  STOP'; g.classList.add('on'); } } };
 
+
+/* ================= v44: PLAY on the Drill also runs on the Met's clock, so switching screens never stops it ================= */
+function drillPlayOnMet(){ const id=prefs.run||'show'; const here=cur, sp=speed();
+  const r=runBuild(id); if(!r) return false; metLoadRun(id,true); FC.side='met'; try{ mcUI(); }catch(e){}
+  setCHF(sp); const i=Math.max(RUN.a+1,Math.min(RUN.z,here+1)); runFromSet(i); try{ fGoUI(); }catch(e){} return true; }
+(function(){ const g=$('fGo2'); if(!g) return; const prev=g.onclick;
+  g.onclick=e=>{ if(FC.mode==='field'&&view==='drill'&&!freeOn){ if(metLive()){ c2Stop(); try{ fGoUI(); }catch(x){} return; }
+      if(playing) stop(); if(drillPlayOnMet()) return; } return prev&&prev.call(g,e); }; })();
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4981,7 +4990,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=43;
+const APP_V=44;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
