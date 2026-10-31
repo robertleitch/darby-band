@@ -1820,6 +1820,16 @@ aside.v48>.card.secs48 .chips>*{font-size:12px!important;padding:3px 8px!importa
 #runCopy{display:block;margin:6px auto 0}
 html body #runCopy:not(#a#b#c){background:#fff!important;color:#253d56!important;border:0!important;box-shadow:inset 0 0 0 2px #253d56!important;border-radius:3px!important;font:700 10.5px/1 system-ui!important;letter-spacing:.12em!important;padding:6px 10px!important;min-height:0!important;height:auto!important}
 #runCopy[hidden]{display:none!important}
+
+/* ===== v49: one button look everywhere: chosen = green, actions = navy, all CAPS ===== */
+html body button.sel:not(#a#b#c):not(.sbk),html body .seg>button.sel:not(#a#b#c),html body .chsm.sel:not(#a#b#c),html body #moBtn.on:not(#a#b#c),html body .dotcard .dcf.on:not(#a#b#c),html body .dotcard .dcb button.on:not(#a#b#c){background:#2e8b57!important;color:#fff!important;border-color:#1d5c3a!important}
+html body #free .frow button.tap:not(#a#b#c),html body #nudgeBar .tap:not(#a#b#c),html body #free .fbpmrow button.tap:not(#a#b#c){background:#2c3d4e!important;color:#fff!important}
+html body .c2sq .c2x:not(#a#b#c){background:#2c3d4e!important;color:#fff!important;border-radius:3px!important}
+html body #c2TNew:not(#a#b#c){text-transform:uppercase!important;letter-spacing:.1em!important}
+html body .sslink:not(#a#b#c){background:#2c3d4e!important;border:0!important;border-radius:3px!important;color:#fff!important}
+html body .sslink:not(#a#b#c) b{text-transform:uppercase;letter-spacing:.12em;font-size:14px}
+html body .sslink:not(#a#b#c) small,html body .sslink:not(#a#b#c) .go{color:#cfdbea!important}
+html body .sslink:not(#a#b#c) svg{color:#fff;stroke:#fff}
 </style>
 </head>
 <body>
@@ -2007,7 +2017,7 @@ html body #runCopy:not(#a#b#c){background:#fff!important;color:#253d56!important
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
   </div>
-  <button class="sslink" id="ssOpen"><span class="ic">🎼</span><span class="tx"><b>Score setup <span class="ssbadge" id="ssBadge"></span></b><small>Tempos, rits, holds, meters and notes from the score: how the app plays each one</small></span><span class="go">›</span></button>
+  <button class="sslink" id="ssOpen"><span class="ic">🎼</span><span class="tx"><b>SCORE SETUP <span class="ssbadge" id="ssBadge"></span></b><small>Tempos, rits, holds, meters and notes from the score: how the app plays each one</small></span><span class="go">›</span></button>
   <div class="srow cigrid">
     <div class="sl">Count-in</div>
     <div class="cictl">
@@ -4827,7 +4837,7 @@ const _testStart32=testStart; testStart=function(){ if(VQ.on){ VQ.q.push(()=>_te
 // voice picker
 (function(){ const after=$('hapRow')||$('verRow'); if(!after) return; const row=document.createElement('div'); row.className='srow'; row.id='voxRow';
   row.innerHTML='<div class="sl">Voice<small>The voice that confirms your commands (tap to hear it)</small></div><div class="seg" id="voxSeg"></div>'; after.after(row);
-  const ui=()=>{ const s=$('voxSeg'); s.innerHTML=''; [['heart','Heart'],['michael','Michael']].forEach(([v,l])=>{ const b=document.createElement('button'); b.textContent=l; b.classList.toggle('sel',FCVOXN===v);
+  const ui=()=>{ const s=$('voxSeg'); s.innerHTML=''; [['heart','1'],['michael','2']].forEach(([v,l])=>{ const b=document.createElement('button'); b.textContent=l; b.classList.toggle('sel',FCVOXN===v);
     b.onclick=()=>{ FCVOXN=v; FCVOX=FCVOXS[v]; VB=null; try{ localStorage.setItem('rm_voice',v); }catch(e){} ui(); const c=AO.confirm; AO.confirm=true; say('part 2 from set 18'); AO.confirm=c; }; s.appendChild(b); }); };
   ui(); })();
 // each run's own starting tempo (for the drawer)
@@ -5004,7 +5014,7 @@ function sedSet(key,val,desc){ const before=SHOWED.ov[key]?JSON.parse(JSON.strin
   SHOWED.hist.push({t:Date.now(),key,desc,before,after:val?JSON.parse(JSON.stringify(val)):null}); sedSave(); }
 let ssuF='all', ssuView='list', ssuBuilt=null;
 (function(){ const d=document.createElement('div'); d.id='ssu'; d.hidden=true; document.body.appendChild(d);
-  const row=document.createElement('button'); row.className='sslink'; row.id='ssuOpen'; row.innerHTML='<span class="ic">'+FIELDI+'</span><span class="tx"><b>Show setup</b><small>The whole show as blocks: answer questions, edit tempos and holds, publish, go back to an earlier version</small></span><span class="go">›</span>';
+  const row=document.createElement('button'); row.className='sslink'; row.id='ssuOpen'; row.innerHTML='<span class="ic">'+FIELDI+'</span><span class="tx"><b>SHOW SETUP</b><small>The whole show as blocks: answer questions, edit tempos and holds, publish, go back to an earlier version</small></span><span class="go">›</span>';
   const so=$('ssOpen'); if(so){ so.before(row); so.style.setProperty('display','none','important'); } row.onclick=()=>ssuOpen(); })();
 function ssuOpen(){ try{ dlg.close(); }catch(e){} if(playing) stop(); if(testing){ if(C2.on) c2Stop(); else testStop(); } ssuView='list'; $('ssu').hidden=false; ssuRender(); }
 function ssuClose(){ $('ssu').hidden=true; openSettings(); }

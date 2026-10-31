@@ -28,7 +28,7 @@ const SCREENS=[
       const bad=await p.evaluate(OK=>{ const out=[]; const vis=e=>{ const r=e.getBoundingClientRect(); if(r.width<4||r.height<4) return false; const s=getComputedStyle(e); return s.visibility!=='hidden'&&s.display!=='none'&&+s.opacity>0.05&&e.offsetParent!==null||s.position==='fixed'; };
         const dlg=document.querySelector('dialog[open]');
         document.querySelectorAll('button,.seg>*,[role=button]').forEach(e=>{ if(!vis(e)) return; if(dlg&&!dlg.contains(e)) return; const s=getComputedStyle(e);
-          const txt=(e.innerText||e.textContent||'').trim().replace(/\s+/g,' '), letters=/[A-Za-z]/.test(txt), icon=!letters;
+          const cl=e.cloneNode(true); cl.querySelectorAll('small').forEach(x=>x.remove()); const txt=(cl.textContent||'').trim().replace(/\s+/g,' '), letters=/[A-Za-z]/.test(txt), icon=!letters;
           const bg=s.backgroundColor, rad=parseFloat(s.borderTopLeftRadius)||0, fw=+s.fontWeight||400, caps=s.textTransform==='uppercase'||txt===txt.toUpperCase();
           const why=[]; const boxless=bg==='rgba(0, 0, 0, 0)'&&s.borderTopStyle==='none'&&!/inset/.test(s.boxShadow);
           if(!(icon&&boxless)){ if(rad>4.5) why.push(`round corners (${Math.round(rad)}px)`); const near=OK.some(o=>{ const A=(o.match(/[\d.]+/g)||[]).map(Number), B=(bg.match(/[\d.]+/g)||[]).map(Number); return A.length>=3&&B.length>=3&&(A[3]??1)===(B[3]??1)&&Math.abs(A[0]-B[0])+Math.abs(A[1]-B[1])+Math.abs(A[2]-B[2])<=12; }); if(!near) why.push(`color ${bg}`); }
