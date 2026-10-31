@@ -1861,8 +1861,8 @@ html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!imp
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 42</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">42</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 43</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">43</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4932,6 +4932,35 @@ function ssuHistWire(){ const d=$('ssu');
   d.querySelectorAll('[data-un]').forEach(b=>b.onclick=()=>{ const x=SHOWED.hist[+b.dataset.un]; if(!x||!x.key) return; const cur=SHOWED.ov[x.key];
     sedSet(x.key,x.before?JSON.parse(JSON.stringify(x.before)):null,'Undid: '+x.desc); ssuRender(); }); }
 
+
+/* ================= v43: one clock. A playing run keeps the Met going on every screen; the Drill just follows it ================= */
+const metLive=()=>!!(C2.on&&testing&&RUN.id&&FC.mode==='field');
+function keepMet(fn){ const was=testing; testing=false; try{ fn(); } finally{ testing=was; } }
+const _fcGo43=fcGo; fcGo=function(k){
+  if(metLive()&&(k==='drill'||k==='met')){
+    keepMet(()=>{ _fcGo31(k); });               // switch screens without touching the click
+    if(k==='met'){ FC.side='chain'; if(freeOn){ fPage='chain'; fMix=false; freePages(); } }
+    fcUI(); try{ mcUI(); }catch(e){} try{ fGoUI(); }catch(e){} return; }
+  _fcGo43(k); };
+// the Drill reads where the Met is and moves the dots to match
+function metPos(){ if(!ac) return null; const now=vNow(); let e=null, nx=null;
+  for(const x of tLog){ if(x.t<=now) e=x; else { nx=x; break; } }
+  if(!e) return {p:SETS[RUN.a].s, col:-1};
+  if(e.ci) return {p:SETS[RUN.a].s, col:e.col};
+  if(e.hold||e.col<0) return null;
+  const s=C2.segs&&C2.segs[e.it], ms=RUN.meas[e.it]; if(!s||!ms||s.k!=='play') return null;
+  const n=s.ts[0], k=Math.max(0,Math.round(e.prog*s.bars*n)-1), m=ms[Math.min(Math.floor(k/n),ms.length-1)], q=Math.min(m.len-1,Math.floor((k%n)*m.len/n)), j=m.js[q];
+  const span=nx?Math.max(0.01,nx.t-e.t):0.5, f=Math.max(0,Math.min(1,(now-e.t)/span)), p0=BT[j].p, p1=BT[j+1]?BT[j+1].p:p0+1;
+  return {p:p0+f*(p1-p0), col:e.col}; }
+let mvLast=null;
+(function metViewer(){ requestAnimationFrame(metViewer); if(!metLive()||view!=='drill'||freeOn) return;
+  const r=metPos(); if(r){ mvLast=r.p; count=r.p; const ti=targetIdx(count); cur=Math.min(NS-1,Math.max(0,ti-(count<SETS[ti].s-1e-6?1:0))); }
+  try{ render(); }catch(e){}
+  if(r&&r.col!=null){ let n=4; try{ const mu=musicAt(count); n=(mu&&mu.bar)||4; }catch(e){} c2BeatUI(Math.max(1,Math.min(12,n)),r.col<0?-1:r.col%n); } })();
+// PLAY / STOP on the Drill stops the Met when the Met is the one playing
+(function(){ const g=$('fGo2'); if(!g) return; const prev=g.onclick; g.onclick=e=>{ if(metLive()&&view==='drill'){ c2Stop(); try{ fGoUI(); }catch(x){} return; } return prev&&prev.call(g,e); }; })();
+const _fGoUI43=fGoUI; fGoUI=function(){ _fGoUI43(); if(metLive()&&view==='drill'){ const g=$('fGo2'); if(g){ g.textContent='■  STOP'; g.classList.add('on'); } } };
+
 /* ---------- start ---------- */
 try{ const m=localStorage.getItem('rm_me'); if(m){const k=P.findIndex(p=>p.l===m); if(k>=0){perfSel.value=k; me=k;}} }catch(e){}
 try{ const pr=JSON.parse(localStorage.getItem('rm_prefs')||'{}');
@@ -4952,7 +4981,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=42;
+const APP_V=43;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
