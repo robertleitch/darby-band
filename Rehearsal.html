@@ -2011,8 +2011,8 @@ html body .sslink:not(#a#b#c) svg{color:#fff;stroke:#fff}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 49</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">49</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 50</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">50</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -5412,9 +5412,9 @@ function runToChain(){ if(!RUN.id||!RUN.chain) return; const base=RUN.chain.name
     LIB.blocks.push({id,name:`${n.trim()} · ${k}`,ts:[...b.ts],a:r1(b.a*CHF),b:r1(b.b*CHF),bars:b.bars,chg:b.chg||'smooth',crv:b.crv||'lin'}); return {t:'ref',id}; }).filter(Boolean);
   CHS.list.push({id:'c'+stamp,name:n.trim(),items,v2:1}); libSave(); c2Save();
   try{ vShow('Copied to a chain','“'+n.trim()+'” is in BUILD › Chains',true); }catch(e){} }
-(function(){ const b=document.createElement('button'); b.id='runCopy'; b.hidden=true; b.textContent='⧉ COPY TO CHAIN'; b.onclick=runToChain;
+(function(){ const b=document.createElement('button'); b.id='runCopy'; b.hidden=true; b.textContent='⧉ SAVE A·B RUN TO CHAIN'; b.onclick=runToChain;
   const t=$('metTitle'); if(t) t.after(b); })();
-const _metTitle48=metTitle; metTitle=function(){ _metTitle48(); let b=$('runCopy'); const t=$('metTitle'); if(!t) return; if(!b){ b=document.createElement('button'); b.id='runCopy'; b.textContent='⧉ COPY TO CHAIN'; b.onclick=runToChain; } const anc=$('bkSw')||t; if(b.previousSibling!==anc) anc.after(b); b.hidden=!(RUN.id&&!t.hidden&&FC.mode==='field'&&FC.metChain); };
+const _metTitle48=metTitle; metTitle=function(){ _metTitle48(); let b=$('runCopy'); const t=$('metTitle'); if(!t) return; if(!b){ b=document.createElement('button'); b.id='runCopy'; b.textContent='⧉ SAVE A·B RUN TO CHAIN'; b.onclick=runToChain; } const anc=$('bkSw')||t; if(b.previousSibling!==anc) anc.after(b); b.hidden=!(RUN.id&&String(RUN.id).startsWith('s:')&&!t.hidden&&FC.mode==='field'&&FC.metChain); };
 setTimeout(()=>{ try{ metTitle(); }catch(e){} },0);
 
 /* ---------- start ---------- */
@@ -5437,7 +5437,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=49;
+const APP_V=50;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
