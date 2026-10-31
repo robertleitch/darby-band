@@ -1680,6 +1680,8 @@ html body #ssu .bl .pl:not(#a#b){flex:none;width:34px;height:34px;padding:0!impo
 #ssu .hs .hr div{flex:1;min-width:0}#ssu .hs .hr b{display:block;font:800 14px system-ui}#ssu .hs .hr small{font:600 12px system-ui;color:#6b7380}
 html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!important;font:800 12px system-ui;background:#fff!important;color:#253d56!important}
 #ssu .empty{margin:6px 14px;font:600 13px system-ui;color:#6b7380}
+
+.sbk .sbr{height:4px;background:#e3e9f1;margin:0 6px 4px;border-radius:2px;overflow:hidden}.sbk .sbr i{display:block;height:100%;width:0;background:#b3261e}
 </style>
 </head>
 <body>
@@ -1861,8 +1863,8 @@ html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!imp
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 44</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">44</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 45</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">45</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4706,7 +4708,7 @@ function setGridUI(){ const sw=$('bkSw'), g=$('setGrid'), run=$('c2Run'); if(!sw
   let h=''; for(let i=RUN.a+1;i<=RUN.z;i++){ const s=SETS[i], A=SETS[i-1].s, B=s.s; const tl=[]; for(let c=A+0.5;c<B;c+=1) tl.push(60/beatAt(c)); if(!tl.length) tl.push(60/beatAt(A+0.5));
     const md=[...tl].sort((x,y)=>x-y)[Math.floor(tl.length/2)], ok=tl.filter(v=>v>=0.6*md); const b0=Math.round((ok[0]||md)*CHF), b1=Math.round((ok[ok.length-1]||md)*CHF);
     const mu=musicAt(A+0.5), ts=mu&&mu.ts?mu.ts:'';
-    h+=`<div class="sbk" data-i="${i}"><div class="h"><span class="sn">${c2Esc(s.l)}</span><small>${s.c} cts</small></div><div class="bp${b0!==b1?' r':''}">${b0===b1?b0:b0+(b1<b0?'↘':'↗')+b1}</div><div class="ft">${c2Esc(ts)||'–'}</div></div>`; }
+    h+=`<div class="sbk" data-i="${i}"><div class="h"><span class="sn">${c2Esc(s.l)}</span><small>${s.c} cts</small></div><div class="bp${b0!==b1?' r':''}">${b0===b1?b0:b0+(b1<b0?'↘':'↗')+b1}</div><div class="sbr"><i></i></div><div class="ft">${c2Esc(ts)||'–'}</div></div>`; }
   g.innerHTML=h; g.querySelectorAll('.sbk').forEach(e=>e.onclick=()=>runFromSet(+e.dataset.i)); }
 // start the loaded run from a set (count-in first)
 function runFromSet(i){ const A=SETS[i-1].s; const j=BT.findIndex(b=>b.p>A+1e-6); const m=j>=0?RUN.btMap[j]:null; if(!m) return;
@@ -4719,11 +4721,12 @@ function runFromSet(i){ const A=SETS[i-1].s; const j=BT.findIndex(b=>b.p>A+1e-6)
     for(let k=0;k<N;k++){ click(tNext,k===0?'start':(k%n===0?'bar':'off'),'ci'); tLog.push({t:tNext,col:k%n,it:m.it,ci:1,prog:0,lab:`${k+1} of ${N}`,bpm:c2Tempo(sg,m.bar,m.beat),ts:sg.ts}); tNext+=sp; } }
   startTimer(); testSchedule(); tRaf=requestAnimationFrame(testFrame); keepAwake(true); playLabel(); fGoUI(); }
 // green outline follows the set being played
-let sgNow=-1;
+let sgNow=-1, sgP=null;
 (function sgTick(){ requestAnimationFrame(sgTick); const g=$('setGrid'); if(!g||g.hidden) return; let i=-1;
   if(C2.on&&ac&&RUN.id){ const now=(typeof vNow==='function'?vNow():ac.currentTime); let e=null; for(const x of tLog) if(x.t<=now&&!x.ci&&x.col>=0) e=x;
-    if(e){ const s=C2.segs&&C2.segs[e.it], ms=RUN.meas[e.it]; if(s&&ms&&s.k==='play'){ const n=s.ts[0], k=Math.max(0,Math.round(e.prog*s.bars*n)-1), m=ms[Math.min(Math.floor(k/n),ms.length-1)], q=Math.min(m.len-1,Math.floor((k%n)*m.len/n)); i=targetIdx(BT[m.js[q]].p); } } }
-  else if(playing&&prefs.run===RUN.id) i=targetIdx(count);
+    if(e){ const s=C2.segs&&C2.segs[e.it], ms=RUN.meas[e.it]; if(s&&ms&&s.k==='play'){ const n=s.ts[0], k=Math.max(0,Math.round(e.prog*s.bars*n)-1), m=ms[Math.min(Math.floor(k/n),ms.length-1)], q=Math.min(m.len-1,Math.floor((k%n)*m.len/n)); const r=metPos(); sgP=r?r.p:BT[m.js[q]].p; i=targetIdx(sgP); } } }
+  else if(playing&&prefs.run===RUN.id){ sgP=count; i=targetIdx(count); }
+  { const fr=(i>0&&count!=null&&sgP!=null)?Math.max(0,Math.min(1,(sgP-SETS[i-1].s)/Math.max(.001,SETS[i].s-SETS[i-1].s))):0; g.querySelectorAll('.sbk').forEach(e=>{ const k=+e.dataset.i, b=e.querySelector('.sbr i'); if(b) b.style.width=(k===i?fr*100:(i>0&&k<i&&(C2.on||playing)?100:0))+'%'; }); }
   if(i!==sgNow){ sgNow=i; g.querySelectorAll('.sbk').forEach(e=>e.classList.toggle('now',+e.dataset.i===i)); const cur=g.querySelector('.sbk.now'); if(cur&&cur.scrollIntoView) try{ cur.scrollIntoView({block:'nearest'}); }catch(e){} } })();
 const _metTitle32=metTitle; metTitle=function(){ _metTitle32(); setGridUI(); };
 const _setCHF32=setCHF; setCHF=function(f){ _setCHF32(f); setGridUI(); };
@@ -4732,7 +4735,7 @@ setTimeout(()=>{ setGridUI(); },0);
 
 /* ================= v33: one switch at the top of the Met (metronome | chain, or metronome | music | sets) ================= */
 FC.side='met';   // every start opens on the wheel; a loaded chain or run waits on the other side
-function mcGo(v){ if(testing){ if(C2.on) c2Stop(); else testStop(); } if(playing) stop();
+function mcGo(v){ if(!(C2.on&&testing&&RUN.id)){ if(testing){ if(C2.on) c2Stop(); else testStop(); } if(playing) stop(); }
   if(v==='met'){ FC.side='met'; FC.drawer=false; fPage='tempo'; fMix=false; freePages(); }
   else { FC.side='chain'; if(v==='music'||v==='sets'){ RV=v; try{ localStorage.setItem('rm_rv',RV); }catch(e){} } fPage='chain'; fMix=false; C2UI.sub='run'; c2Save(); freePages(); c2Render(); }
   metDrawer(); fGoUI(); mcUI(); setGridUI(); }
@@ -4990,7 +4993,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=44;
+const APP_V=45;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
