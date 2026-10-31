@@ -1682,6 +1682,9 @@ html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!imp
 #ssu .empty{margin:6px 14px;font:600 13px system-ui;color:#6b7380}
 
 .sbk .sbr{height:4px;background:#e3e9f1;margin:0 6px 4px;border-radius:2px;overflow:hidden}.sbk .sbr i{display:block;height:100%;width:0;background:#b3261e}
+
+#setGrid .sgpt{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;margin:8px 2px 0;padding-bottom:4px;border-bottom:2px solid #253d56}
+#setGrid .sgpt:first-child{margin-top:0}#setGrid .sgpt b{font:900 12px system-ui;letter-spacing:.16em;color:#253d56}#setGrid .sgpt small{font:700 11px system-ui;color:#6b7380}
 </style>
 </head>
 <body>
@@ -1863,8 +1866,8 @@ html body #ssu .hs .hr button:not(#a#b){flex:none;height:32px;padding:0 10px!imp
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 45</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">45</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 46</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">46</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4705,7 +4708,8 @@ function setGridUI(){ const sw=$('bkSw'), g=$('setGrid'), run=$('c2Run'); if(!sw
   const t=$('metTitle'); if(t&&t.nextSibling!==sw) t.after(sw); const strip=$('c2Strip'); if(strip&&strip.nextSibling!==g) strip.after(g);
   sw.querySelectorAll('button').forEach(b=>b.classList.toggle('sel',b.dataset.v===RV));
   if(!sets) return; const k=RUN.id+'|'+CHF; if(sgKey===k&&g.children.length) return; sgKey=k;
-  let h=''; for(let i=RUN.a+1;i<=RUN.z;i++){ const s=SETS[i], A=SETS[i-1].s, B=s.s; const tl=[]; for(let c=A+0.5;c<B;c+=1) tl.push(60/beatAt(c)); if(!tl.length) tl.push(60/beatAt(A+0.5));
+  let h='', ptPrev=null; for(let i=RUN.a+1;i<=RUN.z;i++){ const s=SETS[i], A=SETS[i-1].s, B=s.s;
+    if(s.p!==ptPrev){ ptPrev=s.p; const rr=rangeOf('p:'+s.p); h+=`<div class="sgpt"><b>${c2Esc(s.p).toUpperCase()}</b><small>sets ${c2Esc(SETS[Math.max(RUN.a+1,rr[0]+(rr[0]===0?0:1))].l)}–${c2Esc(SETS[Math.min(RUN.z,rr[1])].l)}</small></div>`; } const tl=[]; for(let c=A+0.5;c<B;c+=1) tl.push(60/beatAt(c)); if(!tl.length) tl.push(60/beatAt(A+0.5));
     const md=[...tl].sort((x,y)=>x-y)[Math.floor(tl.length/2)], ok=tl.filter(v=>v>=0.6*md); const b0=Math.round((ok[0]||md)*CHF), b1=Math.round((ok[ok.length-1]||md)*CHF);
     const mu=musicAt(A+0.5), ts=mu&&mu.ts?mu.ts:'';
     h+=`<div class="sbk" data-i="${i}"><div class="h"><span class="sn">${c2Esc(s.l)}</span><small>${s.c} cts</small></div><div class="bp${b0!==b1?' r':''}">${b0===b1?b0:b0+(b1<b0?'↘':'↗')+b1}</div><div class="sbr"><i></i></div><div class="ft">${c2Esc(ts)||'–'}</div></div>`; }
@@ -4993,7 +4997,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=45;
+const APP_V=46;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
