@@ -2011,8 +2011,8 @@ html body .sslink:not(#a#b#c) svg{color:#fff;stroke:#fff}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 48</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">48</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 49</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">49</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -5167,11 +5167,11 @@ function c2EndHook(){ if(C2.fdbDone) return false;
 const _c2Start48=c2Start; c2Start=function(f){ C2.fdbDone=false; C2.startP=null; return _c2Start48(f); };
 const _runFromBeat48=runFromBeat; runFromBeat=function(j){ C2.fdbDone=false; C2.startP=j>0&&BT[j]?Math.max(SETS[RUN.a].s,BT[j-1].p):null; return _runFromBeat48(j); };
 const _chainAt48=chainAt; chainAt=function(p){ C2.fdbDone=false; return _chainAt48(p); };
-// cheater: the 1 of the last bar before a tempo or meter change stutters
+// cheater: two 32nd notes lead into the 1 of the last bar before a tempo or meter change (the 1 stays on time)
 function c2Cheat(s,t,span){ if(!prefs.cheat||s.k!=='play'||C2.beat!==0||C2.bar!==s.bars-1) return;
   let nx=null; for(let k=C2.i+1;k<C2.segs.length;k++){ const x=C2.segs[k]; if(x.k==='play'||x.k==='loop'){ nx=x; break; } if(x.k==='wait') return; }
   if(!nx) return; if(Math.abs(nx.a-s.b)<1&&nx.ts[0]===s.ts[0]&&nx.ts[1]===s.ts[1]) return;
-  click(t+span*0.2,'bar','acc'); }
+  const s32=span*(s.ts[1]||4)/32; for(const k of [2,1]){ const tt=t-k*s32; if(tt>ac.currentTime+0.005) click(tt,'beat','q'); } }
 // the Drill's own controls work on the Met's clock while a run plays
 function metSetIdx(){ const r=metPos(); return targetIdx(r?r.p:count); }
 function metJumpSet(i){ runFromSet(Math.max(RUN.a+1,Math.min(RUN.z,i))); }
@@ -5217,7 +5217,7 @@ function segRow(id,label,sub,opts,get,set,after){ const row=document.createEleme
 (function(){ const ci=document.querySelector('dialog#settings .srow.cigrid'); if(!ci) return;
   const r1=segRow('lpciRow','Loop count-in','When LOOP is on: Yes counts in again before each repeat. No jumps straight back to the start.',[[false,'No'],[true,'Yes']],()=>!!prefs.loopCi,v=>prefs.loopCi=v,ci);
   const r2=segRow('fdbRow','Final downbeat','One extra “1” when a chain or run ends.',[[true,'On'],[false,'Off']],()=>!!prefs.fdb,v=>prefs.fdb=v,r1);
-  segRow('cheatRow','Cheater','The “1” of the last bar before a tempo or meter change stutters, as a heads-up.',[[true,'On'],[false,'Off']],()=>!!prefs.cheat,v=>prefs.cheat=v,r2);
+  segRow('cheatRow','Cheater','Two quick 32nd notes lead into the “1” of the last bar before a tempo or meter change, as a heads-up. Every beat stays on time.',[[true,'On'],[false,'Off']],()=>!!prefs.cheat,v=>prefs.cheat=v,r2);
   const dd=[...document.querySelectorAll('dialog#settings .srow')].find(r=>r.querySelector('#cProps'));
   if(dd) segRow('fcolRow','Field color','The look of the field on the Drill.',[[true,'Green'],[false,'White']],()=>prefs.green!==false,v=>{ prefs.green=v; applyFieldColor(); },dd);
   const hs=$('hapSeg'); if(hs){ const t=document.createElement('button'); t.id='hapTest'; t.textContent='Test'; t.onclick=()=>{ for(let k=0;k<6;k++) setTimeout(()=>{ const h=HAP; HAP=true; hapTick(); HAP=h; },k*110); }; hs.after(t); } })();
@@ -5433,7 +5433,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=48;
+const APP_V=49;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
