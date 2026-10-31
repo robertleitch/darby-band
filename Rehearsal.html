@@ -4191,7 +4191,7 @@ function c2Schedule(){ const segs=C2.segs, horizon=ac.currentTime+HORIZON; let g
       for(let k=0;k<s.n;k++){ click(tNext,k===0?'start':(k%s.ts[0]===0?'bar':'off'),'ci'); tLog.push({t:tNext,col:k%s.ts[0],it:C2.i,prog:(k+1)/s.n,lab:`${k+1} OF ${s.n}`,bpm,ts:s.ts}); if(tLog.length>64) tLog.shift(); tNext+=sp; }
       C2.i++; C2.bar=C2.beat=0; continue; }
     const [n,d]=s.ts;
-    if(C2.beat===0){ if(s.k==='play'&&C2.bar>=s.bars){ C2.i++; C2.bar=0; C2.tap=false; continue; } if(C2.tap&&C2.bar>0&&(s.k==='loop'||s.k==='play')){ C2.tap=false; C2.i++; C2.bar=0; continue; } }
+    if(C2.beat===0){ if(s.k==='play'&&C2.bar>=s.bars){ C2.i++; C2.bar=0; C2.tap=false; continue; } if(C2.tap&&C2.bar>0&&(s.k==='loop'||s.k==='play')){ C2.tap=false; if(typeof c2CheatTap==='function') c2CheatTap(s); C2.i++; C2.bar=0; continue; } }
     if(C2.ci>0&&C2.bar===0&&C2.beat===0){ const cb=Math.max(20,s.a+C2.nudge), sp=c2Span(cb,s.ts), N=C2.ci; C2.ci=0;
       for(let k=0;k<N;k++){ click(tNext,k===0?'start':(k%n===0?'bar':'off'),'ci'); tLog.push({t:tNext,col:k%n,it:C2.i,ci:1,prog:0,lab:`${k+1} of ${N}`,bpm:cb,ts:s.ts}); if(tLog.length>64) tLog.shift(); tNext+=sp; } continue; }
     const bpm=Math.max(20,Math.min(400,c2Tempo(s,C2.bar,C2.beat)+C2.nudge)), span=c2Span(bpm,s.ts), P=patFor(`${n}/${d}`), col=C2.beat%12, t=tNext;
@@ -5169,9 +5169,13 @@ const _runFromBeat48=runFromBeat; runFromBeat=function(j){ C2.fdbDone=false; C2.
 const _chainAt48=chainAt; chainAt=function(p){ C2.fdbDone=false; return _chainAt48(p); };
 // cheater: two 32nd notes lead into the 1 of the last bar before a tempo or meter change (the 1 stays on time)
 function c2Cheat(s,t,span){ if(!prefs.cheat||s.k!=='play'||C2.beat!==0||C2.bar!==s.bars-1) return;
-  let nx=null; for(let k=C2.i+1;k<C2.segs.length;k++){ const x=C2.segs[k]; if(x.k==='play'||x.k==='loop'){ nx=x; break; } if(x.k==='wait') return; }
-  if(!nx) return; if(Math.abs(nx.a-s.b)<1&&Math.abs(nx.a-nx.b)<1&&nx.ts[0]===s.ts[0]&&nx.ts[1]===s.ts[1]) return;   // a rit. or accel. coming up counts as a change too
+  const nx=c2NextPlay(C2.i); if(!nx) return; if(Math.abs(nx.a-s.b)<1&&Math.abs(nx.a-nx.b)<1&&nx.ts[0]===s.ts[0]&&nx.ts[1]===s.ts[1]) return;   // a rit. or accel. coming up counts as a change too
   const s32=span*(s.ts[1]||4)/32; for(const k of [2,1]){ const tt=t-k*s32; if(tt>ac.currentTime+0.005) click(tt,'bar','acc'); } }
+function c2NextPlay(i){ for(let k=i+1;k<C2.segs.length;k++){ const x=C2.segs[k]; if(x.k==='play'||x.k==='loop') return x; } return null; }   // past any Stop / Hold
+const c2Chg=(s,nx)=>!!nx&&!(Math.abs(nx.a-s.b)<1&&Math.abs(nx.a-nx.b)<1&&nx.ts[0]===s.ts[0]&&nx.ts[1]===s.ts[1]);
+// a block that loops until you tap: the heads-up goes right before the next block's 1
+function c2CheatTap(s){ if(!prefs.cheat) return; const nx=c2NextPlay(C2.i); if(!c2Chg(s,nx)) return;
+  const span=c2Span(Math.max(20,s.b+C2.nudge),s.ts), s32=span*(s.ts[1]||4)/32; for(const k of [2,1]){ const tt=tNext-k*s32; if(tt>ac.currentTime+0.005) click(tt,'bar','acc'); } }
 // the Drill's own controls work on the Met's clock while a run plays
 function metSetIdx(){ const r=metPos(); return targetIdx(r?r.p:count); }
 function metJumpSet(i){ runFromSet(Math.max(RUN.a+1,Math.min(RUN.z,i))); }
