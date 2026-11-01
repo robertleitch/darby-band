@@ -1830,6 +1830,8 @@ html body .sslink:not(#a#b#c){background:#2c3d4e!important;border:0!important;bo
 html body .sslink:not(#a#b#c) b{text-transform:uppercase;letter-spacing:.12em;font-size:14px}
 html body .sslink:not(#a#b#c) small,html body .sslink:not(#a#b#c) .go{color:#cfdbea!important}
 html body .sslink:not(#a#b#c) svg{color:#fff;stroke:#fff}
+/* v53: the strip under the Met's top row (✕ / switch / LOOP) is always kept clear, so the wheel never slides under it or moves */
+html body.fc-field #free #fpTempo:not(#a#b#c){padding-top:32px!important;box-sizing:border-box!important}
 </style>
 </head>
 <body>
@@ -2011,8 +2013,8 @@ html body .sslink:not(#a#b#c) svg{color:#fff;stroke:#fff}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 52</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">52</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 53</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">53</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -4661,7 +4663,7 @@ const _freeUI28=freeUI; freeUI=function(){ const ts=$('fTs'), sl=ts?ts.scrollLef
 // the dial: wheel fills the room between MET | DRILL and the TAP row, centered
 (function(){ const pg=$('fpTempo'), side=pg.querySelector('.fside'); [[2,pg.firstChild],[3,side],[3,null]].forEach(([g,before])=>{ const d=document.createElement('div'); d.className='mgap'; d.style.flex=g+' 1 0'; pg.insertBefore(d,before); }); })();
 const _freeLayout28=freeLayout; freeLayout=function(){ _freeLayout28(); if(FC.mode!=='field'||!freeOn||view!=='met'||fPage!=='tempo') return;
-  const pg=$('fpTempo'), side=pg.querySelector('.fside'), wh=$('wheel'); if(!pg||!wh) return; const W=pg.clientWidth, H=pg.clientHeight-(side?side.offsetHeight:0); if(!W||!H) return;
+  const pg=$('fpTempo'), side=pg.querySelector('.fside'), wh=$('wheel'); if(!pg||!wh) return; const W=pg.clientWidth, H=pg.clientHeight-(side?side.offsetHeight:0)-(parseFloat(getComputedStyle(pg).paddingTop)||0); if(!W||!H) return;
   const sz=Math.max(90,Math.floor(Math.min(W*0.92,H-40,420))); if(wh.offsetWidth!==sz){ wh.style.width=wh.style.height=sz+'px'; wh.style.setProperty('--dz',sz+'px'); tickPos(); setDial(prefs.testBpm,false); } };
 // the dot sits halfway between the inner ends of the ticks and the dark center
 const _setDial28=setDial; setDial=function(b,f){ _setDial28(b,f); const w=wheel.clientWidth, k=$('knob'); if(!w||!k) return; const R=w*0.325, a=(dialAng-90)*Math.PI/180, kw=k.offsetWidth;
@@ -5436,7 +5438,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=52;
+const APP_V=53;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
