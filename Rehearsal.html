@@ -2011,8 +2011,8 @@ html body .sslink:not(#a#b#c) svg{color:#fff;stroke:#fff}
  </div>
 </div>
 <dialog id="settings">
-  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 51</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
-  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">51</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
+  <div class="dhead bandhead"><img id="bhLogo" alt=""><div class="bht"><b id="bhName"></b><small>SETTINGS · VERSION 52</small></div><button id="sClose" aria-label="Close">✕ Close</button></div>
+  <div class="srow" id="verRow"><div class="sl">Version <b id="verNum">52</b> <small id="verMsg"></small></div><button id="verBtn">⟳ Update</button></div>
   <div class="srow">
     <div class="sl">Field view</div>
     <div class="seg" role="group"><button id="vBottom" class="sel">Front ▼ bottom</button><button id="vTop">Front ▲ top</button></div>
@@ -5436,7 +5436,7 @@ runChips(); $('tBpm').textContent=prefs.testBpm; showSplash();
 goSet(prefs.run.startsWith('p:')||prefs.run.startsWith('s:')?rangeOf(prefs.run)[0]:(prefs.run==='move'?1:0)); if(me>=0) setMe(me);
 try{ const g=localStorage.getItem('rm_goto'); if(g){ localStorage.removeItem('rm_goto'); const k=SETS.findIndex(s=>s.l===g); if(k>=0){ goSet(k); setUI('side',true); } } }catch(e){} 
 /* ---------- updates: the home-screen app has no reload button, so check for a newer copy here ---------- */
-const APP_V=51;
+const APP_V=52;
 try{ const u=new URL(location.href); if(u.searchParams.has('fcu')){ u.searchParams.delete('fcu'); history.replaceState(null,'',u.pathname+u.search+u.hash); } }catch(e){}
 async function fcCheck(manual){
   const m=$('verMsg'); if(manual) m.textContent='Checking…';
@@ -5450,6 +5450,8 @@ async function fcCheck(manual){
   }catch(e){ if(manual) m.textContent='No signal. Try again.'; }
 }
 $('verBtn').onclick=()=>fcCheck(true);
+// works with no signal: the service worker keeps the last copy of this page on the phone (saved now, and again every time it loads with a signal)
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js').then(()=>navigator.serviceWorker.ready).then(()=>caches.open('darby-v3')).then(c=>fetch(location.pathname,{cache:'no-cache'}).then(r=>{ if(r.ok) return c.put(location.origin+location.pathname,r); })).catch(()=>{}); }
 setTimeout(()=>fcCheck(false),2500);
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') fcCheck(false); });
 </script>

@@ -1,5 +1,5 @@
 // Darby Band service worker: lets the site install as an app, work offline with the last copy, and receive alerts.
-const CACHE='darby-v2';
+const CACHE='darby-v3';
 self.addEventListener('install',e=>{self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const k of await caches.keys())if(k!==CACHE)await caches.delete(k);await self.clients.claim()})())});
 // Pages: always try the network first so people get the newest scores; fall back to the last saved copy when offline.
@@ -7,8 +7,8 @@ self.addEventListener('fetch',e=>{
   const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);if(u.origin!==location.origin)return;
   if(r.mode==='navigate'||u.pathname.endsWith('.html')||/\.(png|webmanifest)$/.test(u.pathname)||u.pathname.startsWith('/photos/')){
     const html=r.mode==='navigate'||u.pathname.endsWith('.html');
-    e.respondWith((async()=>{try{const res=await (html?fetch(r.url,{cache:'no-cache',credentials:'same-origin'}):fetch(r));if(res.redirected&&html)return Response.redirect(res.url,302);if(res&&res.ok){const c=await caches.open(CACHE);c.put(r,res.clone())}return res}
-      catch(x){const hit=await caches.match(r,{ignoreSearch:r.mode==='navigate'});if(hit)return hit;throw x}})());
+    e.respondWith((async()=>{try{const res=await (html?fetch(r.url,{cache:'no-cache',credentials:'same-origin'}):fetch(r));if(res.redirected&&html)return Response.redirect(res.url,302);if(res&&res.ok){const c=await caches.open(CACHE);c.put(html?u.origin+u.pathname:r,res.clone())}return res}
+      catch(x){if(u.searchParams.has('fcc'))throw x;const hit=await caches.match(html?u.origin+u.pathname:r,{ignoreSearch:html});if(hit)return hit;throw x}})());
   }
 });
 self.addEventListener('push',e=>{
