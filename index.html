@@ -39,6 +39,8 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}footer a:focus
 @media (prefers-reduced-motion:reduce){.play{transition:none}}
 .play[disabled]{background:rgba(255,255,255,.18);color:#fff;cursor:default;box-shadow:none;backdrop-filter:blur(4px);border:2px solid rgba(255,255,255,.6)}.play[disabled]:hover{transform:none}.play[disabled] i{background:rgba(255,255,255,.25)}
 .soon{font-family:var(--display);font-weight:700;font-size:1.2rem;letter-spacing:.08em;margin-top:14px;color:var(--accent);min-height:1.4em}
+body.on{background:#000}body.on .hero{padding:0;justify-content:center}body.on .hero::before,body.on .hero::after,body.on .kick,body.on h1,body.on .soon{display:none}
+body.on .player{width:100vw;height:100vh;height:100dvh;aspect-ratio:auto;border-radius:0;box-shadow:none}
 </style>
 </head>
 <body>
@@ -57,7 +59,7 @@ function upd(){var n=Date.now();if(n<T0||n>=T){b.disabled=false;lab.nodeValue='P
 b.disabled=true;lab.nodeValue='Coming soon';b.setAttribute('aria-label','Coming soon at 8:15 PM');var m=Math.ceil((T-n)/6e4),h=Math.floor(m/60);sn.textContent='Premieres tonight at 8:15 PM'+(m<=180?' \u00b7 '+(h?h+'h ':'')+(m%60)+'m':'');return false}
 upd();var iv=setInterval(function(){if(!document.body.classList.contains('on'))upd();if(Date.now()>=T)clearInterval(iv)},15000);})();
 (function(){var V="1247396179";var b=document.getElementById('play'),p=document.getElementById('player');
-b.addEventListener('click',function(){p.innerHTML='<iframe src="https://player.vimeo.com/video/'+V+'?h=d6e086e20e&autoplay=1&autopause=0&title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="With Pride: a look back at the 2026 Marching Band Season"></iframe>';document.body.classList.add('on');try{window.goatcounter&&goatcounter.count({path:'play-with-pride',event:true})}catch(e){}});})();
+b.addEventListener('click',function(){p.innerHTML='<iframe src="https://player.vimeo.com/video/'+V+'?h=d6e086e20e&autoplay=1&autopause=0&title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="With Pride: a look back at the 2026 Marching Band Season"></iframe>';document.body.classList.add('on');try{p.requestFullscreen&&p.requestFullscreen().catch(function(){})}catch(e){}try{window.goatcounter&&goatcounter.count({path:'play-with-pride',event:true})}catch(e){}});})();
 </script>
 <script src="/pwa.js" defer></script>
 <script data-goatcounter="https://robertleitch.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
