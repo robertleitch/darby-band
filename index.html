@@ -51,12 +51,11 @@ footer a{color:var(--accent);font-weight:600;text-decoration:none}footer a:focus
  <div class="soon" id="soon" aria-live="polite"></div>
  <div class="player" id="player"></div>
 </main>
-<footer>See you next season · <a href="more.html">Band members &amp; families log in</a></footer>
 <script>
-(function(){var T=Date.parse("2026-11-16T20:15:00-05:00"),b=document.getElementById('play'),sn=document.getElementById('soon'),lab=b.lastChild;
-function upd(){var n=Date.now();if(n>=T){b.disabled=false;lab.nodeValue='Play video';sn.textContent='';b.setAttribute('aria-label','Play With Pride');return true}
+(function(){var T0=Date.parse("2026-11-16T17:15:00-05:00"),T=Date.parse("2026-11-16T20:15:00-05:00"),b=document.getElementById('play'),sn=document.getElementById('soon'),lab=b.lastChild;
+function upd(){var n=Date.now();if(n<T0||n>=T){b.disabled=false;lab.nodeValue='Play video';sn.textContent='';b.setAttribute('aria-label','Play With Pride');return true}
 b.disabled=true;lab.nodeValue='Coming soon';b.setAttribute('aria-label','Coming soon at 8:15 PM');var m=Math.ceil((T-n)/6e4),h=Math.floor(m/60);sn.textContent='Premieres tonight at 8:15 PM'+(m<=180?' \u00b7 '+(h?h+'h ':'')+(m%60)+'m':'');return false}
-if(!upd()){var iv=setInterval(function(){if(upd())clearInterval(iv)},15000)}})();
+upd();var iv=setInterval(function(){if(!document.body.classList.contains('on'))upd();if(Date.now()>=T)clearInterval(iv)},15000);})();
 (function(){var V="1247396179";var b=document.getElementById('play'),p=document.getElementById('player');
 b.addEventListener('click',function(){p.innerHTML='<iframe src="https://player.vimeo.com/video/'+V+'?h=d6e086e20e&autoplay=1&autopause=0&title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="With Pride: a look back at the 2026 Marching Band Season"></iframe>';document.body.classList.add('on');try{window.goatcounter&&goatcounter.count({path:'play-with-pride',event:true})}catch(e){}});})();
 </script>
